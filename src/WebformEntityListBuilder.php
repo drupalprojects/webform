@@ -213,17 +213,19 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     else {
       switch ($entity->get('status')) {
         case WebformInterface::STATUS_OPEN:
-          $row['status'] = $this->t('Open');
+          $status = $this->t('Open');
           break;
 
         case WebformInterface::STATUS_CLOSED:
-          $row['status'] = $this->t('Closed');
+          $status = $this->t('Closed');
           break;
 
         case WebformInterface::STATUS_SCHEDULED:
-          $row['status'] = $this->t('Scheduled (@state)', ['@state' => $entity->isOpen() ? $this->t('Open') : $this->t('Closed')]);
+          $status = $this->t('Scheduled (@state)', ['@state' => $entity->isOpen() ? $this->t('Open') : $this->t('Closed')]);
           break;
       }
+
+      $row['status']['data'] = ($entity->access('update')) ? $entity->toLink($status, 'settings-form') : $status;
     }
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
     $row['results_total'] = $this->getResultsTotal($entity->id()) . ($entity->isResultsDisabled() ? ' ' . $this->t('(Disabled)') : '');
