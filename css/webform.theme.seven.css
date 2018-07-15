@@ -84,6 +84,17 @@ pre.webform-codemirror-runmode {
   }
 }
 
+/**
+ * Form action are moved to a dialogs footer and don't need to be visually
+ * hidden.
+
+ * @see Drupal.behaviors.dialog.prepareDialogButtons
+ */
+.webform-ui-dialog .form-actions input[type=submit],
+.webform-ui-dialog .form-actions a.button {
+  display: none !important;
+}
+
 /* System tray divider */
 .ui-dialog.ui-dialog-off-canvas .ui-resizable-w {
   background-color: #bfbfba;
