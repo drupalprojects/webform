@@ -1077,13 +1077,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $properties = parent::getConfigurationFormProperties($form, $form_state);
     foreach ($properties as $key => $value) {
       // Convert composite element access and required to boolean value.
-      if (strpos($key, '__access') || strpos($key, '__required')) {
+      if (preg_match('/__(access|required)$/', $key)) {
         $properties[$key] = (boolean) $value;
-      }
-      // If the entire element is required remove required property for
-      // composite elements.
-      if (!empty($properties['required']) && strpos($key, '__required')) {
-        unset($properties[$key]);
       }
     }
     return $properties;
