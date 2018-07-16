@@ -217,7 +217,7 @@ class WebformEntityReferenceManager implements WebformEntityReferenceManagerInte
     $sorted_entities = [];
     foreach ($field_names as $field_name) {
       foreach ($entity->$field_name as $item) {
-        $sorted_entities[$item->target_id] = (method_exists('getWeight', $item->entity)) ? $item->entity->getWeight() : 0;
+        $sorted_entities[$item->target_id] = (method_exists($item->entity, 'getWeight')) ? $item->entity->getWeight() : 0;
         $target_entities[$item->target_id] = $item->entity;
       }
     }
