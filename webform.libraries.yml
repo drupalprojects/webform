@@ -59,6 +59,16 @@ webform.admin.settings:
     theme:
       css/webform.admin.settings.css: {}
 
+webform.admin.tabledrag:
+  version: VERSION
+  css:
+    theme:
+      css/webform.admin.tabledrag.css: {}
+  js:
+    js/webform.admin.tabledrag.js:  {}
+  dependencies:
+    - core/drupal.tabledrag
+
 webform.admin.translation:
   version: VERSION
   css:

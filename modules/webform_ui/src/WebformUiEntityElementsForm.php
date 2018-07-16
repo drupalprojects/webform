@@ -142,6 +142,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($form);
+    $form['#attached']['library'][] = 'webform/webform.admin.tabledrag';
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
 
     $form = parent::buildForm($form, $form_state);
@@ -384,8 +385,14 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       'data' => $this->t('Required'),
       'class' => ['webform-ui-element-required', RESPONSIVE_PRIORITY_LOW],
     ];
-    $header['weight'] = $this->t('Weight');
-    $header['parent'] = $this->t('Parent');
+    $header['weight'] = [
+      'data' => $this->t('Weight'),
+      'class' => ['webform-tabledrag-hide'],
+    ];
+    $header['parent'] = [
+      'data' => $this->t('Parent'),
+      'class' => ['webform-tabledrag-hide'],
+    ];
     $header['operations'] = [
       'data' => $this->t('Operations'),
       'class' => ['webform-ui-element-operations'],
@@ -562,12 +569,16 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       '#title' => $this->t('Weight for @title', ['@title' => $title]),
       '#title_display' => 'invisible',
       '#default_value' => $element['#weight'],
+      '#wrapper_attributes' => ['class' => ['webform-tabledrag-hide']],
       '#attributes' => [
         'class' => ['row-weight'],
       ],
       '#delta' => $delta,
     ];
 
+    $row['parent'] = [
+      '#wrapper_attributes' => ['class' => ['webform-tabledrag-hide']],
+    ];
     $row['parent']['key'] = [
       '#parents' => ['webform_ui_elements', $key, 'key'],
       '#type' => 'hidden',
@@ -683,8 +694,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       $row['conditions'] = ['#markup' => ''];
     }
     $row['required'] = ['#markup' => ''];
-    $row['weight'] = ['#markup' => ''];
-    $row['parent'] = ['#markup' => ''];
+    $row['weight'] = ['#markup' => '', '#wrapper_attributes' => ['class' => ['webform-tabledrag-hide']]];
+    $row['parent'] = ['#markup' => '', '#wrapper_attributes' => ['class' => ['webform-tabledrag-hide']]];
     $row['operations'] = [
       '#type' => 'operations',
       '#prefix' => '<div class="webform-dropbutton">',

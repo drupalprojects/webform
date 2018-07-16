@@ -70,7 +70,7 @@ class WebformEntityHandlersForm extends EntityForm {
       ['data' => $this->t('ID'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
       ['data' => $this->t('Summary'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
       ['data' => $this->t('Status'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
-      ['data' => $this->t('Weight'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
+      ['data' => $this->t('Weight'), 'class' => ['webform-tabledrag-hide']],
       ['data' => $this->t('Operations')],
     ];
 
@@ -125,6 +125,7 @@ class WebformEntityHandlersForm extends EntityForm {
         '#attributes' => [
           'class' => ['webform-handler-order-weight'],
         ],
+        '#wrapper_attributes' => ['class' => ['webform-tabledrag-hide']],
       ];
 
       $operations = [];
@@ -195,6 +196,7 @@ class WebformEntityHandlersForm extends EntityForm {
 
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($form);
+    $form['#attached']['library'][] = 'webform/webform.admin.tabledrag';
 
     return parent::form($form, $form_state);
   }
