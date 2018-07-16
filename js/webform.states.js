@@ -163,6 +163,10 @@
         }
       }
 
+      // Issue #2986017: Fieldsets shouldn't have required attribute.
+      if ($target.is('fieldset')) {
+        $target.removeAttr('required aria-required');
+      }
     }
 
   });
