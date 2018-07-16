@@ -86,19 +86,19 @@ webform.config.advanced:
   title: 'Advanced'
   route_name: webform.config.advanced
   parent_id: webform.config
-  weight: 80
+  weight: 100
 
 webform.addons:
   title: 'Add-ons'
   route_name: webform.addons
   base_route: entity.webform.collection
-  weight: 40
+  weight: 50
 
 webform.contribute:
   title: 'Contribute'
   route_name: webform.contribute
   base_route: entity.webform.collection
-  weight: 50
+  weight: 60
 
 # Form
 

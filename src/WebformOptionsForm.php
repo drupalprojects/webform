@@ -30,7 +30,7 @@ class WebformOptionsForm extends EntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\webform\WebformOptionsInterface $webform */
+    /** @var \Drupal\webform\WebformOptionsInterface $webform_options */
     $webform_options = $this->getEntity();
 
     // Customize title for duplicate and edit operation.
