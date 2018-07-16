@@ -147,4 +147,14 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
     return implode('; ', array_slice($options, 0, 12)) . (count($options) > 12 ? '; …' : '');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOperations(EntityInterface $entity) {
+    return parent::buildOperations($entity) + [
+        '#prefix' => '<div class="webform-dropbutton">',
+        '#suffix' => '</div>',
+      ];
+  }
+
 }
