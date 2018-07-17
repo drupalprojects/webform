@@ -66,6 +66,14 @@ class WebformSettingsDraftTest extends WebformTestBase {
       $this->assertRaw('You have an existing draft');
       $this->assertFieldByName('name', 'John Smith');
 
+      // Check no draft message when webform is closed.
+      $webform->setStatus(FALSE)->save();
+      $this->drupalGet("webform/$webform_id");
+      $this->assertNoRaw('You have an existing draft');
+      $this->assertNoFieldByName('name', 'John Smith');
+      $this->assertRaw('Sorry…This form is closed to new submissions.');
+      $webform->setStatus(TRUE)->save();
+
       // Login admin account.
       $this->drupalLogin($this->adminSubmissionUser);
 
@@ -207,12 +215,11 @@ class WebformSettingsDraftTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_draft_authenticated');
     $this->assertRaw('You have an existing draft');
     $this->assertRaw('<label>Name</label>' . PHP_EOL . '        John Smith');
-  }
 
-  /**
-   * Test webform draft multiple.
-   */
-  public function testDraftMultiple() {
+    /**************************************************************************/
+    // Test webform draft multiple.
+    /**************************************************************************/
+
     $this->drupalLogin($this->normalUser);
 
     $webform = Webform::load('test_form_draft_multiple');
@@ -270,12 +277,11 @@ class WebformSettingsDraftTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_draft_multiple');
     $this->clickLink('Load your pending draft');
     $this->assertFieldByName('name', 'Jane Doe');
-  }
 
-  /**
-   * Test webform submission form reset draft.
-   */
-  public function testResetDraft() {
+    /**************************************************************************/
+    // Test webform submission form reset draft.
+    /**************************************************************************/
+
     $this->drupalLogin($this->rootUser);
 
     $webform = Webform::load('test_form_draft_authenticated');

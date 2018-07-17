@@ -728,7 +728,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Don't display webform if it is closed.
-    if ($webform_submission->isNew() && $webform->isClosed()) {
+    if (($webform_submission->isNew() || $webform_submission->isDraft()) && $webform->isClosed()) {
       // If the current user can update any submission just display the closed
       // message and still allow them to create new submissions.
       if ($webform->isTemplate() && $webform->access('duplicate') && !$webform->isArchived()) {
@@ -848,7 +848,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_SAVED_MESSAGE);
         $form_state->set('draft_saved', FALSE);
       }
-      elseif ($this->isGet() && !$webform->getSetting('draft_multiple')) {
+      elseif ($this->isGet() && !$webform->getSetting('draft_multiple') && !$webform->isClosed()) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_LOADED_MESSAGE);
       }
     }
