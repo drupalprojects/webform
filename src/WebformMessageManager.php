@@ -262,6 +262,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
         return $this->t('This webform is <a href=":href">archived</a>. Only submission administrators are allowed to access this webform and create new submissions.', $t_args);
 
       case WebformMessageManagerInterface::ADMIN_ARCHIVED:
+        $t_args = [':settings_href' => $webform->toUrl('settings')->toString()];
         return $this->t('This webform is <a href=":settings_href">archived</a>. Only submission administrators are allowed to access this webform and create new submissions.', $t_args);
 
       case WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION:
