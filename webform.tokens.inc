@@ -717,6 +717,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   $element_plugin = $element_manager->getElementInstance($element);
 
+  // Always get value for a computed element.
+  if ($element_plugin instanceof WebformComputedBase) {
+    $token_value = $element_plugin->getValue($element, $webform_submission);
+    return _webform_token_get_submission_value_encode($token_value, $options);
+  }
+
   // Exit if no submission data and form element is not a container.
   if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
     return NULL;
@@ -743,12 +749,6 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   /****************************************************************************/
   // Get value.
   /****************************************************************************/
-
-  // Get value for a computed element.
-  if ($element_plugin instanceof WebformComputedBase) {
-    $token_value = $element_plugin->getValue($element, $webform_submission);
-    return _webform_token_get_submission_value_encode($token_value, $options);
-  }
 
   // Set entity reference chaining.
   if ($keys && $keys[0] == 'entity' && $element_plugin instanceof WebformElementEntityReferenceInterface) {
