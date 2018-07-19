@@ -195,7 +195,7 @@ drush webform:tidy -y --dependencies webform_scheduled_email_test
 drush features-import -y webform
 drush features-import -y webform_demo_application_evaluation
 drush features-import -y webform_demo_event_registration
-d
+drush features-import -y webform_demo_examples
 drush features-import -y webform_examples_accessibility
 drush features-import -y webform_example_element
 drush features-import -y webform_example_composite
