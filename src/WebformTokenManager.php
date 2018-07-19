@@ -6,6 +6,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -26,6 +27,13 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    * @var \Drupal\Core\Session\AccountInterface
    */
   protected $currentUser;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
 
   /**
    * The configuration object factory.
@@ -53,6 +61,8 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -60,8 +70,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, Token $token) {
+  public function __construct(AccountInterface $current_user, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, Token $token) {
     $this->currentUser = $current_user;
+    $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->token = $token;
@@ -92,6 +103,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
 
       // Set token data based on entity type.
       $this->setTokenData($data, $entity);
+
+      // Set token options based on entity.
+      $this->setTokenOptions($options, $entity);
     }
 
     // For anonymous users remove all [current-user] tokens to prevent
@@ -239,19 +253,38 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   /**
    * Get token data based on an entity's type.
    *
-   * @param array $token_data
+   * @param array $data
    *   An array of token data.
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A Webform or Webform submission entity.
    */
-  protected function setTokenData(array &$token_data, EntityInterface $entity) {
+  protected function setTokenData(array &$data, EntityInterface $entity) {
     if ($entity instanceof WebformSubmissionInterface) {
-      $token_data['webform_submission'] = $entity;
-      $token_data['webform'] = $entity->getWebform();
+      $data['webform_submission'] = $entity;
+      $data['webform'] = $entity->getWebform();
     }
     elseif ($entity instanceof WebformInterface) {
-      $token_data['webform'] = $entity;
+      $data['webform'] = $entity;
     }
+  }
+
+  /**
+   * Set token option based on the entity.
+   *
+   * @param array $options
+   *   An array of token data.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   A Webform or Webform submission entity.
+   */
+  protected function setTokenOptions(array &$options, EntityInterface $entity) {
+    $token_options = [];
+    if ($entity instanceof WebformSubmissionInterface) {
+      $token_options['langcode'] = $entity->language()->getId();
+    }
+    elseif ($entity instanceof WebformInterface) {
+      $token_options['langcode'] = $this->languageManager->getCurrentLanguage()->getId();
+    }
+    $options += $token_options;
   }
 
   /**
