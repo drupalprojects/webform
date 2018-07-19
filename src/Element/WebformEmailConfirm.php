@@ -124,7 +124,7 @@ class WebformEmailConfirm extends FormElement {
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
     if ($has_access) {
       if ((!empty($mail_1) || !empty($mail_2)) && strcmp($mail_1, $mail_2)) {
-        $form_state->setError($element['mail_2'], t('The specified email addresses do not match.'));
+        $form_state->setError($element, t('The specified email addresses do not match.'));
       }
       else {
         // NOTE: Only mail_1 needs to be validated since mail_2 is the same value.
