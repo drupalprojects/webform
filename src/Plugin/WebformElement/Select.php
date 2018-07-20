@@ -68,9 +68,31 @@ class Select extends OptionsBase {
       $element['#element_validate'][] = [get_class($this), 'validateMultipleOptions'];
     }
 
-    parent::prepare($element, $webform_submission);
+    // If select2 or chosen is not available, see if we can use the alternative.
+    if (isset($element['#select2'])
+      && !$this->librariesManager->isIncluded('jquery.select2')
+      && $this->librariesManager->isIncluded('jquery.chosen')) {
+      $element['#chosen'] = TRUE;
+    }
+    elseif (isset($element['#chosen'])
+      && !$this->librariesManager->isIncluded('jquery.chosen')
+      && $this->librariesManager->isIncluded('jquery.select2')) {
+      $element['#select2'] = TRUE;
+    }
 
-    WebformElementHelper::enhanceSelect($element);
+    // Enhance select element using select2 or chosen.
+    if (isset($element['#select2']) && $this->librariesManager->isIncluded('jquery.select2')) {
+      $element['#attached']['library'][] = 'webform/webform.element.select2';
+      $element['#attributes']['class'][] = 'js-webform-select2';
+      $element['#attributes']['class'][] = 'webform-select2';
+    }
+    elseif (isset($element['#chosen']) && $this->librariesManager->isIncluded('jquery.chosen')) {
+      $element['#attached']['library'][] = 'webform/webform.element.chosen';
+      $element['#attributes']['class'][] = 'js-webform-chosen';
+      $element['#attributes']['class'][] = 'webform-chosen';
+    }
+
+    parent::prepare($element, $webform_submission);
   }
 
   /**
@@ -111,7 +133,7 @@ class Select extends OptionsBase {
       $form['options']['select_message'] = [
         '#type' => 'webform_message',
         '#message_type' => 'warning',
-        '#message_message' => $this->t('Select2 and Chosen provide very similar functionality, only one can enabled.'),
+        '#message_message' => $this->t('Select2 and Chosen provide very similar functionality, only one should be enabled.'),
         '#access' => TRUE,
       ];
     }

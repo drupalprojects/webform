@@ -184,52 +184,19 @@ class WebformElementHelper {
   }
 
   /**
-   * Enhance select menu with the Select2 or the Chosen library.
+   * Process a form element and apply webform element specific enhancements.
    *
-   * Please Note: Select2 is preferred library for Webform administrative
-   * forms.
+   * This method allows any form API element to be enhanced using webform
+   * specific features include custom validation, external libraries,
+   * accessibility improvements, etc…
    *
    * @param array $element
-   *   A select element.
-   * @param bool $library
-   *   Flag to automatically detect and apply library.
-   *
-   * @return array
-   *   The select element with Select2 or Chosen class and library attached.
+   *   An associative array containing an element with a #type property.
    */
-  public static function enhanceSelect(array &$element, $library = FALSE) {
-    // If automatic is FALSE, look at the element's #select2 and #chosen
-    // property.
-    if (!$library) {
-      if (isset($element['#select2'])) {
-        $library = 'select2';
-      }
-      elseif (isset($element['#chosen'])) {
-        $library = 'chosen';
-      }
-    }
-
-    if ($library === FALSE) {
-      return $element;
-    }
-
-    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
-    $libaries_manager = \Drupal::service('webform.libraries_manager');
-
-    // Add select2 library and classes.
-    if (($library === TRUE || $library === 'select2') && $libaries_manager->isIncluded('jquery.select2')) {
-      $element['#attached']['library'][] = 'webform/webform.element.select2';
-      $element['#attributes']['class'][] = 'js-webform-select2';
-      $element['#attributes']['class'][] = 'webform-select2';
-    }
-    // Add chosen library and classes.
-    elseif (($library === TRUE || $library === 'chosen') && $libaries_manager->isIncluded('jquery.chosen')) {
-      $element['#attached']['library'][] = 'webform/webform.element.chosen';
-      $element['#attributes']['class'][] = 'js-webform-chosen';
-      $element['#attributes']['class'][] = 'webform-chosen';
-    }
-
-    return $element;
+  public static function process(array &$element) {
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+    $element_manager->processElement($element);
   }
 
   /**

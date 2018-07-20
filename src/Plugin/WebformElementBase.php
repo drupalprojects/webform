@@ -665,7 +665,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element['#access'] = $this->checkAccessRules($operation, $element);
     }
 
-    // Enable webform template preprocessiing enhancements.
+    // Enable webform template preprocessing enhancements.
     // @see \Drupal\webform\Utility\WebformElementHelper::isWebformElement
     $element['#webform_element'] = TRUE;
 
@@ -769,16 +769,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $element['#attributes']['data-webform-required-error'] = $element['#required_error'];
       }
 
-      // Add webform element #minlength, #unique, and/or #multiple
+      // Add webform element #minlength, #multiple, and/or #unique
       // validation handler.
       if (isset($element['#minlength'])) {
         $element['#element_validate'][] = [get_class($this), 'validateMinlength'];
       }
-      if (isset($element['#unique'])) {
-        $element['#element_validate'][] = [get_class($this), 'validateUnique'];
-      }
       if (isset($element['#multiple']) && $element['#multiple'] > 1) {
         $element['#element_validate'][] = [get_class($this), 'validateMultiple'];
+      }
+      if (isset($element['#unique']) && $webform_submission) {
+        $element['#element_validate'][] = [get_class($this), 'validateUnique'];
       }
     }
 

@@ -80,9 +80,10 @@ class WebformElementAttributes extends FormElement {
             'js-' . $element['#id'] . '-attributes-style',
           ],
         ],
+        '#select2' => TRUE,
         '#default_value' => $element['#default_value']['class'],
       ];
-      WebformElementHelper::enhanceSelect($element['class'], TRUE);
+      WebformElementHelper::process($element['class']);
     }
     else {
       $element['class'] = [

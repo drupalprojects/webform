@@ -315,8 +315,9 @@ class Address extends WebformCompositeBase {
       '#options' => \Drupal::service('address.country_repository')->getList(),
       '#multiple' => TRUE,
       '#size' => 10,
+      '#select2' => TRUE,
     ];
-    WebformElementHelper::enhanceSelect($form['address']['available_countries'], TRUE);
+    WebformElementHelper::process($form['address']['available_countries']);
     $form['address']['langcode_override'] = [
       '#type' => 'select',
       '#title' => $this->t('Language override'),

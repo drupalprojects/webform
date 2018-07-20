@@ -183,6 +183,17 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
   /**
    * {@inheritdoc}
    */
+  public function processElement(array &$element) {
+    $element_plugin = $this->getElementInstance($element);
+    $element_plugin->initialize($element);
+    $element_plugin->prepare($element);
+    $element_plugin->finalize($element);
+    $element_plugin->setDefaultValue($element);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function invokeMethod($method, array &$element, &$context1 = NULL, &$context2 = NULL) {
     // Make sure element has a #type.
     if (!isset($element['#type'])) {

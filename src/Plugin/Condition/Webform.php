@@ -90,9 +90,10 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
       '#type' => 'select',
       '#options' => $options,
       '#multiple' => $options,
+      '#select2' => TRUE,
       '#default_value' => $this->configuration['webforms'],
     ];
-    WebformElementHelper::enhanceSelect($form['webforms'], TRUE);
+    WebformElementHelper::process($form['webforms']);
 
     if (empty($this->configuration['context_mapping'])) {
       $form['message'] = [
