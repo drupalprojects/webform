@@ -189,6 +189,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
     $element_plugin->prepare($element);
     $element_plugin->finalize($element);
     $element_plugin->setDefaultValue($element);
+    return $element;
   }
 
   /**

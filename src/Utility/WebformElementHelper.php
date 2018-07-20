@@ -192,11 +192,14 @@ class WebformElementHelper {
    *
    * @param array $element
    *   An associative array containing an element with a #type property.
+   *
+   * @return array
+   *   The processed form element with webform element specific enhancements.
    */
   public static function process(array &$element) {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
-    $element_manager->processElement($element);
+    return $element_manager->processElement($element);
   }
 
   /**

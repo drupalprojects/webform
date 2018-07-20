@@ -54,6 +54,9 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
    *
    * @param array $element
    *   An associative array containing an element with a #type property.
+   *
+   * @return array
+   *   The processed form element with webform element specific enhancements.
    */
   public function processElement(array &$element);
 
