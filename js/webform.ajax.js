@@ -138,7 +138,7 @@
       setTimeout(function() {$element.removeClass('color-success')}, 3000);
 
       // Focus first tabbable item for the updated elements and handlers.
-      $element.find(':tabbable').first().focus();
+      $element.find(':tabbable:not(.tabledrag-handle)').eq(0).focus();
 
       // Scroll to elements that are not visible.
       if (!isScrolledIntoView($element)) {

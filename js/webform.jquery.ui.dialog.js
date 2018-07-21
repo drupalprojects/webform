@@ -21,23 +21,29 @@
   };
 
   /**
-   * Never focus dialog on first link.
+   * Attaches webform dialog behaviors.
+   *
+   * @type {Drupal~behavior}
+   *
+   * @prop {Drupal~behaviorAttach} attach
+   *   Attaches event listeners for webform dialogs.
    */
-  $.ui.dialog.prototype._focusTabbable = function() {
-    var hasFocus = this.element.find('[autofocus]');
-    if (!hasFocus.length) {
-      hasFocus = this.element.find(':tabbable:not(a.webform-element-help)');
+  Drupal.behaviors.webformDialogEvents = {
+    attach: function () {
+      $(window).once('webform-dialog').on({
+        'dialog:aftercreate': function (event, dialog, $element, settings) {
+          setTimeout(function() {
+            // After creating dialog and fully initializing the dialog
+            // move focus to first element.
+            var hasFocus = $element.find('[autofocus]:tabbable');
+            if (!hasFocus.length) {
+              hasFocus = $element.find(':input:tabbable:not(:button)');
+            }
+            hasFocus.eq(0).focus();
+          });
+        }
+      });
     }
-    if (!hasFocus.length) {
-      hasFocus = this.uiDialogButtonPane.find(':tabbable:not(a.webform-element-help)');
-    }
-    if (!hasFocus.length) {
-      hasFocus = this.uiDialogTitlebarClose.filter(':tabbable:not(a.webform-element-help)');
-    }
-    if (!hasFocus.length) {
-      hasFocus = this.uiDialog;
-    }
-    hasFocus.eq(0).focus();
   };
 
 })(jQuery, Drupal);

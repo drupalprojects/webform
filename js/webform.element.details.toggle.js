@@ -74,7 +74,7 @@
         }
         else {
           // Add toggle state link to first details element.
-          $details.first().before($toggle);
+          $details.eq(0).before($toggle);
         }
 
         setDetailsToggleLabel($form);
