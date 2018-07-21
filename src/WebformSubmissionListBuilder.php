@@ -543,7 +543,11 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         else {
           $link_text = $entity->label();
         }
-        return Link::fromTextAndUrl($link_text, $link_url);
+        $link = Link::fromTextAndUrl($link_text, $link_url)->toRenderable();
+        if ($name == 'serial') {
+          $link['#attributes']['title'] = $entity->label();
+        }
+        return ['data' => $link];
 
       case 'in_draft':
         return ($entity->isDraft()) ? $this->t('Yes') : $this->t('No');

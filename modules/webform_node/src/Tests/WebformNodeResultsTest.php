@@ -2,6 +2,7 @@
 
 namespace Drupal\webform_node\Tests;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\WebformInterface;
@@ -94,7 +95,7 @@ class WebformNodeResultsTest extends WebformNodeTestBase {
     $this->assertResponse(200);
     $this->assertRaw('<h1 class="page-title">' . $node->label() . '</h1>');
     $this->assertNoRaw('<h1 class="page-title">' . $webform->label() . '</h1>');
-    $this->assertRaw(('<a href="' . $node_submission_url->toString() . '">' . $node_sids[1] . '</a>'));
+    $this->assertRaw(('<a href="' . $node_submission_url->toString() . '" title="' . Html::escape($node->label()) . ': Submission #' . $node_sids[1] . '">' . $node_sids[1] . '</a>'));
     $this->assertNoRaw(('<a href="' . $webform_submission_url->toString() . '">' . $webform_sids[1] . '</a>'));
 
     // Check webform node title.
