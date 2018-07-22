@@ -1169,7 +1169,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'timestamp' => time(),
     ];
     $values['data'] = serialize($values['data']);
-    \Drupal::database()
+    $this->database
       ->insert('webform_submission_log')
       ->fields($values)
       ->execute();
