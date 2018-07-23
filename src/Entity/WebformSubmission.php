@@ -461,8 +461,10 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    * {@inheritdoc}
    */
   public function getTokenUrl() {
-    return $this->getSourceUrl()
-      ->setOption('query', ['token' => $this->token->value]);
+    $uri = $this->getSourceUrl();
+    $options = $uri->getOptions();
+    $options['query']['token'] = $this->getToken();
+    return $uri->setOptions($options);
   }
 
   /**

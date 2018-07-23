@@ -282,8 +282,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
 
       case WebformMessageManagerInterface::DRAFT_PREVIOUS:
         $webform_draft = $this->entityStorage->loadDraft($webform, $source_entity, $this->currentUser);
-        $webform_draft_entity = ($source_entity && $source_entity->hasLinkTemplate('canonical')) ? $source_entity : $webform;
-        $t_args = [':href' => $webform_draft_entity->toUrl('canonical', ['query' => ['token' => $webform_draft->getToken()]])->toString()];
+        $t_args = [':href' => $webform_draft->getTokenUrl()->toString()];
         return $this->t('You have a pending draft for this webform.') . ' ' . $this->t('<a href=":href">Load your pending draft</a>.', $t_args);
 
       case WebformMessageManagerInterface::DRAFTS_PREVIOUS:

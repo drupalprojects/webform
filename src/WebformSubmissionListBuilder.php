@@ -469,6 +469,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   Throw exception if table row column is not found.
    */
   public function buildRowColumn(array $column, EntityInterface $entity) {
+    /** @var  $entity \Drupal\webform\WebformSubmissionInterface */
+
     $is_raw = ($column['format'] == 'raw');
     $name = $column['name'];
 
@@ -524,15 +526,11 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
       case 'serial':
       case 'label':
-        // Note: Using source entity associate with the submission and not
-        // the current webform.
+        // Note: Use the submission's token URL which points to the
+        // submission's source URL with a secure token.
+        // @see \Drupal\webform\Entity\WebformSubmission::getTokenUrl
         if ($entity->isDraft()) {
-          if ($entity->getSourceEntity()  && $entity->getSourceEntity()->hasLinkTemplate('canonical')) {
-            $link_url = $entity->getSourceEntity()->toUrl('canonical', ['query' => ['token' => $entity->getToken()]]);
-          }
-          else {
-            $link_url = $this->webform->toUrl('canonical', ['query' => ['token' => $entity->getToken()]]);
-          }
+          $link_url = $entity->getTokenUrl();
         }
         else {
           $link_url = $this->requestHandler->getUrl($entity, $entity->getSourceEntity(), $this->getSubmissionRouteName());
