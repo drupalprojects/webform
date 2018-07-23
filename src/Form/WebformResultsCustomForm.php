@@ -208,6 +208,25 @@ class WebformResultsCustomForm extends FormBase {
       '#default_value' => $format['element_format'],
     ];
 
+    // Submission settings
+    $form['submission'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission settings'),
+    ];
+    // Get link types.
+    // @see entity.webform_submission.* route names.
+    $link_type_options = [
+      'canonical' => t('View'),
+      'table' => t('Table'),
+    ];
+    $form['submission']['link_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Link submissions to…'),
+      '#descriptions' => $this->t('Please note: Drafts will always be linked to submission form.'),
+      '#options' => $link_type_options,
+      '#default_value' => $this->webform->getState($this->getStateKey('link_type'), 'canonical'),
+    ];
+
     // Build actions.
     $form['actions']['#type'] = 'actions';
     $form['actions']['save'] = [
@@ -291,6 +310,7 @@ class WebformResultsCustomForm extends FormBase {
     $this->webform->setState($this->getStateKey('direction'), $form_state->getValue('direction'));
     $this->webform->setState($this->getStateKey('limit'), (int) $form_state->getValue('limit'));
     $this->webform->setState($this->getStateKey('format'), $form_state->getValue('format'));
+    $this->webform->setState($this->getStateKey('link_type'), $form_state->getValue('link_type'));
 
     // Set default.
     if (empty($this->sourceEntity)) {

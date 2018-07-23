@@ -110,6 +110,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   ];
 
   /**
+   * The submission link type. (canonical, table, or edit)
+   *
+   * @var array
+   */
+  protected $linkType = 'canonical';
+
+  /**
    * The webform elements.
    *
    * @var array
@@ -209,6 +216,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
       $this->limit = $webform_submission_storage->getCustomSetting('limit', 20, $this->webform, $this->sourceEntity);
       $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
+      $this->linkType = $webform_submission_storage->getCustomSetting('link_type', $this->linkType, $this->webform, $this->sourceEntity);
       $this->customize = $this->webform->access('update');
       if ($this->format['element_format'] == 'raw') {
         foreach ($this->columns as &$column) {
@@ -742,7 +750,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   or 'webform_submission.canonical.
    */
   protected function getSubmissionRouteName() {
-    return (strpos(\Drupal::routeMatch()->getRouteName(), 'webform.user.submissions') !== FALSE) ? 'webform.user.submission' : 'webform_submission.canonical';
+    return (strpos(\Drupal::routeMatch()->getRouteName(), 'webform.user.submissions') !== FALSE) ? 'webform.user.submission' : 'webform_submission.' . $this->linkType;
   }
 
   /**

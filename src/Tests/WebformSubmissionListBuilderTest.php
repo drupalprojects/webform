@@ -137,6 +137,11 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
     // Check the table results order by sid.
     $this->assertPattern('#Hillary.+Abraham.+George#ms');
 
+    // Check the table links to canonical view.
+    $this->assertRaw('data-webform-href="' . $submissions[0]->toUrl()->toString() . '"');
+    $this->assertRaw('data-webform-href="' . $submissions[1]->toUrl()->toString() . '"');
+    $this->assertRaw('data-webform-href="' . $submissions[2]->toUrl()->toString() . '"');
+
     // Customize to results table.
     $edit = [
       'columns[created][checkbox]' => FALSE,
@@ -146,9 +151,16 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
       'sort' => 'element__first_name',
       'direction' => 'desc',
       'limit' => 20,
+      'link_type' => 'table',
     ];
     $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/submissions/custom', $edit, t('Save'));
     $this->assertRaw('The customized table has been saved.');
+
+    // Check that table now link to table.
+    $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions');
+    $this->assertRaw('data-webform-href="' . $submissions[0]->toUrl('table')->toString() . '"');
+    $this->assertRaw('data-webform-href="' . $submissions[1]->toUrl('table')->toString() . '"');
+    $this->assertRaw('data-webform-href="' . $submissions[2]->toUrl('table')->toString() . '"');
 
     // Check that sid is hidden and changed is visible.
     $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions');
