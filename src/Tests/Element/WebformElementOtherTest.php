@@ -29,7 +29,7 @@ class WebformElementOtherTest extends WebformElementTestBase {
     /**************************************************************************/
 
     // Check basic select_other.
-    $this->assertRaw('<fieldset data-drupal-selector="edit-select-other-basic" class="js-webform-select-other webform-select-other webform-select-other--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper" id="edit-select-other-basic--wrapper">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-select-other-basic" class="js-webform-select-other webform-select-other webform-select-other--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper" id="edit-select-other-basic">');
     $this->assertRaw('<span class="fieldset-legend">Select other basic</span>');
     $this->assertRaw('<select data-drupal-selector="edit-select-other-basic-select" id="edit-select-other-basic-select" name="select_other_basic[select]" class="form-select">');
     $this->assertRaw('<input data-drupal-selector="edit-select-other-basic-other" type="text" id="edit-select-other-basic-other" name="select_other_basic[other]" value="Four" size="60" maxlength="128" placeholder="Enter other…" class="form-text" />');

@@ -151,9 +151,16 @@ abstract class WebformOtherBase extends FormElement {
       $element['other']['#parents'] = array_merge($element['#parents'], ['other']);
     }
 
+    // Add attributes to the composite fieldset wrapper.
+    // @see \Drupal\webform\Element\WebformCompositeFormElementTrait
+
     // Add js trigger to fieldset.
     $element['#attributes']['class'][] = "js-webform-$type-other";
     $element['#attributes']['class'][] = "webform-$type-other";
+
+    // Apply the element id to the wrapper so that inline form errors point
+    // to the correct element.
+    $element['#attributes']['id'] = $element['#id'];
 
     // Remove options.
     unset($element['#options']);

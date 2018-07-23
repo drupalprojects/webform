@@ -48,7 +48,9 @@ trait WebformCompositeFormElementTrait {
     if (isset($element['#title']) || isset($element['#description'])) {
       // @see #type 'fieldgroup'
       $element['#theme_wrappers'][] = 'fieldset';
-      $element['#attributes']['id'] = $element['#id'] . '--wrapper';
+      if (!isset($element['#attributes']['id'])) {
+        $element['#attributes']['id'] = $element['#id'] . '--wrapper';
+      }
       $element['#attributes']['class'][] = Html::getClass($element['#type']) . '--wrapper';
       $element['#attributes']['class'][] = 'fieldgroup';
       $element['#attributes']['class'][] = 'form-composite';
