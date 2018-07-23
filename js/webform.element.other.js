@@ -33,8 +33,12 @@
 
       // Display the element.
       $element[showEffect]();
-      // Focus and require the input.
-      $input.focus().prop('required', true).attr('aria-required', 'true');
+      // If not initializing, then focus the other element.
+      if (effect !== false) {
+        $input.focus();
+      }
+      // Require the input.
+      $input.prop('required', true).attr('aria-required', 'true');
       // Restore the input's value.
       var value = $input.data('webform-value');
       if (value !== undefined) {
