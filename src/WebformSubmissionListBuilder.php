@@ -552,6 +552,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         $link = Link::fromTextAndUrl($link_text, $link_url)->toRenderable();
         if ($name == 'serial') {
           $link['#attributes']['title'] = $entity->label();
+          $link['#attributes']['aria-label'] = $entity->label();
         }
         return ['data' => $link];
 

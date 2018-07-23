@@ -545,10 +545,12 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           ['webform' => $webform->id(), 'key' => $key]
         ),
         '#attributes' => $element_dialog_attributes + [
-            // Add custom hash to current page's location.
-            // @see Drupal.behaviors.webformAjaxLink
-            'data-hash' => 'webform-tab--conditions',
-          ],
+          // Add custom hash to current page's location.
+          // @see Drupal.behaviors.webformAjaxLink
+          'data-hash' => 'webform-tab--conditions',
+          'title' => $this->t('Edit @states conditional', ['@states' =>  implode('; ', $states)]),
+          'aria-label' => $this->t('Edit @states conditional', ['@states' =>  implode('; ', $states)]),
+        ],
       ];
     }
 
