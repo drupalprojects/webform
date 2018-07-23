@@ -115,7 +115,6 @@ abstract class WebformOtherBase extends FormElement {
     $element[$type]['#pre_render'] = [];
 
     // Build other textfield.
-    $element['other']['#error_no_message'] = TRUE;
     foreach ($element as $key => $value) {
       if (strpos($key, '#other__') === 0) {
         $other_key = str_replace('#other__', '#', $key);
@@ -196,6 +195,7 @@ abstract class WebformOtherBase extends FormElement {
     $element_value = $value[$type];
     $other_value = $value['other'];
     $required_error_title = (isset($element['#title'])) ? $element['#title'] : NULL;
+    $other_is_empty = FALSE;
     if (static::isMultiple($element)) {
       $element_value = array_filter($element_value);
       $element_value = array_combine($element_value, $element_value);
@@ -203,7 +203,8 @@ abstract class WebformOtherBase extends FormElement {
       if (isset($return_value[static::OTHER_OPTION])) {
         unset($return_value[static::OTHER_OPTION]);
         if ($has_access && $other_value === '') {
-          WebformElementHelper::setRequiredError($element, $form_state, $required_error_title);
+          WebformElementHelper::setRequiredError($element['other'], $form_state, $required_error_title);
+          $other_is_empty = TRUE;
         }
         else {
           $return_value += [$other_value => $other_value];
@@ -214,7 +215,8 @@ abstract class WebformOtherBase extends FormElement {
       $return_value = $element_value;
       if ($element_value == static::OTHER_OPTION) {
         if ($has_access && $other_value === '') {
-          WebformElementHelper::setRequiredError($element, $form_state, $required_error_title);
+          WebformElementHelper::setRequiredError($element['other'], $form_state, $required_error_title);
+          $other_is_empty = TRUE;
           $return_value = '';
         }
         else {
@@ -232,8 +234,9 @@ abstract class WebformOtherBase extends FormElement {
     }
 
     // Handler required validation.
-    if ($element['#required'] && $is_empty && $has_access) {
+    if ($has_access && $element['#required'] && $is_empty && !$other_is_empty) {
       WebformElementHelper::setRequiredError($element, $form_state, $required_error_title);
+      $element['other']['#error_no_message'] = TRUE;
     }
 
     $form_state->setValueForElement($element[$type], NULL);
