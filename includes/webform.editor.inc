@@ -128,6 +128,10 @@ function _webform_get_file_uuids(WebformInterface $webform) {
  *   An array of all found UUIDs.
  */
 function _webform_parse_file_uuids($text) {
+  if (strpos($text, 'data-entity-uuid') === FALSE) {
+    return [];
+  }
+
   $dom = Html::load($text);
   $xpath = new \DOMXPath($dom);
   $uuids = [];
