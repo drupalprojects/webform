@@ -58,6 +58,10 @@ function webform_webform_delete(WebformInterface $webform) {
  *   An entity whose fields to inspect for file references.
  */
 function _webform_record_file_usage(array $uuids, WebformInterface $webform) {
+  if (empty($uuids)) {
+    return;
+  }
+
   /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
   $file_usage = \Drupal::service('file.usage');
 
@@ -86,6 +90,10 @@ function _webform_record_file_usage(array $uuids, WebformInterface $webform) {
  * @see \Drupal\file\FileUsage\FileUsageInterface::delete()
  */
 function _webform_delete_file_usage(array $uuids, WebformInterface $webform, $count) {
+  if (empty($uuids)) {
+    return;
+  }
+
   /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
   $file_usage = \Drupal::service('file.usage');
 
