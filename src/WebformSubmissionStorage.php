@@ -841,6 +841,11 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
           $message = $this->t('@title submitted.', $t_args);
           break;
 
+        case WebformSubmissionInterface::STATE_LOCKED:
+          $operation = 'submission locked';
+          $message = $this->t('@title locked.', $t_args);
+          break;
+
         default:
           throw new \Exception('Unexpected webform submission state');
       }

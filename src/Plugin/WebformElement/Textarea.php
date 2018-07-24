@@ -51,8 +51,10 @@ class Textarea extends TextBase {
       'unique_entity' => FALSE,
       'unique_error' => '',
       'counter_type' => '',
+      'counter_minimum' => '',
+      'counter_minimum_message' => '',
       'counter_maximum' => '',
-      'counter_message' => '',
+      'counter_maximum_message' => '',
       // Attributes.
       'wrapper_attributes' => [],
       'label_attributes' => [],

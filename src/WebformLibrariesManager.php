@@ -401,6 +401,15 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'version' => '1.8.3',
       'optional' => TRUE,
     ];
+    $libraries['jquery.textcounter'] = [
+      'title' => $this->t('jQuery: Text Counter'),
+      'description' => $this->t('A jQuery plugin for counting and limiting characters/words on text input, or textarea, elements.'),
+      'notes' => $this->t('Word or character counting, with server-side validation, is available for text fields and text areas.'),
+      'homepage_url' => Url::fromUri('https://github.com/ractoon/jQuery-Text-Counter'),
+      'download_url' => Url::fromUri('https://github.com/ractoon/jQuery-Text-Counter/archive/0.8.0.zip'),
+      'version' => '0.8.0',
+      'optional' => TRUE,
+    ];
     $libraries['jquery.timepicker'] = [
       'title' => $this->t('jQuery: Timepicker'),
       'description' => $this->t('A lightweight, customizable javascript timepicker plugin for jQuery, inspired by Google Calendar.'),
@@ -419,15 +428,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'version' => '4.0.0',
       'elements' => ['webform_toggle', 'webform_toggles'],
       'deprecated' => $this->t('The Toogles library is not being maintained and has major accessibility issues. It has been <a href=":href">deprecated</a> amd will be removed before Webform 8.x-5.0.', [':href' => 'https://www.drupal.org/project/webform/issues/2890861']),
-      'optional' => TRUE,
-    ];
-    $libraries['jquery.word-and-character-counter'] = [
-      'title' => $this->t('jQuery: Word and character counter plug-in!'),
-      'description' => $this->t('The jQuery word and character counter plug-in allows you to count characters or words'),
-      'notes' => $this->t('Word or character counting, with server-side validation, is available for text fields and text areas.'),
-      'homepage_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin'),
-      'download_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/archive/2.5.1.zip'),
-      'version' => '2.5.1',
       'optional' => TRUE,
     ];
     $libraries['progress-tracker'] = [

@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\Block;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -144,7 +145,12 @@ full_name: '[webform_submission:node:field_full_name:clear]"
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
-    return $this->getWebform()->access('submission_create', $account, TRUE);
+    $webform = $this->getWebform();
+    if (!$webform) {
+      return AccessResult::forbidden();
+    }
+
+    return $webform->access('submission_create', $account, TRUE);
   }
 
   /**

@@ -66,7 +66,7 @@ class ActionWebformHandler extends WebformHandlerBase {
    */
   public function getSummary() {
     $configuration = $this->getConfiguration();
-    $this->configuration = $configuration['settings'];
+    $settings = $configuration['settings'];
 
     // Get state labels.
     $states = [
@@ -76,7 +76,7 @@ class ActionWebformHandler extends WebformHandlerBase {
       WebformSubmissionInterface::STATE_UPDATED => $this->t('Updated'),
       WebformSubmissionInterface::STATE_LOCKED => $this->t('Locked'),
     ];
-    $this->configuration['states'] = array_intersect_key($states, array_combine($this->configuration['states'], $this->configuration['states']));
+    $settings['states'] = array_intersect_key($states, array_combine($settings['states'], $settings['states']));
 
     // Get message type.
     $message_types = [
@@ -85,15 +85,15 @@ class ActionWebformHandler extends WebformHandlerBase {
       'warning' => t('Warning'),
       'info' => t('Info'),
     ];
-    $this->configuration['message'] = $this->configuration['message'] ? WebformHtmlEditor::checkMarkup($this->configuration['message']) : NULL;
-    $this->configuration['message_type'] = $message_types[$this->configuration['message_type']];
+    $settings['message'] = $settings['message'] ? WebformHtmlEditor::checkMarkup($settings['message']) : NULL;
+    $settings['message_type'] = $message_types[$settings['message_type']];
 
     // Get data element keys.
-    $data = Yaml::decode($this->configuration['data']) ?: [];
-    $this->configuration['data'] = array_keys($data);
+    $data = Yaml::decode($settings['data']) ?: [];
+    $settings['data'] = array_keys($data);
 
     return [
-      '#settings' => $this->configuration,
+      '#settings' => $settings,
     ] + parent::getSummary();
   }
 

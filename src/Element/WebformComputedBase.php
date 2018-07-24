@@ -73,7 +73,7 @@ abstract class WebformComputedBase extends FormElement {
    *   The processed element.
    */
   public static function processWebformComputed(&$element, FormStateInterface $form_state, &$complete_form) {
-    $webform_submission = static::getWebformSubmission($element, $form_state);
+    $webform_submission = static::getWebformSubmission($element, $form_state, $complete_form);
     if ($webform_submission) {
       $value = static::processValue($element, $webform_submission);;
 
@@ -187,9 +187,9 @@ abstract class WebformComputedBase extends FormElement {
    */
   public static function validateWebformComputed(&$element, FormStateInterface $form_state, &$complete_form) {
     // Make sure the form's state value uses the computed value and not the
-    // raw #value. This ensures conditional handlers are trigger using
+    // raw #value. This ensures conditional handlers are triggered using
     // the accurate computed value.
-    $webform_submission = static::getWebformSubmission($element, $form_state);
+    $webform_submission = static::getWebformSubmission($element, $form_state, $complete_form);
     if ($webform_submission) {
       $value = static::processValue($element, $webform_submission);;
       $form_state->setValueForElement($element['value'], NULL);
@@ -223,14 +223,6 @@ abstract class WebformComputedBase extends FormElement {
    *   The current state of the form.
    */
   public static function submitWebformComputedCallback(array $form, FormStateInterface $form_state) {
-    $form_object = $form_state->getFormObject();
-
-    // Build webform submission with validated and processed form state values.
-    if ($form_object instanceof WebformSubmissionForm) {
-      $entity = $form_object->buildEntity($form, $form_state);
-      $form_object->setEntity($entity);
-    }
-
     $form_state->setRebuild();
   }
 
@@ -254,7 +246,6 @@ abstract class WebformComputedBase extends FormElement {
     // @see js/webform.element.computed.js
     $element['#prefix'] = '<div class="js-webform-computed-wrapper" id="' . $element['#wrapper_id'] . '">';
     $element['#suffix'] = '</div>';
-
     return $element;
   }
 
@@ -287,22 +278,27 @@ abstract class WebformComputedBase extends FormElement {
    *   The element.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
    *
    * @return \Drupal\webform\WebformSubmissionInterface|null
    *   A webform submission.
    */
-  protected static function getWebformSubmission(array $element, FormStateInterface $form_state) {
+  protected static function getWebformSubmission(array $element, FormStateInterface $form_state, array &$complete_form) {
     $form_object = $form_state->getFormObject();
-    if (isset($element['#webform_submission'])) {
+    if ($form_object instanceof WebformSubmissionForm) {
+      // We must continually rebuild the webform submission since a computed
+      // element's value can be based on another computed element's value.
+      $entity = $form_object->buildEntity($complete_form, $form_state);
+      return $entity;
+    }
+    elseif (isset($element['#webform_submission'])) {
       if (is_string($element['#webform_submission'])) {
         return WebformSubmission::load($element['#webform_submission']);
       }
       else {
         return $element['#webform_submission'];
       }
-    }
-    elseif ($form_object instanceof WebformSubmissionForm) {
-      return $form_object->getEntity();
     }
     else {
       return NULL;
