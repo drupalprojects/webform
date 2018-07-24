@@ -213,10 +213,11 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
     // config management.
     $libraries['excluded_libraries'] = array_keys($libraries['excluded_libraries']);
 
-    $config = $this->config('webform.settings');
+    // Load and save config.
+    $config = $this->loadConfig();
     $config->set('assets', $form_state->getValue('assets'));
     $config->set('libraries', $libraries);
-    $config->save();
+    $this->saveConfig($config);
 
     // Reset libraries cached.
     // @see webform_library_info_build()

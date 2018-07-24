@@ -26,6 +26,10 @@ function webform_uninstall() {
   $mail_plugins = $config->get('interface');
   unset($mail_plugins['webform']);
   $config->set('interface', $mail_plugins)->save();
+
+  // Delete editor uploaded files.
+  $config = \Drupal::configFactory()->get('webform.settings');
+  _webform_config_delete($config);
 }
 
 /**

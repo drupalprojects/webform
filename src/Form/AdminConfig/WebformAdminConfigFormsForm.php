@@ -598,10 +598,11 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       $settings['dialog_options'][$dialog_name] = array_filter($dialog_options);
     }
 
-    $config = $this->config('webform.settings');
+    // Load and save config.
+    $config = $this->loadConfig();
     $config->set('settings', $settings + $config->get('settings'));
     $config->set('third_party_settings', $form_state->getValue('third_party_settings') ?: []);
-    $config->save();
+    $this->saveConfig($config);
 
     /* Update paths */
 

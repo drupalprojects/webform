@@ -8,6 +8,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
+use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
@@ -310,22 +311,40 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         ],
       ],
     ];
-    $t_args = [
-      ':dialog_href' => Url::fromRoute('<current>', [], ['fragment' => 'edit-ui'])->toString(),
-      ':modules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-core-experimental'])->toString(),
-    ];
-    $form['html_editor']['message'] = [
+    $form['html_editor']['format_container']['warning_message'] = [
       '#type' => 'webform_message',
-      '#message_message' => $this->t('Text formats that open CKEditor image and/or link dialogs will not work properly.') . '<br />' .
-        $this->t('You may need to <a href=":dialog_href">disable dialogs</a> or enable the experimental <a href=":modules_href">Settings Tray</a> module.', $t_args) . '<br />' .
-        $this->t('For more information see: <a href="https://www.drupal.org/node/2741877">Issue #2741877: Nested modals don\'t work</a>'),
+      '#message_message' => $this->t('Files uploaded via the CKEditor file dialog to webform elements, settings, and configuration will not be exportable.') . '<br/>' .
+        '<strong>' . $this->t('All files must be uploaded to your production environment and then copied to development and local environment.') . '</strong>',
       '#message_type' => 'warning',
       '#states' => [
         'visible' => [
-          ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
-          ':input[name="html_editor[format]"]' => ['!value' => ''],
+          [':input[name="html_editor[element_format]"]' => ['!value' => '']],
+          'or',
+          [':input[name="html_editor[mail_format]"]' => ['!value' => '']],
         ],
       ],
+      '#message_close' => TRUE,
+      '#message_storage' => WebformMessage::STORAGE_SESSION,
+    ];
+    if (!$this->moduleHandler->moduleExists('imce')) {
+      $form['html_editor']['format_container']['help_message'] = [
+        '#type' => 'webform_message',
+        '#message_message' => $this->t('It is recommended to use the <a href=":href">IMCE module</a> to manage webform elements, settings, and configuration files.', [':href' => 'https://www.drupal.org/project/imce']),
+        '#message_type' => 'info',
+        '#states' => [
+          'visible' => [
+            [':input[name="html_editor[element_format]"]' => ['!value' => '']],
+            'or',
+            [':input[name="html_editor[mail_format]"]' => ['!value' => '']],
+          ],
+        ],
+        '#message_close' => TRUE,
+        '#message_storage' => WebformMessage::STORAGE_SESSION,
+      ];
+    }
+    $t_args = [
+      ':dialog_href' => Url::fromRoute('<current>', [], ['fragment' => 'edit-ui'])->toString(),
+      ':modules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-core-experimental'])->toString(),
     ];
 
     // Element: Location.
@@ -580,7 +599,8 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     // Excluded elements.
     $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_elements'));
 
-    $config = $this->config('webform.settings');
+    // Load and save config.
+    $config = $this->loadConfig();
     $config->set('element', $form_state->getValue('element') +
       $form_state->getValue('checkbox') +
       $form_state->getValue('location') +
@@ -590,7 +610,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     $config->set('html_editor', $form_state->getValue('html_editor'));
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
-    $config->save();
+    $this->saveConfig($config);
 
     parent::submitForm($form, $form_state);
   }
