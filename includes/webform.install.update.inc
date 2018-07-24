@@ -2394,3 +2394,10 @@ function webform_update_8135() {
   unset($settings['html_editor']['format']);
   $admin_config->setData($settings)->save();
 }
+
+/**
+ * Issue #2983137: WYSIWYG editor not saving inline images for advanced html/text editor.
+ */
+function webform_update_8136() {
+  _webform_update_admin_settings();
+}
