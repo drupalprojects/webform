@@ -174,6 +174,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function getSummary() {
     $settings = $this->getEmailConfiguration();
+
     // Simplify the [webform_submission:values:.*] tokens.
     array_walk($settings, function (&$value, $key) {
       if (is_string($value)) {

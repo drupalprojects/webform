@@ -123,18 +123,21 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    */
   public function getSummary() {
     $configuration = $this->getConfiguration();
+    $settings = $configuration['settings'];
+
     if (!$this->isResultsEnabled()) {
-      $configuration['settings']['updated_url'] = '';
-      $configuration['settings']['deleted_url'] = '';
+      $settings['updated_url'] = '';
+      $settings['deleted_url'] = '';
     }
     if (!$this->isDraftEnabled()) {
-      $configuration['settings']['draft_url'] = '';
+      $settings['draft_url'] = '';
     }
     if (!$this->isConvertEnabled()) {
-      $configuration['settings']['converted_url'] = '';
+      $settings['converted_url'] = '';
     }
+
     return [
-      '#settings' => $configuration['settings'],
+      '#settings' => $settings,
     ] + parent::getSummary();
   }
 

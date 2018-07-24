@@ -76,16 +76,20 @@ class SettingsWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function getSummary() {
+    $configuration = $this->getConfiguration();
+    $settings = $configuration['settings'];
+
     $setting_definitions = $this->getSettingsDefinitions();
-    $settings = $this->getSettingsOverride();
-    foreach ($settings as $name => $value) {
-      $settings[$name] = [
+    $setting_override = $this->getSettingsOverride();
+    foreach ($setting_override as $name => $value) {
+      $settings['settings'][$name] = [
         'title' => $setting_definitions[$name]['label'],
         'value' => $value,
       ];
     }
+
     return [
-      '#settings' => $this->configuration + ['settings' => $settings],
+      '#settings' => $settings,
     ] + parent::getSummary();
   }
 
