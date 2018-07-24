@@ -699,6 +699,8 @@ class WebformCliService implements WebformCliServiceInterface {
     /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
     $libraries_manager = \Drupal::service('webform.libraries_manager');
     $libraries = $libraries_manager->getLibraries();
+    // Manually add deleted libraries, so that they will always be removed.
+    $libraries['jquery.word-and-character-counter'] = 'jquery.word-and-character-counter';
     foreach ($libraries as $library_name => $library) {
       $library_path = '/libraries/' . $library_name;
       $library_exists = (file_exists(DRUPAL_ROOT . $library_path)) ? TRUE : FALSE;
@@ -971,7 +973,7 @@ class WebformCliService implements WebformCliServiceInterface {
     file_put_contents($composer_json, json_encode($data, $this->drush_webform_composer_get_json_encode_options()));
 
     $this->drush_print("$composer_json updated.");
-    $this->drush_print('Make sure to run `omposer update --lock`.');
+    $this->drush_print('Make sure to run `composer update --lock`.');
   }
 
   /**

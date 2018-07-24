@@ -41,16 +41,32 @@ abstract class TextBase extends WebformElementBase {
     parent::prepare($element, $webform_submission);
 
     // Counter.
-    if (!empty($element['#counter_type']) && !empty($element['#counter_maximum']) && $this->librariesManager->isIncluded('jquery.word-and-character-counter')) {
+    if (!empty($element['#counter_type'])
+      && (!empty($element['#counter_minimum']) || !empty($element['#counter_maximum']))
+      && $this->librariesManager->isIncluded('jquery.textcounter')) {
 
+      // Apply character min/max to min/max length.
       if ($element['#counter_type'] == 'character') {
-        $element['#maxlength'] = $element['#counter_maximum'];
+        if (!empty($element['#counter_minimum'])) {
+          $element['#minlength'] = $element['#counter_minimum'];
+        }
+        if (!empty($element['#counter_maximum'])) {
+          $element['#maxlength'] = $element['#counter_maximum'];
+        }
       }
 
-      $element['#attributes']['data-counter-type'] = $element['#counter_type'];
-      $element['#attributes']['data-counter-limit'] = $element['#counter_maximum'];
-      if (!empty($element['#counter_message'])) {
-        $element['#attributes']['data-counter-message'] = $element['#counter_message'];
+      // Set 'data-counter-*' attributes using '#counter_*' properties.
+      $data_attributes = [
+        'counter_type',
+        'counter_minimum',
+        'counter_minimum_message',
+        'counter_maximum',
+        'counter_maximum_message',
+      ];
+      foreach ($data_attributes as $data_attribute) {
+        if (!empty($element['#' . $data_attribute])) {
+          $element['#attributes']['data-' . str_replace('_', '-', $data_attribute)] = $element['#' . $data_attribute];
+        }
       }
 
       $element['#attributes']['class'][] = 'js-webform-counter';
@@ -124,8 +140,7 @@ abstract class TextBase extends WebformElementBase {
     ];
 
     // Counter.
-    $form['validation']['counter_container'] = $this->getFormInlineContainer();
-    $form['validation']['counter_container']['counter_type'] = [
+    $form['validation']['counter_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Count'),
       '#description' => $this->t('Limit entered value to a maximum number of characters or words.'),
@@ -135,32 +150,67 @@ abstract class TextBase extends WebformElementBase {
         'word' => $this->t('Words'),
       ],
     ];
+    $form['validation']['counter_container'] = $this->getFormInlineContainer();
+    $form['validation']['counter_container']['#states'] = [
+      'invisible' => [
+        ':input[name="properties[counter_type]"]' => ['value' => ''],
+      ]
+    ];
+    $form['validation']['counter_container']['counter_minimum'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Count minimum'),
+      '#min' => 1,
+      '#states' => [
+        'required' => [
+          ':input[name="properties[counter_type]"]' => ['!value' => ''],
+          ':input[name="properties[counter_maximum]"]' => ['value' => ''],
+        ],
+      ],
+    ];
     $form['validation']['counter_container']['counter_maximum'] = [
       '#type' => 'number',
       '#title' => $this->t('Count maximum'),
       '#min' => 1,
       '#states' => [
-        'invisible' => [
-          ':input[name="properties[counter_type]"]' => ['value' => ''],
-        ],
-        'optional' => [
-          ':input[name="properties[counter_type]"]' => ['value' => ''],
+        'required' => [
+          ':input[name="properties[counter_type]"]' => ['!value' => ''],
+          ':input[name="properties[counter_minimum]"]' => ['value' => ''],
         ],
       ],
     ];
-    $form['validation']['counter_message'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Count message'),
-      '#description' => $this->t('Defaults to: %value', ['%value' => $this->t('X characters/word(s) left')]),
+    $form['validation']['counter_message_container'] = [
+      '#type' => 'container',
       '#states' => [
         'invisible' => [
           ':input[name="properties[counter_type]"]' => ['value' => ''],
         ],
       ],
     ];
-    if ($this->librariesManager->isExcluded('jquery.word-and-character-counter')) {
+    $form['validation']['counter_message_container']['counter_minimum_message'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Count minimum message'),
+      '#description' => $this->t('Defaults to: %value', ['%value' => $this->t('%d characters/word(s) entered')]),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[counter_minimum]"]' => ['!value' => ''],
+          ':input[name="properties[counter_maximum]"]' => ['value' => ''],
+        ],
+      ],
+    ];
+    $form['validation']['counter_message_container']['counter_maximum_message'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Count maximum message'),
+      '#description' => $this->t('Defaults to: %value', ['%value' => $this->t('%d characters/word(s) remaining')]),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[counter_maximum]"]' => ['!value' => ''],
+        ],
+      ],
+    ];
+    if ($this->librariesManager->isExcluded('jquery.textcounter')) {
+      $form['validation']['counter_type']['#access'] = FALSE;
       $form['validation']['counter_container']['#access'] = FALSE;
-      $form['validation']['counter_message']['#access'] = FALSE;
+      $form['validation']['counter_message_container']['#access'] = FALSE;
     }
 
     if (isset($form['form']['maxlength'])) {
@@ -176,41 +226,46 @@ abstract class TextBase extends WebformElementBase {
   }
 
   /**
-   * Form API callback. Validate (word/charcter) counter.
+   * Form API callback. Validate (word/character) counter.
    */
   public static function validateCounter(array &$element, FormStateInterface $form_state) {
     $name = $element['#name'];
     $value = $form_state->getValue($name);
-    $type = $element['#counter_type'];
-    $max = $element['#counter_maximum'];
-
-    // Validate character count.
-    if ($type == 'character') {
-      $length = Unicode::strlen($value);
-      if ($length <= $max) {
-        return;
-      }
-    }
-    // Validate word count.
-    elseif ($type == 'word') {
-      $length = str_word_count($value);
-      if ($length <= $max) {
-        return;
-      }
-    }
-    else {
+    if ($value === '') {
       return;
     }
+
+    $type = $element['#counter_type'];
+    $max = (!empty($element['#counter_maximum'])) ? $element['#counter_maximum'] : NULL;
+    $min = (!empty($element['#counter_minimum'])) ? $element['#counter_minimum'] : NULL;
 
     // Display error.
     // @see \Drupal\Core\Form\FormValidator::performRequiredValidation
     $t_args = [
+      '@type' => ($type == 'character') ? t('characters') : t('words'),
       '@name' => $element['#title'],
       '%max' => $max,
-      '@type' => ($type == 'character') ? t('characters') : t('words'),
-      '%length' => $length,
+      '%min' => $min,
     ];
-    $form_state->setError($element, t('@name cannot be longer than %max @type but is currently %length @type long.', $t_args));
+
+    // Get character/word count.
+    if ($type === 'character') {
+      $length = Unicode::strlen($value);
+      $t_args['%length'] = $length;
+    }
+    // Validate word count.
+    elseif ($type === 'word') {
+      $length = str_word_count($value);
+      $t_args['%length'] = $length;
+    }
+
+    // Validate character/word count.
+    if ($max && $length > $max) {
+      $form_state->setError($element, t('@name cannot be longer than %max @type but is currently %length @type long.', $t_args));
+    }
+    elseif ($min && $length < $min) {
+      $form_state->setError($element, t('@name must be longer than %min @type but is currently %length @type long.', $t_args));
+    }
   }
 
   /**

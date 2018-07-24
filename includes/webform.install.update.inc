@@ -2394,3 +2394,53 @@ function webform_update_8135() {
   unset($settings['html_editor']['format']);
   $admin_config->setData($settings)->save();
 }
+
+/**
+ * Issue #2987174: Replace and improve word/character counter.
+ */
+function webform_update_8136() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    if (strpos($data['elements'], "'#counter_message'") === FALSE) {
+      continue;
+    }
+
+    $elements = Yaml::decode($data['elements']);
+    _webform_update_8136($elements);
+
+    $data['elements'] = Yaml::encode($elements);
+    $webform_config->setData($data);
+    $webform_config->save();
+  }
+}
+
+/**
+ * Update #counter_* attribute.s
+ *
+ * Replace 'X' in counter message with '%d' and
+ * move '#counter_message' to '#counter_maxiumum_message'.
+ *
+ * @param array $element
+ *   A form element.
+ */
+function _webform_update_8136(array &$element) {
+  if (isset($element['#counter_message'])) {
+    if (strpos($element['#counter_message'], 'X') === FALSE) {
+      $element['#counter_message'] = '%d ' . $element['#counter_message'];
+    }
+    else {
+      $element['#counter_message'] = str_replace('X', '%d', $element['#counter_message']);
+    }
+    $element['#counter_maximum_message'] = $element['#counter_message'];
+    unset($element['#counter_message']);
+  }
+
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      _webform_update_8136($element[$key]);
+    }
+  }
+}

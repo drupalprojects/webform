@@ -26,8 +26,10 @@ class TextField extends TextBase {
       'input_mask' => '',
       // Form validation.
       'counter_type' => '',
+      'counter_minimum' => '',
+      'counter_minimum_message' => '',
       'counter_maximum' => '',
-      'counter_message' => '',
+      'counter_maximum_message' => '',
     ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 

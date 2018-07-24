@@ -10,36 +10,75 @@ close: null
 uid: null
 template: false
 archive: false
-id: test_element_text
-title: 'Test: Element: Text'
-description: 'Tests text field and text area based elements.'
+id: test_element_counter
+title: 'Test: Element: Counter'
+description: 'Tests text counter.'
 category: 'Test: Element'
 elements: |
-  '#attributes':
-    novalidate: novalidate
-  text_format_element:
+  counter_characters:
     '#type': details
-    '#title': 'Text format elements'
+    '#title': counter_characters
     '#open': true
-    text_format:
-      '#type': text_format
-      '#title': text_format
-      '#hide_help': true
-  counter_elements:
-    '#type': details
-    '#title': 'Word and character counter'
-    '#open': true
-    counter_characters:
+    counter_characters_min:
       '#type': textfield
-      '#title': 'Character counter'
+      '#title': 'counter_characters_min (5)'
+      '#counter_type': character
+      '#counter_minimum': 5
+    counter_characters_max:
+      '#type': textfield
+      '#title': 'counter_characters_max (10)'
       '#counter_type': character
       '#counter_maximum': 10
-    counter_words:
+    counter_characters_min_max:
+      '#type': textfield
+      '#title': 'counter_characters_min_max (5-10)'
+      '#counter_type': character
+      '#counter_minimum': 5
+      '#counter_maximum': 10
+    counter_characters_min_message:
+      '#type': textfield
+      '#title': 'counter_characters_min_message (5)'
+      '#counter_type': character
+      '#counter_minimum': 5
+      '#counter_minimum_message': '%d character(s) entered. This is custom text'
+    counter_characters_max_message:
+      '#type': textfield
+      '#title': 'counter_characters_max_message (10)'
+      '#counter_type': character
+      '#counter_maximum': 10
+      '#counter_maximum_message': '%d character(s) remaining. This is custom text'
+  counter_word:
+    '#type': details
+    '#title': counter_word
+    '#open': true
+    counter_words_min:
       '#type': textarea
-      '#title': 'Word counter'
+      '#title': 'counter_words_min (5)'
       '#counter_type': word
-      '#counter_maximum': 3
-      '#counter_message': 'word(s) left. This is a custom message'
+      '#counter_minimum': 5
+    counter_words_max:
+      '#type': textarea
+      '#title': 'counter_words_max (10)'
+      '#counter_type': word
+      '#counter_maximum': 10
+    counter_words_min_max:
+      '#type': textarea
+      '#title': 'counter_words_min_max (5-10)'
+      '#counter_type': word
+      '#counter_minimum': 5
+      '#counter_maximum': 10
+    counter_words_min_message:
+      '#type': textarea
+      '#title': 'counter_words_min_message (5)'
+      '#counter_type': word
+      '#counter_minimum': 5
+      '#counter_minimum_message': '%d word(s) entered. This is custom text'
+    counter_words_max_message:
+      '#type': textarea
+      '#title': 'counter_words_max_message (10)'
+      '#counter_type': word
+      '#counter_maximum': 10
+      '#counter_maximum_message': '%d character(s) remaining. This is custom text'
 css: ''
 javascript: ''
 settings:

@@ -491,12 +491,15 @@ webform.element.computed:
 
 webform.element.counter:
   version: VERSION
+  css:
+    component:
+      css/webform.element.counter.css: {}
   js:
     js/webform.element.counter.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
-    - webform/libraries.jquery.word-and-character-counter
+    - webform/libraries.jquery.textcounter
 
 webform.element.date:
   version: VERSION
@@ -935,20 +938,6 @@ libraries.codemirror.twig:
   dependencies:
     - webform/libraries.codemirror.text
 
-libraries.jquery.word-and-character-counter:
-  remote: https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin
-  version: '2.5.1'
-  license:
-    name: MIT
-    url: http://opensource.org/licenses/mit-license.php
-    gpl-compatible: true
-  cdn:
-    /libraries/jquery.word-and-character-counter/: https://cdn.rawgit.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/2.5.1/
-  js:
-    /libraries/jquery.word-and-character-counter/jquery.word-and-character-counter.min.js: {}
-  dependencies:
-    - core/jquery
-
 libraries.jquery.geocomplete:
   remote: http://ubilabs.github.io/geocomplete/
   version: '1.7.0'
@@ -1098,6 +1087,20 @@ libraries.jquery.chosen:
       /libraries/jquery.chosen/chosen.css: {}
   js:
     /libraries/jquery.chosen/chosen.jquery.js: {}
+  dependencies:
+    - core/jquery
+
+libraries.jquery.textcounter:
+  remote: https://github.com/ractoon/jQuery-Text-Counter
+  version: '0.8.0'
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/mit-license.php
+    gpl-compatible: true
+  cdn:
+    /libraries/jquery.textcounter/: https://cdn.rawgit.com/ractoon/jQuery-Text-Counter/0.8.0/
+  js:
+    /libraries/jquery.textcounter/textcounter.min.js: {}
   dependencies:
     - core/jquery
 
