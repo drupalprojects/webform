@@ -264,29 +264,49 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         $format_options[$filter->id()] = $filter->label();
       }
     }
-    $form['html_editor']['element_format'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Element text format'),
-      '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
-      '#empty_option' => $this->t('- None -'),
-      '#options' => $format_options,
-      '#default_value' => $config->get('html_editor.element_format'),
+    $form['html_editor']['format_container'] = [
+      '#type' => 'container',
       '#states' => [
         'visible' => [
           ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
         ],
       ],
     ];
-    $form['html_editor']['mail_format'] = [
+    $form['html_editor']['format_container']['element_format'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Element text format'),
+      '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
+      '#empty_option' => $this->t('- None -'),
+      '#options' => $format_options,
+      '#default_value' => $config->get('html_editor.element_format'),
+      '#parents' => ['html_editor', 'element_format'],
+    ];
+    $form['html_editor']['format_container']['mail_format'] = [
       '#type' => 'select',
       '#title' => $this->t('Mail text format'),
       '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
       '#empty_option' => $this->t('- None -'),
       '#options' => $format_options,
       '#default_value' => $config->get('html_editor.mail_format'),
+      '#parents' => ['html_editor', 'mail_format'],
       '#states' => [
         'visible' => [
           ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+    $form['html_editor']['format_container']['make_unused_managed_files_temporary'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Unused html editor files should be marked temporary'),
+      '#description' => $this->t('Drupal core does not automatically delete unused files because unused files could reused.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('html_editor.make_unused_managed_files_temporary'),
+      '#parents' => ['html_editor', 'make_unused_managed_files_temporary'],
+      '#states' => [
+        'visible' => [
+          [':input[name="html_editor[element_format]"]' => ['!value' => '']],
+          'or',
+          [':input[name="html_editor[mail_format]"]' => ['!value' => '']],
         ],
       ],
     ];

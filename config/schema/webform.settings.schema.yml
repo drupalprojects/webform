@@ -241,6 +241,9 @@ webform.settings:
         tidy:
           type: boolean
           label: 'Tidy HTML markup'
+        make_unused_managed_files_temporary:
+          type: boolean
+          label: 'Controls if unused HTML editor files should be marked temporary'
     file:
       type: mapping
       label: 'File upload default settings'
@@ -274,10 +277,10 @@ webform.settings:
           label: 'Default allowed document file extensions'
         make_unused_managed_files_temporary:
           type: boolean
-          label: 'Controls if unused files should be marked temporary'
+          label: 'Controls if unused webform submission files should be marked temporary'
         delete_temporary_managed_files:
           type: boolean
-          label: 'Immediately deleted temporary managed files'
+          label: 'Immediately deleted temporary managed webform submission files'
     format:
       type: ignore
       label: 'Format default settings'
