@@ -128,6 +128,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'config',
     ];
 
+    // Config: Config Entity Revisions.
+    $projects['config_entity_revisions'] = [
+      'title' => $this->t('Config Entity Revisions'),
+      'description' => $this->t('Provides an API for augmenting Configuration entities in Drupal 8.5 and later with revision and moderation support.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/config_entity_revisions'),
+      'category' => 'config',
+    ];
+
     // Config: Configuration Ignore.
     $projects['config_ignore'] = [
       'title' => $this->t('Config Ignore'),
