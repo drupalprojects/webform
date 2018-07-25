@@ -549,6 +549,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
       $data[$element_key . '__name'] = $file->getFilename();
       $data[$element_key . '__uri'] = $file->getFileUri();
+      $data[$element_key . '__mime'] = $file->getMimeType();
       $data[$element_key . '__data'] = base64_encode(file_get_contents($file->getFileUri()));
     }
 
