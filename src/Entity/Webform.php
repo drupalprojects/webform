@@ -44,6 +44,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *       "duplicate" = "Drupal\webform\WebformEntityAddForm",
  *       "delete" = "Drupal\webform\WebformEntityDeleteForm",
  *       "edit" = "Drupal\webform\WebformEntityElementsForm",
+ *       "export" = "Drupal\webform\WebformEntityExportForm",
  *       "settings" = "Drupal\webform\EntitySettings\WebformEntitySettingsGeneralForm",
  *       "settings_form" = "Drupal\webform\EntitySettings\WebformEntitySettingsFormForm",
  *       "settings_submissions" = "Drupal\webform\EntitySettings\WebformEntitySettingsSubmissionsForm",
