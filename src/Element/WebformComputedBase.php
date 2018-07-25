@@ -246,6 +246,18 @@ abstract class WebformComputedBase extends FormElement {
     // @see js/webform.element.computed.js
     $element['#prefix'] = '<div class="js-webform-computed-wrapper" id="' . $element['#wrapper_id'] . '">';
     $element['#suffix'] = '</div>';
+
+    // Remove flexbox wrapper because it  already been render outside this
+    // computed element's ajax wrapper.
+    // @see \Drupal\webform\Plugin\WebformElementBase::prepareWrapper
+    // @see \Drupal\webform\Plugin\WebformElementBase::preRenderFixFlexboxWrapper
+    $preRenderFixFlexWrapper = ['Drupal\webform\Plugin\WebformElement\WebformComputedTwig',  'preRenderFixFlexboxWrapper'];
+    foreach ($element['#pre_render'] as $index => $pre_render) {
+      if (is_array($pre_render) && $pre_render === $preRenderFixFlexWrapper ) {
+        unset($element['#pre_render'][$index]);
+      }
+    }
+
     return $element;
   }
 
