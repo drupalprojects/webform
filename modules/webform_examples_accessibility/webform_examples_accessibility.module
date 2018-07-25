@@ -34,8 +34,6 @@ function webform_examples_accessibility_webform_submission_form_alter(array &$fo
     return;
   }
 
-  $form['#attributes']['class'][] = 'webform-examples-accessibility';
-
   $form['accessibility'] = [
     '#suffix' => '<hr/>',
     '#weight' => -1000,
