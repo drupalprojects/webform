@@ -110,7 +110,7 @@ class WebformResultsExportController extends ControllerBase implements Container
 
       return $build;
     }
-    elseif ($query && empty($query['ajax_form'])) {
+    elseif ($query && empty($query['ajax_form']) && isset($query['download'])) {
       $default_options = $this->submissionExporter->getDefaultExportOptions();
       foreach ($query as $key => $value) {
         if (isset($default_options[$key]) && is_array($default_options[$key]) && is_string($value)) {
