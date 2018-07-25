@@ -194,6 +194,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\webform\WebformInterface */
 
+    // Title.
+    //
     // ISSUE: Webforms that the current user can't access are not being hidden via the EntityQuery.
     // WORK-AROUND: Don't link to the webform.
     // See: Access control is not applied to config entity queries
@@ -202,30 +204,61 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     if ($entity->isTemplate()) {
       $row['title']['data']['template'] = ['#markup' => ' <b>(' . $this->t('Template') . ')</b>'];
     }
+
+    // Description.
     $row['description']['data'] = WebformHtmlEditor::checkMarkup($entity->get('description'));
+
+    // Category.
     $row['category']['data']['#markup'] = $entity->get('category');
+
+    // Status.
+    $t_args = ['@label' => $entity->label()];
     if ($entity->isArchived()) {
+      $row['status']['data'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#markup' => $this->t('Archived'),
+        '#attributes' => ['aria-label' => $this->t('@label is archived', $t_args)],
+      ];
       $row['status'] = $this->t('Archived');
     }
     else {
       switch ($entity->get('status')) {
         case WebformInterface::STATUS_OPEN:
           $status = $this->t('Open');
+          $aria_label = $this->t('@label is open', $t_args);
           break;
 
         case WebformInterface::STATUS_CLOSED:
           $status = $this->t('Closed');
+          $aria_label = $this->t('@label is closed', $t_args);
           break;
 
         case WebformInterface::STATUS_SCHEDULED:
           $status = $this->t('Scheduled (@state)', ['@state' => $entity->isOpen() ? $this->t('Open') : $this->t('Closed')]);
+          $aria_label = $this->t('@label is scheduled and is @state', $t_args + ['@state' => $entity->isOpen() ? $this->t('open') : $this->t('closed')]);
           break;
       }
 
-      $row['status']['data'] = ($entity->access('update')) ? $entity->toLink($status, 'settings-form', ['query' => $this->getDestinationArray()]) : $status;
+      if ($entity->access('update')) {
+        $row['status']['data'] = $entity->toLink($status, 'settings-form', ['query' => $this->getDestinationArray()])->toRenderable() + [
+          '#attributes' => ['aria-label' => $aria_label]
+        ];
+      }
+      else {
+        $row['status']['data'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#markup' => $status,
+          '#attributes' => ['aria-label' => $aria_label],
+        ];
+      }
     }
+
+    // Owner.
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
 
+    // Results.
     $result_total = $this->getResultsTotal($entity->id());
     $results_access = $entity->access('submission_view_any');
     $results_disabled = $entity->isResultsDisabled();
@@ -245,6 +278,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         ],
       ];
     }
+
+    // Operations.
     return $row + parent::buildRow($entity);
   }
 
