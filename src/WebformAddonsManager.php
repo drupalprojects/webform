@@ -257,6 +257,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'enhancement',
     ];
 
+    // Integrations: Headless Ninja React Webform.
+    $projects['hn-react-webform'] = [
+      'title' => $this->t('Headless Ninja React Webform'),
+      'description' => $this->t('With this awesome React component, you can render complete Drupal Webforms in React. With validation, easy custom styling and a modern, clean interface.'),
+      'url' => Url::fromUri('https://github.com/headless-ninja/hn-react-webform'),
+      'category' => 'integration',
+    ];
+
     // Integration: Webform HubSpot.
     $projects['hubspot'] = [
       'title' => $this->t('Webform HubSpot'),
@@ -368,6 +376,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/sfweb2lead_webform'),
       'category' => 'integration',
     ];
+
 
     // Mail: Mail System.
     $projects['mailsystem'] = [
