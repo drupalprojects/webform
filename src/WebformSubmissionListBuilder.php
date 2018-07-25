@@ -212,7 +212,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       // @see /admin/structure/webform/manage/{webform}/results/submissions
       // @see /node/{node}/webform/results/submissions
       $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
-      $this->sort = $webform_submission_storage->getCustomSetting('sort', 'serial', $this->webform, $this->sourceEntity);
+      $this->sort = $webform_submission_storage->getCustomSetting('sort', 'created', $this->webform, $this->sourceEntity);
       $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
       $this->limit = $webform_submission_storage->getCustomSetting('limit', 20, $this->webform, $this->sourceEntity);
       $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
@@ -241,12 +241,12 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
               'format' => 'value',
             ],
           ] + $this->columns;
-        $this->sort = 'sid';
+        $this->sort = 'created';
       }
       else {
         $this->columns = $webform_submission_storage->getUserColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
         unset($this->columns['sid']);
-        $this->sort = 'serial';
+        $this->sort = 'created';
       }
       $this->direction = 'desc';
       $this->limit = 20;

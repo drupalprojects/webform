@@ -143,7 +143,7 @@ class WebformNodeResultsTest extends WebformNodeTestBase {
 
     // Check default node results table.
     $this->drupalGet('node/' . $node->id() . '/webform/results/submissions');
-    $this->assertRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
+    $this->assertRaw('<th specifier="created" class="priority-medium is-active" aria-sort="descending">');
     $this->assertRaw('sort by Created');
     $this->assertNoRaw('sort by Changed');
 
