@@ -176,18 +176,15 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       'specifier' => 'uid',
       'field' => 'uid',
     ];
-    $header['results_total'] = [
-      'data' => $this->t('Total Results'),
+    $header['results'] = [
+      'data' => $this->t('Results'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-      'specifier' => 'results_total',
-      'field' => 'results_total',
+      'specifier' => 'results',
+      'field' => 'results',
     ];
-    $header['results_operations'] = [
+    $header['operations'] = [
       'data' => $this->t('Operations'),
-      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
     ];
-    $header['operations'] = '';
-
     return $header;
   }
 
@@ -228,13 +225,26 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       $row['status']['data'] = ($entity->access('update')) ? $entity->toLink($status, 'settings-form', ['query' => $this->getDestinationArray()]) : $status;
     }
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
-    $row['results_total'] = $this->getResultsTotal($entity->id()) . ($entity->isResultsDisabled() ? ' ' . $this->t('(Disabled)') : '');
-    $row['results_operations']['data'] = [
-      '#type' => 'operations',
-      '#links' => $this->getDefaultOperations($entity, 'results'),
-      '#prefix' => '<div class="webform-dropbutton">',
-      '#suffix' => '</div>',
-    ];
+
+    $result_total = $this->getResultsTotal($entity->id());
+    $results_access = $entity->access('submission_view_any');
+    $results_disabled = $entity->isResultsDisabled();
+    if ($results_disabled || !$results_access) {
+      $row['results'] = $result_total . ($entity->isResultsDisabled() ? ' ' . $this->t('(Disabled)') : '');
+    }
+    else {
+      $row['results'] = [
+        'data' => [
+          '#type' => 'link',
+          '#title' => $result_total,
+          '#attributes' => [
+            'aria-label' => $this->formatPlural($result_total, '@count result for @label', '@count results for @label', ['@label' => $entity->label()])
+          ],
+          '#url' => $entity->toUrl('results-submissions'),
+          '#suffix' => ($entity->isResultsDisabled() ? ' ' . $this->t('(Disabled)') : ''),
+        ],
+      ];
+    }
     return $row + parent::buildRow($entity);
   }
 
@@ -253,76 +263,45 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    */
   public function getDefaultOperations(EntityInterface $entity, $type = 'edit') {
     /* @var $entity \Drupal\webform\WebformInterface */
-    if ($type == 'results') {
-      $operations = [];
-      if ($entity->access('submission_view_any')) {
-        $operations['submissions'] = [
-          'title' => $this->t('Submissions'),
-          'url' => $entity->toUrl('results-submissions'),
-        ];
-        $operations['export'] = [
-          'title' => $this->t('Download'),
-          'url' => $entity->toUrl('results-export'),
-        ];
-      }
-      if ($entity->access('submission_delete_any')) {
-        $operations['clear'] = [
-          'title' => $this->t('Clear'),
-          'url' => $entity->toUrl('results-clear'),
-        ];
-      }
+
+    $operations = [];
+    if ($entity->access('update')) {
+      $operations['edit'] = [
+        'title' => $this->t('Build'),
+        'url' => $this->ensureDestination($entity->toUrl('edit-form')),
+      ];
     }
-    else {
-      $operations = parent::getDefaultOperations($entity);
-      if (isset($operations['edit'])) {
-        $operations['edit']['title'] = $this->t('Build');
-      }
-      if ($entity->access('update')) {
-        $operations['settings'] = [
-          'title' => $this->t('Settings'),
-          'weight' => 22,
-          'url' => $entity->toUrl('settings'),
-        ];
-      }
-      if ($entity->access('submission_page')) {
-        $operations['view'] = [
-          'title' => $this->t('View'),
-          'weight' => 24,
-          'url' => $entity->toUrl(),
-        ];
-      }
-      if ($entity->access('submission_update_any')) {
-        $operations['test'] = [
-          'title' => $this->t('Test'),
-          'weight' => 25,
-          'url' => $entity->toUrl('test-form'),
-        ];
-      }
-      if ($entity->access('duplicate')) {
-        $operations['duplicate'] = [
-          'title' => $this->t('Duplicate'),
-          'weight' => 26,
-          'url' => $entity->toUrl('duplicate-form'),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
-        ];
-      }
-      if ($entity->access('update') && $this->moduleHandler()->moduleExists('webform_node')) {
-        $operations['References'] = [
-          'title' => $this->t('References'),
-          'weight' => 27,
-          'url' => $entity->toUrl('references'),
-        ];
-      }
-      if (\Drupal::currentUser()->hasPermission('export configuration')) {
-        $operations['export'] = [
-          'title' => $this->t('Export'),
-          'weight' => 28,
-          'url' => $entity->toUrl('export-form'),
-        ];
-      }
-      if (isset($operations['delete'])) {
-        $operations['delete']['attributes'] = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW);
-      }
+    if ($entity->access('submission_page')) {
+      $operations['view'] = [
+        'title' => $this->t('View'),
+        'url' => $entity->toUrl('canonical'),
+      ];
+    }
+    if ($entity->access('submission_view_any') && !$entity->isResultsDisabled()) {
+      $operations['results'] = [
+        'title' => $this->t('Results'),
+        'url' => $entity->toUrl('results-submissions'),
+      ];
+    }
+    if ($entity->access('update')) {
+      $operations['settings'] = [
+        'title' => $this->t('Settings'),
+        'url' => $entity->toUrl('settings'),
+      ];
+    }
+    if ($entity->access('duplicate')) {
+      $operations['duplicate'] = [
+        'title' => $this->t('Duplicate'),
+        'url' => $entity->toUrl('duplicate-form'),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
+      ];
+    }
+    if ($entity->access('delete') && $entity->hasLinkTemplate('delete-form')) {
+      $operations['delete'] = [
+        'title' => $this->t('Delete'),
+        'url' => $this->ensureDestination($entity->toUrl('delete-form')),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
+      ];
     }
     return $operations;
   }
@@ -332,7 +311,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    */
   protected function getEntityIds() {
     $header = $this->buildHeader();
-    if (\Drupal::request()->query->get('order') === (string) $header['results_total']['data']) {
+    if (\Drupal::request()->query->get('order') === (string) $header['results']['data']) {
       // Get results totals for all returned entity ids.
       $results_totals = $this->getQuery($this->keys, $this->category, $this->state)
         ->execute();
@@ -394,7 +373,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
 
     $query = \Drupal::database()->select('webform_submission', 'ws');
     $query->fields('ws', ['webform_id']);
-    $query->addExpression('COUNT(sid)', 'results_total');
+    $query->addExpression('COUNT(sid)', 'results');
     $query->groupBy('webform_id');
 
     $this->resultsTotals = array_map('intval', $query->execute()->fetchAllKeyed());

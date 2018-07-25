@@ -35,13 +35,10 @@ class WebformListBuilderTest extends BrowserTestBase {
     $list_path = '/admin/structure/webform';
     $this->drupalGet($list_path);
     $assert_session->linkExists('Test: Submissions');
-    $assert_session->linkExists('Submissions');
-    $assert_session->linkExists('Download');
-    $assert_session->linkExists('Clear');
+    $assert_session->linkExists('Results');
     $assert_session->linkExists('Build');
     $assert_session->linkExists('Settings');
     $assert_session->linkExists('View');
-    $assert_session->linkExists('Test');
     $assert_session->linkExists('Duplicate');
     $assert_session->linkExists('Delete');
 
@@ -57,15 +54,10 @@ class WebformListBuilderTest extends BrowserTestBase {
     // Webform name should not be a link as the user doesn't have access to the
     // submission page.
     $assert_session->linkExists('Test: Submissions');
-    $assert_session->linkExists('Submissions');
-    $assert_session->linkExists('Download');
-    // TODO: Is this a bug that this doesn't pass? User has delete any
-    // submission permission.
-    // $assert_session->linkExists('Clear')
+    $assert_session->linkExists('Results');
     $assert_session->linkNotExists('Build');
     $assert_session->linkNotExists('Settings');
     $assert_session->linkExists('View');
-    $assert_session->linkExists('Test');
     $assert_session->linkNotExists('Duplicate');
     $assert_session->linkNotExists('Delete');
 
@@ -90,8 +82,7 @@ class WebformListBuilderTest extends BrowserTestBase {
     $this->drupalLogin($special_access_user);
     $this->drupalGet($list_path);
     $assert_session->responseContains('Test: Submissions');
-    $assert_session->linkExists('Submissions');
-    $assert_session->linkExists('Download');
+    $assert_session->linkExists('Results');
   }
 
   /**
