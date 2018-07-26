@@ -104,14 +104,12 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
       $row['title'] = $webform->toLink();
       $row['description']['data']['#markup'] = $webform->get('description');
       $row['category']['data']['#markup'] = $webform->get('category');
-      if ($this->currentUser->hasPermission('create webform')) {
-        $row['operations']['data']['select'] = [
-          '#type' => 'link',
-          '#title' => $this->t('Select'),
-          '#url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['button', 'button--primary']),
-        ];
-      }
+      $row['operations']['data']['select'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Select'),
+        '#url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['button', 'button--primary']),
+      ];
       $row['operations']['data']['preview'] = [
         '#type' => 'link',
         '#title' => $this->t('Preview'),
