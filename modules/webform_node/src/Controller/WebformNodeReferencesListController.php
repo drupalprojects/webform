@@ -358,6 +358,8 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
   public function render() {
     $build = parent::render();
 
+    $build['table']['#sticky'] = TRUE;
+
     // Customize the empty message.
     $build['table']['#empty'] = $this->t('There are no webform node references.');
 

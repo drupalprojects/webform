@@ -242,6 +242,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
       '#type' => 'table',
       '#header' => $headers,
       '#rows' => $rows,
+      '#sticky' => TRUE,
       '#empty' => $this->t('No handler available.'),
       '#attributes' => [
         'class' => ['webform-handler-add-table'],

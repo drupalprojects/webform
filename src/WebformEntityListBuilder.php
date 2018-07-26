@@ -134,6 +134,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
 
     $build += parent::render();
 
+    $build['table']['#sticky'] = TRUE;
     $build['table']['#attributes']['class'][] = 'webform-forms';
 
     // Must preload libraries required by (modal) dialogs.

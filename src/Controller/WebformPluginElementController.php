@@ -320,6 +320,7 @@ class WebformPluginElementController extends ControllerBase implements Container
         $this->t('Operations'),
       ],
       '#rows' => $webform_form_element_rows,
+      '#sticky' => TRUE,
       '#attributes' => [
         'class' => ['webform-element-plugin'],
       ],

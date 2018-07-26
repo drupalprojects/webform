@@ -331,6 +331,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
 
+    $build['table']['#sticky'] = TRUE;
     $build['table']['#attributes']['class'][] = 'webform-results-table';
 
     $build['#attached']['library'][] = 'webform/webform.admin';

@@ -32,6 +32,8 @@ class WebformImageSelectImagesListBuilder extends ConfigEntityListBuilder {
 
     $build += parent::render();
 
+    $build['table']['#sticky'] = TRUE;
+
     $build['#attached']['library'][] = 'webform/webform.tooltip';
     $build['#attached']['library'][] = 'webform/webform.admin.dialog';
 

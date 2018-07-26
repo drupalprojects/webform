@@ -541,6 +541,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         'item' => ['data' => $this->t('Item format'), 'width' => '25%'],
         'items' => ['data' => $this->t('Items format'), 'width' => '25%'],
       ],
+      '#sticky' => TRUE,
     ] + $rows;
 
     return parent::buildForm($form, $form_state);

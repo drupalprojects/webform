@@ -226,6 +226,7 @@ class WebformSubmissionLogController extends ControllerBase {
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#sticky' => TRUE,
       '#empty' => $this->t('No log messages available.'),
     ];
     $build['pager'] = ['#type' => 'pager'];

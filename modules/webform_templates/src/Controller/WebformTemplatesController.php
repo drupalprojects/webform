@@ -137,6 +137,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#sticky' => TRUE,
       '#empty' => $this->t('There are no templates available.'),
       '#cache' => [
         'contexts' => $this->webformStorage->getEntityType()->getListCacheContexts(),
