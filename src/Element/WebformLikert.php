@@ -29,6 +29,7 @@ class WebformLikert extends FormElement {
       ],
       '#theme_wrappers' => ['form_element'],
       '#required' => FALSE,
+      '#sticky' => TRUE,
       '#questions' => [],
       '#questions_description_display' => 'description',
       // Using #answers insteads of #options to prevent triggering
@@ -195,10 +196,13 @@ class WebformLikert extends FormElement {
     $element['table'] = [
       '#type' => 'table',
       '#header' => $header,
+      '#sticky' => $element['#sticky'],
       '#attributes' => [
         'class' => ['webform-likert-table'],
         'data-likert-answers-count' => count($element['#answers']),
       ],
+      '#prefix' => '<div class="webform-likert-table-wrapper">',
+      '#suffix' => '</div>'
     ] + $rows;
 
     // Build table element with selected properties.
