@@ -1,0 +1,8 @@
+name: 'Webform Shortcuts'
+type: module
+description: 'Provides keyboard shortcuts to create and save webform elements.'
+package: 'Webform [EXPERIMENTAL]'
+core: 8.x
+dependencies:
+  - 'webform:webform'
+  - 'webform:webform_ui'

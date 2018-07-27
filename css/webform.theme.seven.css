@@ -124,6 +124,12 @@ pre.webform-codemirror-runmode {
   border: solid 1px #ed5;
 }
 
+/* jQuery UI tooltip */
+.ui-tooltip hr {
+  background: #840;
+  margin: .3em 0;
+}
+
 /* jQuery UI tabs */
 .ui-tabs .ui-tabs-panel {
   padding: 0;
