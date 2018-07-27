@@ -20,7 +20,7 @@
   });
 
   // Add layout.
-  $(document).bind('keydown', 'ctrl+p', function() {
+  $(document).bind('keydown', 'ctrl+l', function() {
     $('#webform-ui-add-layout').click();
   });
 
