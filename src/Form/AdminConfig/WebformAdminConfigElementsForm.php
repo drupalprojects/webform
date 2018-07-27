@@ -367,7 +367,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     ];
     $form['file']['delete_temporary_managed_files'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Immediately deleted temporary managed files'),
+      '#title' => $this->t('Immediately delete temporary managed files'),
       '#description' => $this->t('Drupal core does not immediately delete temporary file. For webform submissions it is recommended that temporary files are immediately deleted.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.delete_temporary_managed_files'),
