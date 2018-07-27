@@ -5,7 +5,7 @@
  * @see webform_shortcuts_preprocess_block()
  */
 
-(function ($, Drupal) {
+(function ($) {
 
   'use strict';
 
@@ -16,7 +16,7 @@
 
   // Add page.
   $(document).bind('keydown', 'ctrl+p', function() {
-    $('#webform-ui-add-page').click();
+    $('#webform-ui-add-page').focus().click();
   });
 
   // Add layout.
@@ -45,4 +45,4 @@
     $('.tabledrag-toggle-weight').eq(0).click();
   });
 
-})(jQuery, Drupal);
+})(jQuery);
