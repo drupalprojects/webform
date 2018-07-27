@@ -44,12 +44,13 @@ class WebformPermissions extends Select {
     }
     $element['#options'] = $options;
     $element['#select2'] = TRUE;
-    WebformElementHelper::process($element);
 
     // Must convert this element['#type'] to a 'select' to prevent
     // "Illegal choice %choice in %name element" validation error.
     // @see \Drupal\Core\Form\FormValidator::performRequiredValidation
     $element['#type'] = 'select';
+
+    WebformElementHelper::process($element);
 
     return parent::processSelect($element, $form_state, $complete_form);
   }
