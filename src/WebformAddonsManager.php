@@ -193,6 +193,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform DropzoneJS.
+    $projects['webform_dropzonejs'] = [
+      'title' => $this->t('Webform DropzoneJS'),
+      'description' => $this->t("Creates a new DropzoneJS element that you can add to webforms."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_dropzonejs'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Handsontable.
     $projects['handsontable_yml_webform'] = [
       'title' => $this->t('Webform Handsontable'),
