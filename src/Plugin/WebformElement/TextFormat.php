@@ -242,10 +242,10 @@ class TextFormat extends WebformElementBase {
   }
 
   /**
-   * Get composite element.
+   * Check if composite element exists.
    *
-   * @return array
-   *   A composite sub-elements.
+   * @return bool
+   *   TRUE if composite element exists.
    */
   public function hasCompositeElement(array $element, $key) {
     $elements = $this->getCompositeElements();

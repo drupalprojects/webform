@@ -95,7 +95,7 @@ class WebformSubmissionLogController extends ControllerBase {
    *
    * @param \Drupal\webform\WebformInterface|null $webform
    *   A webform.
-   * @param \Drupal\webform\WebformInterface|null $webform_submission
+   * @param \Drupal\webform\WebformSubmissionInterface|null $webform_submission
    *   A webform submission.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
    *   A source entity.

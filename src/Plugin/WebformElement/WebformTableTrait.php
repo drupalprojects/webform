@@ -129,9 +129,6 @@ trait WebformTableTrait {
    *   An associative array containing the properties and children of
    *   the table select element
    *
-   * @return array
-   *   The table select element with #process callbacks.
-   *
    * @see \Drupal\Core\Render\Element\Tableselect::processTableselect
    */
   public static function setProcessTableSelectCallback(array &$element) {
