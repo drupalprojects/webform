@@ -93,7 +93,7 @@ class WebformElementComputedTest extends WebformElementTestBase {
     $this->drupalGet('webform/test_element_computed_twig');
 
     // Check Twig trim.
-    $this->assertFieldByName('webform_computed_twig_trim', '<em>This is trimmmed</em>  <br/>');
+    $this->assertFieldByName('webform_computed_twig_trim', '<em>This is trimmed</em>  <br/>');
 
     // Check Twig spaceless.
     $this->assertFieldByName('webform_computed_twig_spaceless', '<em>This is spaceless</em><br/>');
