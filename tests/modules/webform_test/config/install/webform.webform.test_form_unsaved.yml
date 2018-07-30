@@ -15,10 +15,14 @@ title: 'Test: Webform: Unsaved'
 description: 'Test displaying unsaved data warning.'
 category: 'Test: Webform'
 elements: |
+  markup:
+    '#markup': 'Enter some data and hit reload'
   test:
     '#type': textfield
-    '#title': 'Text field'
-    '#description': 'Enter some data and hit reload'
+    '#title': textfield
+  text_format:
+    '#type': text_format
+    '#title': text_format
 css: ''
 javascript: ''
 settings:
