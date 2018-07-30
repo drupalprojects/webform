@@ -202,7 +202,7 @@ class WebformLikert extends FormElement {
         'data-likert-answers-count' => count($element['#answers']),
       ],
       '#prefix' => '<div class="webform-likert-table-wrapper">',
-      '#suffix' => '</div>'
+      '#suffix' => '</div>',
     ] + $rows;
 
     // Build table element with selected properties.

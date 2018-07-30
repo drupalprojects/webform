@@ -267,7 +267,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
 
       case WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION:
         $t_args = ['%form' => ($source_entity) ? $source_entity->label() : $webform->label()];
-        return $this->t('New submission added to %form.',$t_args);
+        return $this->t('New submission added to %form.', $t_args);
 
       case WebformMessageManagerInterface::FORM_SAVE_EXCEPTION:
         $t_args = [

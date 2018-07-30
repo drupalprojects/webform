@@ -33,7 +33,6 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class Address extends WebformCompositeBase {
 
-
   /**
    * {@inheritdoc}
    */

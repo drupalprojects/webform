@@ -151,7 +151,7 @@ trait WebformTableTrait {
    * @param array $option
    *   A table select option.
    *
-   * @return string|\Drupal\Component\Render\MarkupInterface|NULL
+   * @return string|\Drupal\Component\Render\MarkupInterface|null
    *   Table selection option title/text.
    *
    * @see https://www.drupal.org/project/drupal/issues/2719453

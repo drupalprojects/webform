@@ -249,7 +249,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
           '#type' => 'link',
           '#title' => $result_total,
           '#attributes' => [
-            'aria-label' => $this->formatPlural($result_total, '@count result for @label', '@count results for @label', ['@label' => $entity->label()])
+            'aria-label' => $this->formatPlural($result_total, '@count result for @label', '@count results for @label', ['@label' => $entity->label()]),
           ],
           '#url' => Url::fromRoute('entity.node.webform.results_submissions', $route_parameters),
         ],

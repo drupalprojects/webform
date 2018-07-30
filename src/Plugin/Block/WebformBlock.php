@@ -111,7 +111,7 @@ element_key: 'some value'
 # Add ':clear' to the end token to return an empty value when the token is missing.
 title: '[webform_submission:node:title:clear]'
 # The below example uses a token to get a field value from the current node.
-full_name: '[webform_submission:node:field_full_name:clear]"
+full_name: '[webform_submission:node:field_full_name:clear]",
       ],
     ];
 

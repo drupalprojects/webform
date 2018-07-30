@@ -337,7 +337,6 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
     // NOTE: We are not copying form values to the entity because
     // webform element keys can override webform submission properties.
-
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $entity;
     $webform = $webform_submission->getWebform();
@@ -948,10 +947,10 @@ class WebformSubmissionForm extends ContentEntityForm {
       ],
     ];
     if ($this->getWebformSetting('wizard_progress_link')) {
-      $element ['#attributes']['data-wizard-progress-link'] = 'true';
+      $element['#attributes']['data-wizard-progress-link'] = 'true';
     }
     if ($this->getWebformSetting('wizard_preview_link')) {
-      $element ['#attributes']['data-wizard-preview-link'] = 'true';
+      $element['#attributes']['data-wizard-preview-link'] = 'true';
     }
 
     $index = 1;
@@ -1286,12 +1285,12 @@ class WebformSubmissionForm extends ContentEntityForm {
     // @see template_preprocess_webform_progress()
     if ($this->isAjax()) {
       $pages = $this->getPages($form, $form_state);
-      
+
       $page_keys = array_keys($pages);
       $page_indexes = array_flip($page_keys);
       $current_index = $page_indexes[$current_page];
       $total_pages = count($page_keys);
-      
+
       $t_args = [
         '@title' => $this->getWebform()->label(),
         '@page' => $pages[$current_page]['#title'],

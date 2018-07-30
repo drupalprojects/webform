@@ -2418,7 +2418,7 @@ function webform_update_8136() {
 }
 
 /**
- * Update #counter_* attribute.s
+ * Update #counter_* attributes.
  *
  * Replace 'X' in counter message with '%d' and
  * move '#counter_message' to '#counter_maxiumum_message'.

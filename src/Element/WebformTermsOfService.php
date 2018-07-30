@@ -64,7 +64,7 @@ class WebformTermsOfService extends Checkbox {
     $element['#description']['terms'] = [
       '#type' => 'container',
       '#attributes' => [
-        'id' =>  $id . '--description',
+        'id' => $id . '--description',
         'class' => ['webform-terms-of-service-details', 'js-hide'],
       ],
     ];

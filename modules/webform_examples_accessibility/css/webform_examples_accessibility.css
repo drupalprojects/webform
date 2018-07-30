@@ -28,21 +28,20 @@
 /**
  * Show aria-labels.
  */
-[role=main] [aria-label]:after{
-  content:"[aria-label]: " attr(aria-label);
+[role=main] [aria-label]:after {
+  content: "[aria-label]: " attr(aria-label);
   border: 2px dashed green !important;
   padding: 4px !important;
   position: relative !important;
   font-size: 0.8em;
   font-weight: normal;
   color: green;
-
 }
 
 /**
  * Show titles.
  */
-[role=main] [title]:after{
+[role=main] [title]:after {
   content: "[title]: " attr(title);
   border: 2px dashed green !important;
   padding: 4px !important;

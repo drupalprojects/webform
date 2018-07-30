@@ -194,7 +194,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       $form['submission_access_denied']['token_tree_link']['#states'] = [
         'visible' => [
           ':input[name="submission_login"]' => ['checked' => TRUE],
-        ]
+        ],
       ];
     }
 

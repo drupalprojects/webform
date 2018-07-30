@@ -897,6 +897,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       }
     }
   }
+
   /**
    * Replace Core's composite #pre_render with Webform's composite #pre_render.
    *

@@ -296,7 +296,7 @@ class WebformMultiple extends FormElement {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    * @param array $complete_form
-   *    An associative array containing the structure of the form.
+   *   An associative array containing the structure of the form.
    * @param array $sub_elements
    *   The sub element.
    * @param array $required_states
@@ -391,7 +391,7 @@ class WebformMultiple extends FormElement {
       if ($element['#sorting']) {
         $header[] = [
           'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Re-order')),
-          'class' => ["$table_id--handle", "webform-multiple-table--handle"],
+          'class' => ["$table_id--handle", 'webform-multiple-table--handle'],
         ];
       }
 
@@ -400,14 +400,14 @@ class WebformMultiple extends FormElement {
       if ($element['#sorting']) {
         $header[] = [
           'data' => ['#markup' => t('Weight')],
-          'class' => ["$table_id--weight", "webform-multiple-table--weight"]
+          'class' => ["$table_id--weight", 'webform-multiple-table--weight'],
         ];
       }
 
       if ($element['#operations']) {
         $header[] = [
           'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Operations')),
-          'class' => ["$table_id--handle", "webform-multiple-table--operations"],
+          'class' => ["$table_id--handle", 'webform-multiple-table--operations'],
         ];
       }
 

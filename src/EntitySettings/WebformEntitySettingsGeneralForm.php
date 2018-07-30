@@ -323,7 +323,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
           'data-dialog-options' => Json::encode([
             'width' => 400,
             'height' => 400,
-          ])
+          ]),
         ],
       ];
       $dialog_source = $dialog_link;

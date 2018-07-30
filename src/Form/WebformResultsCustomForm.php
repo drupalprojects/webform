@@ -208,7 +208,7 @@ class WebformResultsCustomForm extends FormBase {
       '#default_value' => $format['element_format'],
     ];
 
-    // Submission settings
+    // Submission settings.
     $form['submission'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission settings'),

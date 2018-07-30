@@ -195,7 +195,7 @@ class WebformEntityReferenceManager implements WebformEntityReferenceManagerInte
       return Webform::load($webform_id);
     }
     elseif ($webforms = $this->getWebforms($entity)) {
-      return reset($webforms );
+      return reset($webforms);
     }
     else {
       return NULL;

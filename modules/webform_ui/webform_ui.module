@@ -5,9 +5,6 @@
  * Provides a simple user interface for building and maintaining webforms.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Utility\WebformDialogHelper;
-
 /**
  * Implements hook_entity_type_alter().
  */

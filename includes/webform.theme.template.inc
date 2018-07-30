@@ -17,7 +17,6 @@ use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\WebformMessageManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;

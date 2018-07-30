@@ -17,7 +17,7 @@ class WebformOptionsHelper {
   const DESCRIPTION_DELIMITER = ' -- ';
 
   /**
-   * Append option value to option text
+   * Append option value to option text.
    *
    * @param array $options
    *   An associative array of options.

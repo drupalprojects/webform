@@ -385,7 +385,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-
     // Mail: Mail System.
     $projects['mailsystem'] = [
       'title' => $this->t('Mail System'),
@@ -393,7 +392,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/mailsystem'),
       'category' => 'mail',
     ];
-
 
     // Mail: Mail System: SendGrid Integration.
     $projects['sendgrid_integration'] = [

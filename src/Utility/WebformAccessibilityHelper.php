@@ -8,7 +8,7 @@ namespace Drupal\webform\Utility;
 class WebformAccessibilityHelper {
 
   /**
-   * isually hide text using .visually-hidden class.
+   * Visually hide text using .visually-hidden class.
    *
    * The .visually-hidden class is used to render invisible content just for
    * screen reader users.
@@ -68,5 +68,5 @@ class WebformAccessibilityHelper {
       ];
     }
   }
-}
 
+}

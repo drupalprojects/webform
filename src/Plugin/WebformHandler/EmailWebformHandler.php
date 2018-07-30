@@ -508,7 +508,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       if ($format == 'html') {
         $form['message']['body_custom_' . $format] = [
           '#type' => 'webform_html_editor',
-          '#format' => $this->configFactory->get('webform.settings')->get('html_editor.mail_format')
+          '#format' => $this->configFactory->get('webform.settings')->get('html_editor.mail_format'),
         ];
       }
       else {

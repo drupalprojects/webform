@@ -222,7 +222,6 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ];
     }
 
-
     // Wizard settings.
     $form['wizard_settings'] = [
       '#type' => 'details',

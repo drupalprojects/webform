@@ -612,4 +612,3 @@ class WebformElementHelper {
   }
 
 }
-
