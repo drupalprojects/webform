@@ -19,7 +19,7 @@
   };
 
   /**
-   * Boostrap element help icon.
+   * Bootstrap element help icon.
    *
    * @type {Drupal~behavior}
    */

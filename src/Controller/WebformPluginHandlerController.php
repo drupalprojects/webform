@@ -33,7 +33,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
   protected $pluginManager;
 
   /**
-   * Constructs a WebformPluginHanderController object.
+   * Constructs a WebformPluginHandlerController object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

@@ -175,7 +175,7 @@ thead th .dropbutton {
 }
 
 /**
- * Element (/admin/structure/webform/manage/[webform_id]/element/add/[elment_type])
+ * Element (/admin/structure/webform/manage/[webform_id]/element/add/[element_type])
  * @see \Drupal\webform\Plugin\WebformElementBase::form
  */
 .form--inline.webform-ui-element-form-inline--input .form-item {

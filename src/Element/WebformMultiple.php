@@ -300,7 +300,7 @@ class WebformMultiple extends FormElement {
    * @param array $sub_elements
    *   The sub element.
    * @param array $required_states
-   *   An associative array of required states froim the main element's
+   *   An associative array of required states from the main element's
    *   visible/hidden states.
    */
   protected static function initializeElementRecursive(array $element, FormStateInterface $form_state, array &$complete_form, array &$sub_elements, array $required_states) {
@@ -662,7 +662,7 @@ class WebformMultiple extends FormElement {
   }
 
   /**
-   * Set element row default value recusively.
+   * Set element row default value recursively.
    *
    * @param array $element
    *   The element.
@@ -679,7 +679,7 @@ class WebformMultiple extends FormElement {
   }
 
   /**
-   * Set element row default value recusively.
+   * Set element row default value recursively.
    *
    * @param array $element
    *   The element.

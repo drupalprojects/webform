@@ -113,18 +113,18 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
    *   The node type storage class.
    * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $field_config_storage
    *   The field config storage class.
-   * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submsision_storage
+   * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage
    *   The webform submission storage class.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, ConfigEntityStorageInterface $node_type_storage, ConfigEntityStorageInterface $field_config_storage, WebformSubmissionStorageInterface $webform_submsision_storage, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, ConfigEntityStorageInterface $node_type_storage, ConfigEntityStorageInterface $field_config_storage, WebformSubmissionStorageInterface $webform_submission_storage, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
     parent::__construct($entity_type, $storage);
 
     $this->dateFormatter = $date_formatter;
     $this->nodeTypeStorage = $node_type_storage;
     $this->fieldConfigStorage = $field_config_storage;
-    $this->submissionStorage = $webform_submsision_storage;
+    $this->submissionStorage = $webform_submission_storage;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
 
     $this->nodeTypes = [];

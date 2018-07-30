@@ -1325,7 +1325,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   }
 
   /**
-   * Get anonymous users sumbmission ids.
+   * Get anonymous user's submission ids.
    *
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   A user account.

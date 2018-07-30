@@ -3,7 +3,7 @@
 namespace Drupal\webform\Tests\Element;
 
 /**
- * Tests for webform element radioss.
+ * Tests for webform element radios.
  *
  * @group Webform
  */

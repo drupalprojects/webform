@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides the webform templates filter webform.
  */
-class WebformtemplatesFilterForm extends FormBase {
+class WebformTemplatesFilterForm extends FormBase {
 
   /**
    * {@inheritdoc}

@@ -257,7 +257,7 @@ class WebformCodeMirror extends Textarea {
     $template = $element['#value'];
     $form_object = $form_state->getFormObject();
     try {
-      // If form object has getWebform mehthod. validate Twig template
+      // If form object has getWebform method. validate Twig template
       // using a temporary webform submission context.
       if (method_exists($form_object, 'getWebform')) {
         /** @var \Drupal\webform\WebformInterface $webform */

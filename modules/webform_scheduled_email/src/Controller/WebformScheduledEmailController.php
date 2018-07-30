@@ -44,7 +44,7 @@ class WebformScheduledEmailController extends ControllerBase implements Containe
    * Runs cron task for webform scheduled email handler.
    *
    * @param \Drupal\webform\WebformInterface $webform
-   *   The webform containg a scheduled email handler.
+   *   The webform containing a scheduled email handler.
    * @param string|null $handler_id
    *   A webform handler id.
    *

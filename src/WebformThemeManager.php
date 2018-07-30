@@ -8,7 +8,7 @@ use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Theme\ThemeInitializationInterface;
 
 /**
- * Defines a class to manage webform themeing.
+ * Defines a class to manage webform theming.
  */
 class WebformThemeManager implements WebformThemeManagerInterface {
 

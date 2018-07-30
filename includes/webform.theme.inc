@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Theme hooks, preprocessor, and suggesttions.
+ * Theme hooks, preprocessor, and suggestions.
  */
 
 use Drupal\file\Entity\File;

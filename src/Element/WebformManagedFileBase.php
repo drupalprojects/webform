@@ -17,7 +17,7 @@ if (class_exists('\Drupal\file\Element\ManagedFile')) {
   abstract class WebformManagedFileBase extends ManagedFile {
 
     /**
-     * The the types of files that the server accepts.
+     * The types of files that the server accepts.
      *
      * @var string
      *

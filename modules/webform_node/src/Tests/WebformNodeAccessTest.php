@@ -29,7 +29,7 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
   }
 
   /**
-   * Tests webform node access perimissions.
+   * Tests webform node access permissions.
    *
    * @see \Drupal\webform\Tests\WebformSubmissionAccessTest::testWebformSubmissionAccessPermissions
    */

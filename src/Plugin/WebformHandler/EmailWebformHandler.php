@@ -862,7 +862,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if ($this->configuration['html'] && $this->supportsHtml()) {
       // Apply optional global format to body.
       // NOTE: $message['body'] is not passed-thru Xss::filter() to allow
-      // style tags to be supoported.
+      // style tags to be supported.
       if ($format = $this->configFactory->get('webform.settings')->get('html_editor.mail_format')) {
         $build = [
           '#type' => 'processed_text',
@@ -918,7 +918,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         $emails[] = $email_options[self::DEFAULT_OPTION];
       }
 
-      // Get submission email addresseses as an array.
+      // Get submission email addresses as an array.
       $options_element_value = $webform_submission->getElementData($element_name);
       if (is_array($options_element_value)) {
         $options_values = $options_element_value;
@@ -1329,7 +1329,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   }
 
   /**
-   * Build A select other element for email addresss and names.
+   * Build A select other element for email address and names.
    *
    * @param string $name
    *   The element's key.
@@ -1489,10 +1489,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $mapping_options[self::DEFAULT_OPTION] = $this->t('Default (This email address will always be included)');
 
       // Set placeholder emails.
-      $destination_placeholde_emails = ['example@example.com', '[site:mail]'];
+      $destination_placeholder_emails = ['example@example.com', '[site:mail]'];
       if ($role_options) {
         $role_names = array_keys($role_options);
-        $destination_placeholde_emails[] = ($role_names[0] === '[webform_role:authenticated]' && isset($role_names[1])) ? $role_names[1] : $role_names[0];
+        $destination_placeholder_emails[] = ($role_names[0] === '[webform_role:authenticated]' && isset($role_names[1])) ? $role_names[1] : $role_names[0];
       }
       $element[$options_name] = [
         '#type' => 'webform_mapping',
@@ -1510,7 +1510,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#destination__allow_tokens' => TRUE,
         '#destination__title' => $this->t('Email addresses'),
         '#destination__description' => NULL,
-        '#destination__placeholder' => implode(', ', $destination_placeholde_emails),
+        '#destination__placeholder' => implode(', ', $destination_placeholder_emails),
       ];
     }
     else {

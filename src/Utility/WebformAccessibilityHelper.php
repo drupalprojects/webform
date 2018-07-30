@@ -3,7 +3,7 @@
 namespace Drupal\webform\Utility;
 
 /**
- * Helper class webform accessiblity methods.
+ * Helper class webform accessibility methods.
  */
 class WebformAccessibilityHelper {
 

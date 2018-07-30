@@ -32,7 +32,7 @@ class WebformLikert extends FormElement {
       '#sticky' => TRUE,
       '#questions' => [],
       '#questions_description_display' => 'description',
-      // Using #answers insteads of #options to prevent triggering
+      // Using #answers instead of #options to prevent triggering
       // \Drupal\Core\Form\FormValidator::performRequiredValidation().
       '#answers' => [],
       '#answers_description_display' => 'description',
@@ -155,7 +155,7 @@ class WebformLikert extends FormElement {
         // so that it can hidden but accessible to screen readers
         // when Likert is displayed in grid on desktop.
         // Wrap help and description in
-        // span.webform-likert-(help|description).hidden to block screeen
+        // span.webform-likert-(help|description).hidden to block screen
         // readers except on mobile.
         // @see webform.element.likert.css
         $row[$answer_key]['#title_display'] = 'after';

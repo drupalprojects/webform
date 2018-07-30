@@ -143,7 +143,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
   }
 
   /**
-   * Never trigge validation.
+   * Never trigger validation.
    */
   public function noValidate(array &$form, FormStateInterface $form_state) {
     $form_state->clearErrors();

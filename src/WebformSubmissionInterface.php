@@ -354,7 +354,7 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
    * Gets the webform submission's secure tokenized URL.
    *
    * @return \Drupal\Core\Url
-   *   The the webform submission's secure tokenized URL.
+   *   The webform submission's secure tokenized URL.
    */
   public function getTokenUrl();
 
@@ -375,7 +375,7 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
   public function invokeWebformElements($method);
 
   /**
-   * Convert anonymous submission to authenicated.
+   * Convert anonymous submission to authenticated.
    *
    * @param \Drupal\user\UserInterface $account
    *   An authenticated user account.
