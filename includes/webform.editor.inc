@@ -63,7 +63,8 @@ function webform_webform_delete(WebformInterface $webform) {
 
 /******************************************************************************/
 // Webform config (settings) hooks.
-// @see \Drupal\webform\Form\AdminConfig\WebformAdminConfigBaseForm
+// @see \Drupal\webform\Form\AdminConfig\WebformAdminConfigBaseForm::loadConfig
+// @see \Drupal\webform\Form\AdminConfig\WebformAdminConfigBaseForm::saveConfig
 /******************************************************************************/
 
 /**
