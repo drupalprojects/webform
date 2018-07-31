@@ -180,6 +180,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       if (is_string($value)) {
         $value = preg_replace('/\[webform:([^:]+)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_role:([^:]+)\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_access:type:([^:]+)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_submission:(?:node|source_entity|values):([^]]+)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_submission:([^]]+)\]/', '[\1]', $value);
         $value = preg_replace('/(:raw|:value)(:html)?\]/', ']', $value);
@@ -413,7 +414,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if (!empty($roles_element_options)) {
       $token_types[] = 'webform_role';
     }
-
+    if ($this->moduleHandler->moduleExists('webform_access')) {
+      $token_types[] = 'webform_access';
+    }
     $form['to']['token_tree_link'] = $this->tokenManager->buildTreeElement(
       $token_types,
       $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.')
@@ -959,7 +962,12 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // spam users or worse…expose user email addresses to malicious users.
     if (in_array($configuration_name, ['to', 'cc', 'bcc'])) {
       $roles = $this->configFactory->get('webform.settings')->get('mail.roles');
-      $emails = $this->tokenManager->replace($emails, $webform_submission, ['webform_role' => $roles]);
+      $token_data = [];
+      $token_data['webform_role'] = $roles;
+      if ($this->moduleHandler->moduleExists('webform_access')) {
+        $token_data['webform_access'] = $webform_submission;
+      }
+      $emails = $this->tokenManager->replace($emails, $webform_submission, $token_data);
     }
 
     // Resplit emails to make sure that emails are unique.

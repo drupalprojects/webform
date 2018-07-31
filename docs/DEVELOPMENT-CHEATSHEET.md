@@ -84,6 +84,7 @@ echo 'true' > modules/webform_scheduled_email/tests/modules/webform_scheduled_em
 
 echo 'true' > modules/webform_demo/webform_demo_application_evaluation/webform_demo_application_evaluation.features.yml
 echo 'true' > modules/webform_demo/webform_demo_event_registration/webform_demo_event_registration.features.yml
+echo 'true' > modules/webform_demo/webform_demo_region_contact/webform_demo_region_contact.features.yml
 
 echo 'true' > tests/modules/webform_test/webform_test.features.yml
 echo 'true' > tests/modules/webform_test_ajax/webform_test_ajax.features.yml
@@ -110,6 +111,7 @@ echo 'true' > tests/modules/webform_test_wizard_custom/webform_test_wizard_custo
 drush en -y webform\
   webform_demo_application_evaluation\
   webform_demo_event_registration\
+  webform_demo_region_contact\
   webform_examples\
   webform_examples_accessibility\
   webform_example_element\
@@ -138,6 +140,7 @@ drush features-diff webform_test
 drush features-export -y webform
 drush features-export -y webform_demo_application_evaluation
 drush features-export -y webform_demo_event_registration
+drush features-export -y webform_demo_region_contact
 drush features-export -y webform_examples
 drush features-export -y webform_examples_accessibility
 drush features-export -y webform_example_element
@@ -168,6 +171,7 @@ git checkout -- *.info.yml
 drush webform:tidy -y --dependencies webform
 drush webform:tidy -y --dependencies webform_demo_application_evaluation
 drush webform:tidy -y --dependencies webform_demo_event_registration
+drush webform:tidy -y --dependencies webform_demo_region_contact
 drush webform:tidy -y --dependencies webform_examples
 drush webform:tidy -y --dependencies webform_examples_accessibility
 drush webform:tidy -y --dependencies webform_example_element
@@ -195,6 +199,7 @@ drush webform:tidy -y --dependencies webform_scheduled_email_test
 drush features-import -y webform
 drush features-import -y webform_demo_application_evaluation
 drush features-import -y webform_demo_event_registration
+drush features-import -y webform_demo_region_contact
 drush features-import -y webform_examples
 drush features-import -y webform_examples_accessibility
 drush features-import -y webform_example_element

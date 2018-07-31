@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the webform node module.
+ * Install, update and uninstall functions for the webform demo event registration module.
  */
 
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -37,8 +37,9 @@ function webform_demo_event_registration_install() {
  * Implements hook_uninstall().
  */
 function webform_demo_event_registration_uninstall() {
-  // Delete all webform:demo_application nodes.
+  // Delete all webform:demo_event_registration nodes.
   $entity_ids = \Drupal::entityQuery('node')
+    ->condition('type', 'webform_demo_event')
     ->condition('webform.target_id', 'demo_event_registration')
     ->execute();
   if ($entity_ids) {
