@@ -37,9 +37,9 @@ class WebformEditorTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform (config) entity files.
+   * Tests webform entity settings files.
    */
-  public function testWebformEntityFiles() {
+  public function testWebformSettingsFiles() {
     $this->drupalLogin($this->rootUser);
 
     // Create three test images.
@@ -103,8 +103,87 @@ class WebformEditorTest extends WebformTestBase {
     $this->assertIdentical([], $this->fileUsage->listUsage($images[0]), 'The file has 0 usage.');
     $this->assertIdentical(['editor' => ['webform' => ['contact' => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 1 usage.');
 
-    // Delete the contact webform.
+    // Delete the webform.
     Webform::load('contact')->delete();
+    $this->reloadImages($images);
+
+    // Check that first and second image are temporary.
+    $this->assertTrue($images[0]->isTemporary());
+    $this->assertTrue($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+  }
+
+  /**
+   * Tests webform configuration files.
+   */
+  public function testWebformConfigurationFiles() {
+    $this->drupalLogin($this->rootUser);
+
+    // Create three test images.
+    /** @var \Drupal\file\FileInterface[] $images */
+    $images = $this->drupalGetTestFiles('image');
+    $images = array_slice($images, 0, 5);
+    foreach ($images as $index => $image_file) {
+      $images[$index] = File::create((array) $image_file);
+      $images[$index]->save();
+    }
+
+    // Check that all images are temporary.
+    $this->assertTrue($images[0]->isTemporary());
+    $this->assertTrue($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Upload the first image.
+    $edit = [
+      'form_settings[default_form_open_message][value]' => '<img data-entity-type="file" data-entity-uuid="' . $images[0]->uuid() . '"/>',
+    ];
+    $this->drupalPostForm('/admin/structure/webform/config', $edit, t('Save configuration'));
+    $this->reloadImages($images);
+
+    // Check that first image is not temporary.
+    $this->assertFalse($images[0]->isTemporary());
+    $this->assertTrue($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Check create first image file usage.
+    $this->assertIdentical(['editor' => ['config' => ['webform.settings' => '1']]], $this->fileUsage->listUsage($images[0]), 'The file has 1 usage.');
+
+    // Upload the second image.
+    $edit = [
+      'form_settings[default_form_open_message][value]' => '<img data-entity-type="file" data-entity-uuid="' . $images[0]->uuid() . '"/><img data-entity-type="file" data-entity-uuid="' . $images[1]->uuid() . '"/>',
+    ];
+    $this->drupalPostForm('/admin/structure/webform/config', $edit, t('Save configuration'));
+    $this->reloadImages($images);
+
+    // Check that first and second image are not temporary.
+    $this->assertFalse($images[0]->isTemporary());
+    $this->assertFalse($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Check first and second image file usage.
+    $this->assertIdentical(['editor' => ['config' => ['webform.settings' => '1']]], $this->fileUsage->listUsage($images[0]), 'The file has 1 usage.');
+    $this->assertIdentical(['editor' => ['config' => ['webform.settings' => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 1 usage.');
+
+    // Remove the first image.
+    $edit = [
+      'form_settings[default_form_open_message][value]' => '<img data-entity-type="file" data-entity-uuid="' . $images[1]->uuid() . '"/>',
+    ];
+    $this->drupalPostForm('/admin/structure/webform/config', $edit, t('Save configuration'));
+    $this->reloadImages($images);
+
+    // Check that first is temporary and second image is not temporary.
+    $this->assertTrue($images[0]->isTemporary());
+    $this->assertFalse($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Check first and second image file usage.
+    $this->assertIdentical([], $this->fileUsage->listUsage($images[0]), 'The file has 0 usage.');
+    $this->assertIdentical(['editor' => ['config' => ['webform.settings' => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 1 usage.');
+
+    // Simulate deleting webform.settings.yml during webform uninstall.
+    // @see webform_uninstall()
+    $config = \Drupal::configFactory()->get('webform.settings');
+    _webform_config_delete($config);
     $this->reloadImages($images);
 
     // Check that first and second image are temporary.

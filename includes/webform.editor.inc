@@ -93,7 +93,6 @@ function _webform_config_update(Config $config) {
 
   // Detect file usages that should be decremented.
   $removed_files = array_diff($original_uuids, $uuids);
-  dsm($removed_files);
   _webform_delete_file_usage($removed_files, 'config', $config->getName(), 1);
 }
 
