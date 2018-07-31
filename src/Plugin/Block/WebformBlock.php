@@ -104,7 +104,7 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
       '#more' => [
         '#theme' => 'webform_codemirror',
         '#type' => 'yaml',
-        '#code' => " # This is an example of a comment.
+        '#code' => "# This is an example of a comment.
 element_key: 'some value'
 
 # The below example uses a token to get the current node's title.
