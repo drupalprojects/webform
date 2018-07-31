@@ -93,7 +93,7 @@ class Range extends NumericBase {
       $properties = ['#min', '#max', '#step', '#disabled'];
       $output += array_intersect_key($element, array_combine($properties, $properties));
 
-      // Copy custom output properties to ouput element.
+      // Copy custom output properties to output element.
       foreach ($element as $key => $value) {
         if (strpos($key, '#output__') === 0) {
           $output_key = str_replace('#output__', '#', $key);

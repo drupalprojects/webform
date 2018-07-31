@@ -14,7 +14,7 @@ class WebformRouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
-    // Reove 'Contribute' route if explicitly disabled or the Contribute module
+    // Remove 'Contribute' route if explicitly disabled or the Contribute module
     // is installed.
     if (\Drupal::config('webform.settings')->get('ui.contribute_disabled') || \Drupal::moduleHandler()->moduleExists('contribute')) {
       $collection->remove('webform.contribute');

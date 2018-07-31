@@ -18,6 +18,19 @@ function webform_library_info_alter(&$libraries, $extension) {
     return;
   }
 
+  // Prevent duplicate instances of the chosen plugin and use
+  // the chosen_lib.module's as the dependency.
+  if (isset($libraries['webform.element.chosen']) && \Drupal::moduleHandler()->moduleExists('chosen_lib')) {
+    $dependencies =& $libraries['webform.element.chosen']['dependencies'];
+    foreach ($dependencies as $index => $dependency) {
+      if ($dependency === 'webform/libraries.jquery.chosen') {
+        $dependencies[$index] = 'chosen_lib/chosen';
+        $dependencies[] = 'chosen_lib/chosen.css';
+        break;
+      }
+    }
+  }
+
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
 

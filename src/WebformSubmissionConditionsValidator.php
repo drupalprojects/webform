@@ -333,7 +333,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     foreach ($conditions as $index => $value) {
       if (is_string($value) && in_array($value, ['and', 'or', 'xor'])) {
         $condition_logic = $value;
-        // If OR conditional logic operatator, check current condition
+        // If OR conditional logic operator, check current condition
         // results.
         if ($condition_logic === 'or' && array_sum($condition_results)) {
           return TRUE;
@@ -370,7 +370,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         foreach ($condition as $sub_condition) {
           $sub_condition_results[] = $this->checkCondition($element, $selector, $sub_condition, $webform_submission);
         }
-        // Evalute sub-conditions using the 'OR' operator.
+        // Evaluate sub-conditions using the 'OR' operator.
         $condition_results[$selector] = (boolean) array_sum($sub_condition_results);
       }
       else {

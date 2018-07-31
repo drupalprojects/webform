@@ -113,18 +113,18 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
    *   The node type storage class.
    * @param \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $field_config_storage
    *   The field config storage class.
-   * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submsision_storage
+   * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage
    *   The webform submission storage class.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, ConfigEntityStorageInterface $node_type_storage, ConfigEntityStorageInterface $field_config_storage, WebformSubmissionStorageInterface $webform_submsision_storage, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, DateFormatterInterface $date_formatter, ConfigEntityStorageInterface $node_type_storage, ConfigEntityStorageInterface $field_config_storage, WebformSubmissionStorageInterface $webform_submission_storage, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
     parent::__construct($entity_type, $storage);
 
     $this->dateFormatter = $date_formatter;
     $this->nodeTypeStorage = $node_type_storage;
     $this->fieldConfigStorage = $field_config_storage;
-    $this->submissionStorage = $webform_submsision_storage;
+    $this->submissionStorage = $webform_submission_storage;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
 
     $this->nodeTypes = [];
@@ -208,16 +208,9 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
       'data' => $this->t('Webform status'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
     ];
-    $header['results_total'] = [
-      'data' => $this->t('Total Results'),
+    $header['results'] = [
+      'data' => $this->t('Results'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-    ];
-    $header['results_operations'] = [
-      'data' => $this->t('Operations'),
-      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-    ];
-    $header['operations'] = [
-      'data' => '',
     ];
     return $header + parent::buildHeader();
   }
@@ -240,13 +233,29 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
     $row['changed'] = $this->dateFormatter->format($entity->getChangedTime(), 'short');
     $row['node_status'] = $entity->isPublished() ? $this->t('Published') : $this->t('Not published');
     $row['webform_status'] = $this->getWebformStatus($entity);
-    $row['results_total'] = $this->submissionStorage->getTotal($this->webform, $entity);
-    $row['results_operations']['data'] = [
-      '#type' => 'operations',
-      '#links' => $this->getDefaultOperations($entity, 'results'),
-      '#prefix' => '<div class="webform-dropbutton">',
-      '#suffix' => '</div>',
-    ];
+
+    $result_total = $this->submissionStorage->getTotal($this->webform, $entity);
+    $results_access = $entity->access('submission_view_any');
+    $results_disabled = $this->webform->isResultsDisabled();
+    if ($results_disabled || !$results_access) {
+      $row['results'] = $result_total;
+    }
+    else {
+      $route_parameters = [
+        'node' => $entity->id(),
+      ];
+      $row['results'] = [
+        'data' => [
+          '#type' => 'link',
+          '#title' => $result_total,
+          '#attributes' => [
+            'aria-label' => $this->formatPlural($result_total, '@count result for @label', '@count results for @label', ['@label' => $entity->label()]),
+          ],
+          '#url' => Url::fromRoute('entity.node.webform.results_submissions', $route_parameters),
+        ],
+      ];
+    }
+
     $row['operations']['data'] = $this->buildOperations($entity);
     return $row + parent::buildRow($entity);
   }
@@ -297,38 +306,48 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOperations(EntityInterface $entity, $type = 'edit') {
+  public function buildOperations(EntityInterface $entity) {
+    $build = [
+      '#type' => 'operations',
+      '#links' => $this->getOperations($entity),
+      '#prefix' => '<div class="webform-dropbutton">',
+      '#suffix' => '</div>',
+    ];
+
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultOperations(EntityInterface $entity) {
     $route_parameters = [
       'node' => $entity->id(),
     ];
-    if ($type == 'results') {
-      $operations = [];
-      if ($entity->access('submission_view_any')) {
-        $operations['submissions'] = [
-          'title' => $this->t('Submissions'),
-          'url' => Url::fromRoute('entity.node.webform.results_submissions', $route_parameters),
-        ];
-        $operations['export'] = [
-          'title' => $this->t('Download'),
-          'url' => Url::fromRoute('entity.node.webform.results_export', $route_parameters),
-        ];
-      }
-      if ($entity->access('submission_delete_any')) {
-        $operations['clear'] = [
-          'title' => $this->t('Clear'),
-          'url' => Url::fromRoute('entity.node.webform.results_clear', $route_parameters),
-        ];
-      }
+    $operations = [];
+    if ($entity->access('update')) {
+      $operations['edit'] = [
+        'title' => $this->t('Edit'),
+        'url' => $this->ensureDestination($entity->toUrl('edit-form')),
+      ];
     }
-    else {
-      $operations = parent::getDefaultOperations($entity);
-      if ($entity->access('submission_update_any')) {
-        $operations['test'] = [
-          'title' => $this->t('Test'),
-          'weight' => 21,
-          'url' => Url::fromRoute('entity.node.webform.test_form', $route_parameters),
-        ];
-      }
+    if ($entity->access('view')) {
+      $operations['view'] = [
+        'title' => $this->t('View'),
+        'url' => $this->ensureDestination($entity->toUrl('canonical')),
+      ];
+    }
+    if ($entity->access('submission_view_any') && !$this->webform->isResultsDisabled()) {
+      $operations['results'] = [
+        'title' => $this->t('Results'),
+        'url' => Url::fromRoute('entity.node.webform.results_submissions', $route_parameters),
+      ];
+    }
+    if ($entity->access('delete')) {
+      $operations['delete'] = [
+        'title' => $this->t('Delete'),
+        'url' => $this->ensureDestination($entity->toUrl('delete-form')),
+      ];
     }
     return $operations;
   }
@@ -338,6 +357,8 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
    */
   public function render() {
     $build = parent::render();
+
+    $build['table']['#sticky'] = TRUE;
 
     // Customize the empty message.
     $build['table']['#empty'] = $this->t('There are no webform node references.');
@@ -366,7 +387,6 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
     }
 
     $build['#attached']['library'][] = 'webform_node/webform_node.references';
-
     return $build;
   }
 

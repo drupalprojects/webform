@@ -154,7 +154,7 @@ abstract class TextBase extends WebformElementBase {
     $form['validation']['counter_container']['#states'] = [
       'invisible' => [
         ':input[name="properties[counter_type]"]' => ['value' => ''],
-      ]
+      ],
     ];
     $form['validation']['counter_container']['counter_minimum'] = [
       '#type' => 'number',

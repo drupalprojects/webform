@@ -46,7 +46,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeTestBase {
     $this->drupalGet('node/1/webform/test');
     $this->assertNoRaw('textfield_a');
     $this->assertRaw('textfield_b');
-    
+
     // Check result webform B.
     $this->drupalGet('node/1/webform/results/submissions');
     $this->assertNoRaw('textfield_a');

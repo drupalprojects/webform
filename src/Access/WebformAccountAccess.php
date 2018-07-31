@@ -37,6 +37,19 @@ class WebformAccountAccess {
   }
 
   /**
+   * Check whether the user has 'overview' with 'create' permission.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   Run access checks for this account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public static function checkTemplatesAccess(AccountInterface $account) {
+    return AccessResult::allowedIf($account->hasPermission('access webform overview') && $account->hasPermission('create webform'));
+  }
+
+  /**
    * Check whether the user can view submissions.
    *
    * @param \Drupal\Core\Session\AccountInterface $account

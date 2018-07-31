@@ -193,11 +193,19 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform DropzoneJS.
+    $projects['webform_dropzonejs'] = [
+      'title' => $this->t('Webform DropzoneJS'),
+      'description' => $this->t("Creates a new DropzoneJS element that you can add to webforms."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_dropzonejs'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Handsontable.
     $projects['handsontable_yml_webform'] = [
       'title' => $this->t('Webform Handsontable'),
       'description' => $this->t("Allows both the Drupal Form API and the Drupal 8 Webforms module to use the Excel-like Handsontable library."),
-      'url' => Url::fromUri('https://www.drupal.org/handsontable_yml_webform'),
+      'url' => Url::fromUri('https://www.drupal.org/project/handsontable_yml_webform'),
       'category' => 'element',
     ];
 
@@ -255,6 +263,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Extends functionality of Webform so on wizard forms, the title of the wizard page can override the form title'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_wizard_full_title'),
       'category' => 'enhancement',
+    ];
+
+    // Integrations: Headless Ninja React Webform.
+    $projects['hn-react-webform'] = [
+      'title' => $this->t('Headless Ninja React Webform'),
+      'description' => $this->t('With this awesome React component, you can render complete Drupal Webforms in React. With validation, easy custom styling and a modern, clean interface.'),
+      'url' => Url::fromUri('https://github.com/headless-ninja/hn-react-webform'),
+      'category' => 'integration',
     ];
 
     // Integration: Webform HubSpot.
@@ -376,7 +392,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/mailsystem'),
       'category' => 'mail',
     ];
-
 
     // Mail: Mail System: SendGrid Integration.
     $projects['sendgrid_integration'] = [

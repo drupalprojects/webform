@@ -32,4 +32,5 @@ class WebformHandlerAccess {
     }
     return $access_result->addCacheTags(['config:webform.settings']);
   }
+
 }

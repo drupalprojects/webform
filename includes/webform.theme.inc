@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Theme hooks, preprocessor, and suggesttions.
+ * Theme hooks, preprocessor, and suggestions.
  */
 
 use Drupal\file\Entity\File;
@@ -547,7 +547,7 @@ function _webform_preprocess_element(array &$variables, $title_parents = ['title
       'description' => $variables['description']['content'],
     ];
   }
-  
+
   $title =& NestedArray::getValue($variables, $title_parents);
 
   // Move #description to #help for webform admin routes.
@@ -557,7 +557,7 @@ function _webform_preprocess_element(array &$variables, $title_parents = ['title
   _webform_preprocess_form_element_description_more($variables);
 
   // Add help to title (aka label).
-  _webform_preprocess_help_title($title,$element);
+  _webform_preprocess_help_title($title, $element);
 }
 
 /**

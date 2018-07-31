@@ -897,6 +897,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       }
     }
   }
+
   /**
    * Replace Core's composite #pre_render with Webform's composite #pre_render.
    *
@@ -2843,17 +2844,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     $operations = [
       'create' => [
-        '#title' => $this->t('Create webform submission'),
+        '#title' => $this->t('Create submission'),
         '#description' => $this->t('Select roles and users that should be able to populate this element when creating a new submission.'),
         '#open' => TRUE,
       ],
       'update' => [
-        '#title' => $this->t('Update webform submission'),
+        '#title' => $this->t('Update submission'),
         '#description' => $this->t('Select roles and users that should be able to update this element when updating an existing submission.'),
         '#open' => FALSE,
       ],
       'view' => [
-        '#title' => $this->t('View webform submission'),
+        '#title' => $this->t('View submission'),
         '#description' => $this->t('Select roles and users that should be able to view this element when viewing a submission.'),
         '#open' => FALSE,
       ],

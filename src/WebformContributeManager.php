@@ -471,7 +471,7 @@ class WebformContributeManager implements WebformContributeManagerInterface {
    *   The remote URI.
    *
    * @return mixed|null
-   *   The returned data. Tequests to *.json files will be decoded.
+   *   The returned data. Requests to *.json files will be decoded.
    */
   protected function get($uri) {
     if (isset($this->cachedData[$uri])) {

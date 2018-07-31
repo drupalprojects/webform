@@ -33,6 +33,8 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
 
     $build += parent::render();
 
+    $build['table']['#sticky'] = TRUE;
+
     $build['#attached']['library'][] = 'webform/webform.admin.dialog';
 
     return $build;

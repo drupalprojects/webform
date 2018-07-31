@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Provides keyboard shortcuts to create and save webform elements.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_webform_libraries_info().
+ */
+function webform_shortcuts_webform_libraries_info() {
+  $libraries = [];
+  $libraries['jquery.hotkeys'] = [
+    'title' => t('jQuery.Hotkeys'),
+    'description' => t('jQuery Hotkeys is a plug-in that lets you easily add and remove handlers for keyboard events anywhere in your code supporting almost any key combination.'),
+    'notes' => t('jQuery Hotkeys is used by the form builder to quickly add and save elements.'),
+    'homepage_url' => Url::fromUri('https://github.com/jeresig/jquery.hotkeys'),
+    'download_url' => Url::fromUri('https://github.com/jeresig/jquery.hotkeys/archive/0.2.0.zip'),
+    'version' => '0.2.0',
+    'optional' => FALSE,
+  ];
+  return $libraries;
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function webform_shortcuts_preprocess_block(&$variables) {
+  if ($variables['plugin_id'] != 'local_actions_block') {
+    return;
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() !== 'entity.webform.edit_form') {
+    return;
+  }
+
+  // Shortcuts.
+  // @see modules/webform_shortcuts/js/webform_shortcuts.js
+  $shortcuts = [
+    '',
+    'CRTL+E' => t('Add element'),
+    'CRTL+P' => t('Add page'),
+    'CRTL+L' => t('Add layout'),
+    '',
+    'CRTL+S' => t('Save element or elements'),
+    'CRTL+R' => t('Reset elements'),
+    '',
+    'CRTL+W' => t('Show/hide row weights'),
+    '',
+  ];
+
+  $items = [];
+  foreach ($shortcuts as $keys => $task) {
+    if ($task === '') {
+      $items[] = [
+        '#markup' => '<hr/>',
+      ];
+    }
+    else {
+      $items[] = [
+        '#markup' => t('@keys = @task', ['@keys' => $keys, '@task' => $task]),
+        '#suffix' => '<br/>',
+      ];
+    }
+  }
+
+  $variables['content']['help'] = [
+    '#type' => 'webform_help',
+    '#help_title' => t('Keyboard shortcuts'),
+    '#help' => $items,
+  ];
+  $variables['content']['help']['#attached']['library'][] = 'webform_shortcuts/webform_shortcuts';
+}

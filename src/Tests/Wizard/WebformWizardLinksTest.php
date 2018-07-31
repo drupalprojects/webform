@@ -64,7 +64,7 @@ class WebformWizardLinksTest extends WebformWizardTestBase {
       ->setSetting('wizard_preview_link', TRUE)
       ->save();
 
-    // Check progess bar is not linked.
+    // Check progress bar is not linked.
     $this->drupalGet('webform/test_form_wizard_links');
     $this->assertNoCssSelect('.webform-wizard-pages-links[data-wizard-progress-link="true"]');
     $this->assertCssSelect('.webform-wizard-pages-links[data-wizard-preview-link="true"]');

@@ -131,8 +131,8 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
     // Check that no pager is being displayed.
     $this->assertNoRaw('<nav class="pager" role="navigation" aria-labelledby="pagination-heading">');
 
-    // Check that table is sorted by serial.
-    $this->assertRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
+    // Check that table is sorted by created.
+    $this->assertRaw('<th specifier="created" class="priority-medium is-active" aria-sort="descending">');
 
     // Check the table results order by sid.
     $this->assertPattern('#Hillary.+Abraham.+George#ms');
@@ -222,18 +222,18 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
 
     // Check view own submissions.
     $this->drupalget('/webform/' . $webform->id() . '/submissions');
-    $this->assertRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
-    $this->assertRaw('<th specifier="created" class="priority-medium">');
+    $this->assertRaw('<th specifier="serial">');
+    $this->assertRaw('<th specifier="created" class="priority-medium is-active" aria-sort="descending">');
     $this->assertRaw('<th specifier="remote_addr" class="priority-low">');
 
-    // Display on first name and last name columns.
+    // Display only first name and last name columns.
     $webform->setSetting('submission_user_columns', ['element__first_name', 'element__last_name'])
       ->save();
 
     // Check view own submissions only include first name and last name.
     $this->drupalget('/webform/' . $webform->id() . '/submissions');
-    $this->assertNoRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
-    $this->assertNoRaw('<th specifier="created" class="priority-medium">');
+    $this->assertNoRaw('<th specifier="serial">');
+    $this->assertNoRaw('<th specifier="created" class="priority-medium is-active" aria-sort="descending">');
     $this->assertNoRaw('<th specifier="remote_addr" class="priority-low">');
     $this->assertRaw('<th specifier="element__first_name" aria-sort="ascending" class="is-active">');
     $this->assertRaw('<th specifier="element__last_name">');

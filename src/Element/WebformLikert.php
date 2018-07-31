@@ -29,9 +29,10 @@ class WebformLikert extends FormElement {
       ],
       '#theme_wrappers' => ['form_element'],
       '#required' => FALSE,
+      '#sticky' => TRUE,
       '#questions' => [],
       '#questions_description_display' => 'description',
-      // Using #answers insteads of #options to prevent triggering
+      // Using #answers instead of #options to prevent triggering
       // \Drupal\Core\Form\FormValidator::performRequiredValidation().
       '#answers' => [],
       '#answers_description_display' => 'description',
@@ -154,7 +155,7 @@ class WebformLikert extends FormElement {
         // so that it can hidden but accessible to screen readers
         // when Likert is displayed in grid on desktop.
         // Wrap help and description in
-        // span.webform-likert-(help|description).hidden to block screeen
+        // span.webform-likert-(help|description).hidden to block screen
         // readers except on mobile.
         // @see webform.element.likert.css
         $row[$answer_key]['#title_display'] = 'after';
@@ -195,10 +196,13 @@ class WebformLikert extends FormElement {
     $element['table'] = [
       '#type' => 'table',
       '#header' => $header,
+      '#sticky' => $element['#sticky'],
       '#attributes' => [
         'class' => ['webform-likert-table'],
         'data-likert-answers-count' => count($element['#answers']),
       ],
+      '#prefix' => '<div class="webform-likert-table-wrapper">',
+      '#suffix' => '</div>',
     ] + $rows;
 
     // Build table element with selected properties.

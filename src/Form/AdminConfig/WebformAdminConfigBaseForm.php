@@ -89,6 +89,7 @@ abstract class WebformAdminConfigBaseForm extends ConfigFormBase {
       '#header' => $header,
       '#options' => $options,
       '#required' => TRUE,
+      '#sticky' => TRUE,
       '#default_value' => array_diff($ids, $excluded_ids),
     ];
     TableSelect::setProcessTableSelectCallback($element);

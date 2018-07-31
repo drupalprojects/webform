@@ -15,7 +15,7 @@ class WebformSubmissionAccess {
    * Check whether a webform submissions' webform has wizard pages.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submisison.
+   *   A webform submission.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.

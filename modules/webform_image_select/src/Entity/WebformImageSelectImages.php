@@ -167,7 +167,7 @@ class WebformImageSelectImages extends ConfigEntityBase implements WebformImageS
       $images = [];
     }
 
-    // Alter iamges using hook_webform_image_select_images_alter()
+    // Alter images using hook_webform_image_select_images_alter()
     // and/or hook_webform_image_select_images_WEBFORM_IMAGE_SELECT_IMAGES_ID_alter() hook.
     // @see webform.api.php
     \Drupal::moduleHandler()->alter('webform_image_select_images_' . $id, $images, $element);

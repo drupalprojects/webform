@@ -18,7 +18,7 @@ use Drupal\webform\WebformInterface;
  * done via an update hook.
  *
  * @param bool $reset
- *   If set TRUE old admin settings will be completly deleted.
+ *   If set TRUE old admin settings will be completely deleted.
  *
  * @see drush_webform_repair()
  */

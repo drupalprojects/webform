@@ -10,10 +10,8 @@ interface WebformTranslationManagerInterface {
   /**
    * Determine if the translated webform should be displayed.
    *
-   * @param \Drupal\webform\WebformInterface $webform
-   *
    * @return bool
-   *   TRUE if the translated webform should be displaye.
+   *   TRUE if the translated webform should be displayed.
    */
   public function isAdminRoute();
 

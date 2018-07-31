@@ -90,7 +90,7 @@ elements: |
     '#type': webform_computed_twig
     '#title': webform_computed_twig_trim
     '#whitespace': 'trim'
-    '#value': ' <em>This is trimmmed</em>  <br/> '
+    '#value': ' <em>This is trimmed</em>  <br/> '
   webform_computed_twig_spaceless:
     '#type': webform_computed_twig
     '#title': webform_computed_twig_spaceless

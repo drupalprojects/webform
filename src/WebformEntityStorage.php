@@ -25,6 +25,13 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
   protected $database;
 
   /**
+   * Associative array container total results for all webforms.
+   *
+   * @var array
+   */
+  protected $totals;
+
+  /**
    * Constructs a WebformEntityStorage object.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -265,6 +272,33 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
     $query->condition('webform_id', $webform->id());
     $query->addExpression('MAX(serial)');
     return $query->execute()->fetchField() + 1;
+  }
+
+  /**
+   * Get total number of results for specified webform or all webforms.
+   * @param null $webform_id
+   *   (optional) A webform id.
+   *
+   * @return array|int
+   *   If no webform id is passed, an associative array keyed by webform id
+   *   contains total results for all webforms, otherwise the total number of
+   *   results for specified webform
+   */
+  public function getTotalNumberOfResults($webform_id = NULL) {
+    if (!isset($this->totals)) {
+      $query = $this->database->select('webform_submission', 'ws');
+      $query->fields('ws', ['webform_id']);
+      $query->addExpression('COUNT(sid)', 'results');
+      $query->groupBy('webform_id');
+      $this->totals = array_map('intval', $query->execute()->fetchAllKeyed());
+    }
+
+    if ($webform_id) {
+      return (isset($this->totals[$webform_id])) ? $this->totals[$webform_id] : 0;
+    }
+    else {
+      return $this->totals;
+    }
   }
 
 }

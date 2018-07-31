@@ -5,7 +5,6 @@ namespace Drupal\webform\Controller;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\webform\Ajax\WebformAnnounceCommand;
 use Drupal\webform\WebformSubmissionInterface;
@@ -81,7 +80,7 @@ class WebformSubmissionController extends ControllerBase {
    * @return \Drupal\Component\Render\FormattableMarkup
    *   Sticky icon.
    */
-  static public function buildSticky(WebformSubmissionInterface $webform_submission) {
+  public static function buildSticky(WebformSubmissionInterface $webform_submission) {
     $t_args = ['@label' => $webform_submission->label()];
     $args = [
       '@state' => $webform_submission->isSticky() ? 'on' : 'off',
@@ -99,7 +98,7 @@ class WebformSubmissionController extends ControllerBase {
    * @return \Drupal\Component\Render\FormattableMarkup
    *   Locked icon.
    */
-  static public function buildLocked(WebformSubmissionInterface $webform_submission) {
+  public static function buildLocked(WebformSubmissionInterface $webform_submission) {
     $t_args = ['@label' => $webform_submission->label()];
     $args = [
       '@state' => $webform_submission->isLocked() ? 'on' : 'off',

@@ -42,7 +42,7 @@
 
 /* Float toogle to the right of webform tabs */
 .webform-tabs .webform-details-toggle-state-wrapper {
-  float: right
+  float: right;
 }
 
 @media screen and (max-width: 600px) {

@@ -444,7 +444,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     $element_dialog_attributes = WebformDialogHelper::getOffCanvasDialogAttributes();
     $key = $element['#webform_key'];
     $title = $element['#admin_title'] ?: $element['#title'];
-    $title = (is_array($title)) ? $this->renderer->render($title) :  $title;
+    $title = (is_array($title)) ? $this->renderer->render($title) : $title;
     $plugin_id = $this->elementManager->getElementPluginId($element);
 
     /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
@@ -548,8 +548,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           // Add custom hash to current page's location.
           // @see Drupal.behaviors.webformAjaxLink
           'data-hash' => 'webform-tab--conditions',
-          'title' => $this->t('Edit @states conditional', ['@states' =>  implode('; ', $states)]),
-          'aria-label' => $this->t('Edit @states conditional', ['@states' =>  implode('; ', $states)]),
+          'title' => $this->t('Edit @states conditional', ['@states' => implode('; ', $states)]),
+          'aria-label' => $this->t('Edit @states conditional', ['@states' => implode('; ', $states)]),
         ],
       ];
     }

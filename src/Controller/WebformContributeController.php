@@ -40,7 +40,7 @@ class WebformContributeController extends ControllerBase implements ContainerInj
   protected $contributeManager;
 
   /**
-   * Constructs a WebfomrContributeController object.
+   * Constructs a WebformContributeController object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.

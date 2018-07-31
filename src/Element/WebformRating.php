@@ -76,8 +76,8 @@ class WebformRating extends Range {
    * @param array $element
    *   A rating element.
    *
-   * @return string
-   *   The RateIt div tag.
+   * @return array
+   *   A renderable array containing the RateIt div tag.
    *
    * @see https://github.com/gjunge/rateit.js/wiki
    */

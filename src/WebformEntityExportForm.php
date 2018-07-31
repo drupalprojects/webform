@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_devel\Form;
+namespace Drupal\webform;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Entity\EntityForm;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Export webform configuration.
  */
-class WebformDevelEntityExportForm extends EntityForm {
+class WebformEntityExportForm extends EntityForm {
 
   /**
    * {@inheritdoc}

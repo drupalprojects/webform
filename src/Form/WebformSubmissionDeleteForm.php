@@ -80,7 +80,7 @@ class WebformSubmissionDeleteForm extends ContentEntityDeleteForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     // Issue #2582295: Confirmation cancel links are incorrect if installed in
     // a subdirectory
-    // Work-around: Remove sudirectory from destination before generating
+    // Work-around: Remove subdirectory from destination before generating
     // actions.
     $request = $this->getRequest();
     $destination = $request->query->get('destination');

@@ -46,7 +46,7 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
+   *   The entity type manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    */
@@ -111,7 +111,7 @@ element_key: 'some value'
 # Add ':clear' to the end token to return an empty value when the token is missing.
 title: '[webform_submission:node:title:clear]'
 # The below example uses a token to get a field value from the current node.
-full_name: '[webform_submission:node:field_full_name:clear]"
+full_name: '[webform_submission:node:field_full_name:clear]",
       ],
     ];
 

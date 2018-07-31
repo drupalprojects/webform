@@ -793,6 +793,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     if ($export_options['range_type'] == 'latest' && $export_options['range_latest']) {
       // Clone the query and use it to get latest sid starting sid.
       $latest_query = clone $query;
+      $latest_query->sort('created', 'DESC');
       $latest_query->sort('sid', 'DESC');
       $latest_query->range(0, (int) $export_options['range_latest']);
       if ($latest_query_entity_ids = $latest_query->execute()) {
@@ -800,7 +801,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       }
     }
     else {
-      // Sort by sid in ASC or DESC order.
+      // Sort by created and sid in ASC or DESC order.
+      $query->sort('created', isset($export_options['order']) ? $export_options['order'] : 'ASC');
       $query->sort('sid', isset($export_options['order']) ? $export_options['order'] : 'ASC');
     }
 

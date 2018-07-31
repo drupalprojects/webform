@@ -113,7 +113,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity manager.
+   *   The entity type manager.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -261,13 +261,9 @@ class WebformMessageManager implements WebformMessageManagerInterface {
         $t_args = [':href' => $webform->toUrl('settings')->toString()];
         return $this->t('This webform is <a href=":href">archived</a>. Only submission administrators are allowed to access this webform and create new submissions.', $t_args);
 
-      case WebformMessageManagerInterface::ADMIN_ARCHIVED:
-        $t_args = [':settings_href' => $webform->toUrl('settings')->toString()];
-        return $this->t('This webform is <a href=":settings_href">archived</a>. Only submission administrators are allowed to access this webform and create new submissions.', $t_args);
-
       case WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION:
         $t_args = ['%form' => ($source_entity) ? $source_entity->label() : $webform->label()];
-        return $this->t('New submission added to %form.',$t_args);
+        return $this->t('New submission added to %form.', $t_args);
 
       case WebformMessageManagerInterface::FORM_SAVE_EXCEPTION:
         $t_args = [

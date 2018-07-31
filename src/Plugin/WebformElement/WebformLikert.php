@@ -51,6 +51,7 @@ class WebformLikert extends WebformElementBase {
       'format_html' => '',
       'format_text' => '',
       // Likert settings.
+      'sticky' => TRUE,
       'questions' => [],
       'questions_description_display' => 'description',
       'questions_randomize' => FALSE,
@@ -152,6 +153,7 @@ class WebformLikert extends WebformElementBase {
           '#type' => 'table',
           '#header' => $header,
           '#rows' => $rows,
+          '#sticky' => $this->getElementProperty($element, 'sticky'),
           '#attributes' => [
             'class' => ['webform-likert-table'],
           ],
@@ -459,6 +461,12 @@ class WebformLikert extends WebformElementBase {
           ':input[name="properties[na_answer]"]' => ['checked' => TRUE],
         ],
       ],
+    ];
+    $form['likert']['sticky'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Drupal style "sticky" table headers (Javascript)'),
+      '#description' => $this->t('If checked, the answers will float at the top of the page as the user scrolls-thru the questions.'),
+      '#return_value' => TRUE,
     ];
     return $form;
   }

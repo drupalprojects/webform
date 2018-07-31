@@ -73,7 +73,7 @@
         });
 
         // Input onchange clears signature pad if value is empty.
-        // Onchage events handlers are triggered when a webform is
+        // Onchange events handlers are triggered when a webform is
         // hidden or shown.
         // @see webform.states.js
         // @see triggerEventHandlers()

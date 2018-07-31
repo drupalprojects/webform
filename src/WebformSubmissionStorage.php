@@ -622,10 +622,15 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'title' => $this->t('IP address'),
     ];
 
-    // Webform.
+    // Webform and source entity for entity.webform_submission.collection.
+    // @see /admin/structure/webform/submissions/manage
     if (empty($webform) && empty($source_entity)) {
       $columns['webform_id'] = [
         'title' => $this->t('Webform'),
+      ];
+      $columns['entity'] = [
+        'title' => $this->t('Submitted to'),
+        'sort' => FALSE,
       ];
     }
 
@@ -1325,7 +1330,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   }
 
   /**
-   * Get anonymous users sumbmission ids.
+   * Get anonymous user's submission ids.
    *
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   A user account.

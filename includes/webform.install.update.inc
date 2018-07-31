@@ -12,7 +12,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
-use Drupal\webform\Plugin\WebformHandler\ActionWebformHandler;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler;
@@ -1017,7 +1016,7 @@ function webform_update_8046() {
  *   Webform config data.
  *
  * @return array
- *   Webform config data with 'webfor_actions' element.
+ *   Webform config data with 'webform_actions' element.
  */
 function _webform_update_8046_convert_data(array $data) {
   $button_names = [
@@ -1201,7 +1200,7 @@ function webform_update_8057() {
 }
 
 /**
- * Issue #2888076: Redirect users to login page when trying to access the a protected webform file.
+ * Issue #2888076: Redirect users to login page when trying to access a protected webform file.
  */
 function webform_update_8058() {
   _webform_update_admin_settings();
@@ -2418,10 +2417,10 @@ function webform_update_8136() {
 }
 
 /**
- * Update #counter_* attribute.s
+ * Update #counter_* attributes.
  *
  * Replace 'X' in counter message with '%d' and
- * move '#counter_message' to '#counter_maxiumum_message'.
+ * move '#counter_message' to '#counter_maximum_message'.
  *
  * @param array $element
  *   A form element.

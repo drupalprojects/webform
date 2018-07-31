@@ -60,22 +60,6 @@ class QueryStringWebformSourceEntity extends PluginBase implements WebformSource
   protected $webformEntityReferenceManager;
 
   /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('current_route_match'),
-      $container->get('request_stack'),
-      $container->get('language_manager'),
-      $container->get('webform.entity_reference_manager')
-    );
-  }
-
-  /**
    * QueryStringWebformSourceEntity constructor.
    *
    * @param array $configuration
@@ -103,6 +87,22 @@ class QueryStringWebformSourceEntity extends PluginBase implements WebformSource
     $this->request = $request_stack->getCurrentRequest();
     $this->languageManager = $language_manager;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager'),
+      $container->get('current_route_match'),
+      $container->get('request_stack'),
+      $container->get('language_manager'),
+      $container->get('webform.entity_reference_manager')
+    );
   }
 
   /**

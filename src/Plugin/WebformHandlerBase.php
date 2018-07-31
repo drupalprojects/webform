@@ -104,7 +104,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * webform. Make sure not include any services as a dependency injection
    * that directly connect to the database. This will prevent
    * "LogicException: The database connection is not serializable." exceptions
-   * from being thrown when a form is serialized via an Ajax callaback and/or
+   * from being thrown when a form is serialized via an Ajax callback and/or
    * form build.
    *
    * @param array $configuration

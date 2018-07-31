@@ -14,7 +14,7 @@ use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
- * Provides a base clase for 'webform_computed' elements.
+ * Provides a base class for 'webform_computed' elements.
  */
 abstract class WebformComputedBase extends WebformElementBase implements WebformElementDisplayOnInterface {
 

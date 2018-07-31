@@ -107,7 +107,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack service.
+   *   The request stack.
    * @param \Drupal\Core\Database\Connection $database
    *   The database.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager

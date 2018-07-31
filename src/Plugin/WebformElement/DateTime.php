@@ -166,7 +166,7 @@ class DateTime extends DateBase {
     $form['date']['date_date_element_none_warning'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('You should consider using a dedicated Time element, instead of this Date/time element, which will preprend the current date to the submitted time.'),
+      '#message_message' => $this->t('You should consider using a dedicated Time element, instead of this Date/time element, which will prepend the current date to the submitted time.'),
       '#access' => TRUE,
       '#states' => [
         'visible' => [

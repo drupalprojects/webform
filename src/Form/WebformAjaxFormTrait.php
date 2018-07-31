@@ -352,7 +352,7 @@ trait WebformAjaxFormTrait {
   }
 
   /**
-   * Set announcements
+   * Set announcements.
    *
    * @param array $announcements
    *   An associative array of announcements.

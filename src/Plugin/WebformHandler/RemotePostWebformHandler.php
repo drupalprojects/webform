@@ -76,7 +76,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $elementManager;
 
   /**
-   * List of unsupported webforem submission properties.
+   * List of unsupported webform submission properties.
    *
    * The below properties will not being included in a remote post.
    *
@@ -549,6 +549,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
       $data[$element_key . '__name'] = $file->getFilename();
       $data[$element_key . '__uri'] = $file->getFileUri();
+      $data[$element_key . '__mime'] = $file->getMimeType();
       $data[$element_key . '__data'] = base64_encode(file_get_contents($file->getFileUri()));
     }
 
@@ -628,10 +629,10 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * Determine if converting anoynmous submissions to authenticated is enabled.
+   * Determine if converting anonymous submissions to authenticated is enabled.
    *
    * @return bool
-   *   TRUE if converting anoynmous submissions to authenticated is enabled.
+   *   TRUE if converting anonymous submissions to authenticated is enabled.
    */
   protected function isConvertEnabled() {
     return $this->isDraftEnabled() && ($this->getWebform()->getSetting('form_convert_anonymous') === TRUE);

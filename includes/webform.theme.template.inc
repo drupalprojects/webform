@@ -17,7 +17,6 @@ use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\WebformMessageManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -482,8 +481,8 @@ function _template_progress_webform_set_title(array &$variables, $strip_tags = F
  *   - current_page: The current wizard page.
  */
 function template_preprocess_webform_progress(array &$variables) {
-  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
-  $libaries_manager = \Drupal::service('webform.libraries_manager');
+  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
+  $libraries_manager = \Drupal::service('webform.libraries_manager');
 
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
@@ -500,7 +499,7 @@ function template_preprocess_webform_progress(array &$variables) {
 
   if ($webform->getSetting('wizard_progress_bar')) {
     $variables['bar'] = [
-      '#theme' => ($libaries_manager->isIncluded('progress-tracker')) ? 'webform_progress_tracker' : 'webform_progress_bar',
+      '#theme' => ($libraries_manager->isIncluded('progress-tracker')) ? 'webform_progress_tracker' : 'webform_progress_bar',
       '#webform' => $webform,
       '#current_page' => $current_page,
       '#operation' => $operation,

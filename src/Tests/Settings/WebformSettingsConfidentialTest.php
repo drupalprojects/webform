@@ -69,7 +69,7 @@ class WebformSettingsConfidentialTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_confidential');
     $this->assertRaw('View your previous submission');
 
-    // Check that anonymous submissison is not converted to authenticated.
+    // Check that anonymous submission is not converted to authenticated.
     // @see \Drupal\webform\WebformSubmissionStorage::userLogin
     $this->drupalLogin($this->rootUser);
     $webform_submission = $this->loadSubmission($sid);

@@ -60,7 +60,7 @@ class WebformHandlerEmailMappingTest extends WebformTestBase {
     $this->assertText("Checkboxes sent to saturday@example.com,sunday@example.com from $site_name [$site_mail].");
     $this->assertNoText('Email not sent for Checkboxes handler because a To, CC, or BCC email was not provided.');
 
-    // Check that checkbxoes other option email sent.
+    // Check that checkboxes other option email sent.
     $edit = [
       'radios_other[radios]' => '_other_',
       'radios_other[other]' => '{Other}',

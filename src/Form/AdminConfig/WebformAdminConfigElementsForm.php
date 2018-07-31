@@ -406,7 +406,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     ];
     $form['file']['delete_temporary_managed_files'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Immediately deleted temporary managed files'),
+      '#title' => $this->t('Immediately delete temporary managed files'),
       '#description' => $this->t('Drupal core does not immediately delete temporary file. For webform submissions it is recommended that temporary files are immediately deleted.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.delete_temporary_managed_files'),
@@ -480,7 +480,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     $form['types']['excluded_elements']['#header']['description']['width'] = '50%';
     // Add warning to all password elements.
     foreach ($form['types']['excluded_elements']['#options'] as $element_type => &$excluded_element_option) {
-      if (strpos($element_type,'password') !== FALSE) {
+      if (strpos($element_type, 'password') !== FALSE) {
         $excluded_element_option['description'] = [
           'data' => [
             'description' => ['#markup' => $excluded_element_option['description']],
@@ -580,6 +580,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         'item' => ['data' => $this->t('Item format'), 'width' => '25%'],
         'items' => ['data' => $this->t('Items format'), 'width' => '25%'],
       ],
+      '#sticky' => TRUE,
     ] + $rows;
 
     return parent::buildForm($form, $form_state);

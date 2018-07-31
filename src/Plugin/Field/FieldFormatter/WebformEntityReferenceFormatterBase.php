@@ -103,7 +103,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
     $config = \Drupal::config('webform.settings');
     \Drupal::service('renderer')->addCacheableDependency($elements, $config);
 
-    // Track if the webfor is updated.
+    // Track if the webform is updated.
     \Drupal::service('renderer')->addCacheableDependency($elements, $webform);
 
     // Calculate the max-age based on the open/close data/time for the item

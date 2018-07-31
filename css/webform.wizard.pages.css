@@ -15,13 +15,13 @@
 }
 
 .webform-progress .progress-title[role="link"] {
-  color: #1976D2;
+  color: #1976d2;
 }
 
 .webform-progress .progress-title[role="link"]:hover,
 .webform-progress .progress-title[role="link"]:focus {
   text-decoration: underline;
-  color: #2196F3;
+  color: #2196f3;
 }
 
 /**

@@ -222,7 +222,6 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ];
     }
 
-
     // Wizard settings.
     $form['wizard_settings'] = [
       '#type' => 'details',
@@ -289,7 +288,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['wizard_settings']['wizard_start_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wizard start label'),
-      '#description' => $this->t('The first page label in the progress bar. Subseqent pages are titled by their wizard page title.'),
+      '#description' => $this->t('The first page label in the progress bar. Subsequent pages are titled by their wizard page title.'),
       '#size' => 20,
       '#default_value' => $settings['wizard_start_label'],
     ];

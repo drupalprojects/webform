@@ -49,7 +49,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The webform builder.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity manager.
+   *   The entity type manager.
    */
   public function __construct(AccountInterface $current_user, FormBuilderInterface $form_builder, EntityTypeManagerInterface $entity_type_manager) {
     $this->currentUser = $current_user;
@@ -104,14 +104,12 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
       $row['title'] = $webform->toLink();
       $row['description']['data']['#markup'] = $webform->get('description');
       $row['category']['data']['#markup'] = $webform->get('category');
-      if ($this->currentUser->hasPermission('create webform')) {
-        $row['operations']['data']['select'] = [
-          '#type' => 'link',
-          '#title' => $this->t('Select'),
-          '#url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['button', 'button--primary']),
-        ];
-      }
+      $row['operations']['data']['select'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Select'),
+        '#url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['button', 'button--primary']),
+      ];
       $row['operations']['data']['preview'] = [
         '#type' => 'link',
         '#title' => $this->t('Preview'),
@@ -137,6 +135,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#sticky' => TRUE,
       '#empty' => $this->t('There are no templates available.'),
       '#cache' => [
         'contexts' => $this->webformStorage->getEntityType()->getListCacheContexts(),

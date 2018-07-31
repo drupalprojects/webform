@@ -77,7 +77,7 @@ class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
     ];
     $form['mail']['roles'] = [
       '#type' => 'webform_roles',
-      '#title' => $this->t('Recipent roles'),
+      '#title' => $this->t('Recipient roles'),
       '#description' => $this->t("Select roles that can be assigned to receive a webform's email. <em>Please note: Selected roles will be available to all webforms.</em>"),
       '#include_anonymous' => FALSE,
       '#default_value' => $config->get('mail.roles'),
