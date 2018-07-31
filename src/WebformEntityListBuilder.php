@@ -6,10 +6,13 @@ use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Utility\WebformDialogHelper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Defines a class to build a listing of webform entities.
@@ -17,6 +20,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @see \Drupal\webform\Entity\Webform
  */
 class WebformEntityListBuilder extends ConfigEntityListBuilder {
+
+  /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
 
   /**
    * Search keys.
@@ -61,24 +78,43 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
   protected $roleStorage;
 
   /**
-   * Associative array container total results for all webforms.
-   *
-   * @var array
-   */
-  protected $resultsTotals;
-
-  /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage) {
-    parent::__construct($entity_type, $storage);
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
+    return new static(
+      $entity_type,
+      $container->get('entity.manager')->getStorage($entity_type->id()),
+      $container->get('request_stack'),
+      $container->get('current_user'),
+      $container->get('entity_type.manager')
+    );
+  }
 
-    $this->keys = \Drupal::request()->query->get('search');
-    $this->category = \Drupal::request()->query->get('category');
-    $this->state = \Drupal::request()->query->get('state');
-    $this->submissionStorage = \Drupal::entityTypeManager()->getStorage('webform_submission');
-    $this->userStorage = \Drupal::entityTypeManager()->getStorage('user');
-    $this->roleStorage = \Drupal::entityTypeManager()->getStorage('user_role');
+  /**
+   * Constructs a new WebformListBuilder object.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type definition.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
+   *   The entity storage class.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, RequestStack $request_stack, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($entity_type, $storage);
+    $this->request = $request_stack->getCurrentRequest();
+    $this->currentUser = $current_user;
+
+    $this->keys = $this->request->query->get('search');
+    $this->category = $this->request->query->get('category');
+    $this->state = $this->request->query->get('state');
+    $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
+    $this->userStorage = $entity_type_manager->getStorage('user');
+    $this->roleStorage = $entity_type_manager->getStorage('user_role');
   }
 
   /**
@@ -95,7 +131,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $build = [];
 
     // Add the filter by key(word) and/or state.
-    if (\Drupal::currentUser()->hasPermission('administer webform')) {
+    if ($this->currentUser->hasPermission('administer webform')) {
       $state_options = [
         (string) $this->t('Active') => [
           '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
@@ -124,7 +160,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->category, $this->state, $state_options);
 
     // Display info.
-    if (\Drupal::currentUser()->hasPermission('administer webform') && ($total = $this->getTotal($this->keys, $this->category, $this->state))) {
+    if ($this->currentUser->hasPermission('administer webform') && ($total = $this->getTotal($this->keys, $this->category, $this->state))) {
       $build['info'] = [
         '#markup' => $this->formatPlural($total, '@total webform', '@total webforms', ['@total' => $total]),
         '#prefix' => '<div>',
@@ -260,7 +296,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
 
     // Results.
-    $result_total = $this->getResultsTotal($entity->id());
+    $result_total = $this->storage->getTotalNumberOfResults($entity->id());
     $results_access = $entity->access('submission_view_any');
     $results_disabled = $entity->isResultsDisabled();
     if ($results_disabled || !$results_access) {
@@ -347,17 +383,17 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    */
   protected function getEntityIds() {
     $header = $this->buildHeader();
-    if (\Drupal::request()->query->get('order') === (string) $header['results']['data']) {
+    if ($this->request->query->get('order') === (string) $header['results']['data']) {
       // Get results totals for all returned entity ids.
       $results_totals = $this->getQuery($this->keys, $this->category, $this->state)
         ->execute();
       foreach ($results_totals as $entity_id) {
-        $results_totals[$entity_id] = $this->getResultsTotal($entity_id);
+        $results_totals[$entity_id] = $this->storage->getTotalNumberOfResults($entity_id);
       }
 
       // Sort results totals.
       asort($results_totals, SORT_NUMERIC);
-      if (\Drupal::request()->query->get('sort') === 'desc') {
+      if ($this->request->query->get('sort') === 'desc') {
         $results_totals = array_reverse($results_totals, TRUE);
       }
 
@@ -366,7 +402,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       $entity_ids = array_combine($entity_ids, $entity_ids);
 
       // Manually initialize and apply paging to the entity ids.
-      $page = \Drupal::request()->query->get('page') ?: 0;
+      $page = $this->request->query->get('page') ?: 0;
       $total = count($entity_ids);
       $limit = $this->getLimit();
       $start = ($page * $limit);
@@ -379,41 +415,6 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       $query->pager($this->getLimit());
       return $query->execute();
     }
-  }
-
-  /**
-   * Get total number of results for a webform.
-   *
-   * @param string $webform_id
-   *   A webform id.
-   *
-   * @return int
-   *   Total number of results for a webform.
-   */
-  protected function getResultsTotal($webform_id) {
-    $results_totals = $this->getResultsTotals();
-    return (isset($results_totals[$webform_id])) ? $results_totals[$webform_id] : 0;
-  }
-
-  /**
-   * Get total results for all webforms.
-   *
-   * @return array
-   *   An associative array keyed by webform id contains total results for
-   *   all webforms.
-   */
-  protected function getResultsTotals() {
-    if (isset($this->resultsTotals)) {
-      return $this->resultsTotals;
-    }
-
-    $query = \Drupal::database()->select('webform_submission', 'ws');
-    $query->fields('ws', ['webform_id']);
-    $query->addExpression('COUNT(sid)', 'results');
-    $query->groupBy('webform_id');
-
-    $this->resultsTotals = array_map('intval', $query->execute()->fetchAllKeyed());
-    return $this->resultsTotals;
   }
 
   /**
@@ -558,15 +559,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    *   permission.
    */
   protected function isAdmin() {
-    $account = \Drupal::currentUser();
+    $account = $this->currentUser;
     return ($account->hasPermission('administer webform') || $account->hasPermission('edit any webform') || $account->hasPermission('view any webform submission'));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function ensureDestination(Url $url) {
-    return $url;
   }
 
 }

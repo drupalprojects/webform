@@ -93,7 +93,7 @@ class WebformRequest implements WebformRequestInterface {
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type repository.
+   *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityTypeRepositoryInterface $entity_type_repository
    *   The entity type repository.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
