@@ -32,7 +32,7 @@
     attach: function () {
       $(window).once('webform-dialog').on({
         'dialog:aftercreate': function (event, dialog, $element, settings) {
-          setTimeout(function() {
+          setTimeout(function () {
             // After creating dialog and fully initializing the dialog
             // move focus to first element.
             var hasFocus = $element.find('[autofocus]:tabbable');

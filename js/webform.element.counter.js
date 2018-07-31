@@ -37,7 +37,7 @@
           // Don't display min/max message since server-side validation will
           // display these messages.
           minimumErrorText: '',
-          maximumErrorText : ''
+          maximumErrorText: ''
         };
 
         options.countDown = (options.max) ? true : false;

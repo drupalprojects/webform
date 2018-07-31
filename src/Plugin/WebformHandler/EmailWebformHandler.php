@@ -958,7 +958,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     // Add user role email addresses to 'To', 'CC', and 'BCC'.
     // IMPORTANT: This is the only place where user email addresses can be
-    // used as tokens.  This prevents the webform module from being used to
+    // used as tokens. This prevents the webform module from being used to
     // spam users or worse…expose user email addresses to malicious users.
     if (in_array($configuration_name, ['to', 'cc', 'bcc'])) {
       $roles = $this->configFactory->get('webform.settings')->get('mail.roles');

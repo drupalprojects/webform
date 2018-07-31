@@ -302,7 +302,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Look _webform_dialog which enables Ajax support when this form is
     // opened in dialog.
-    // @see  webform.dialog.js
+    // @see webform.dialog.js
     //
     // Must be called after WebformHandler::overrideSettings which resets all
     // overridden settings.
@@ -568,7 +568,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Pages: Set current wizard or preview page.
     $this->displayCurrentPage($form, $form_state);
 
-    /* Webform  */
+    /* Webform */
 
     // Move all $elements properties to the $form.
     $this->setFormPropertiesFromElements($form, $elements);
@@ -625,7 +625,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attributes']['novalidate'] = 'novalidate';
     }
 
-    // Inline form errors: Add  #disable_inline_form_errors property to form.
+    // Inline form errors: Add #disable_inline_form_errors property to form.
     if ($this->getWebformSetting('form_disable_inline_errors')) {
       $form['#disable_inline_form_errors'] = TRUE;
     }
@@ -960,10 +960,10 @@ class WebformSubmissionForm extends ContentEntityForm {
       // to previous and visible pages.
       //
       // Developers who want to allow users to jump to any wizard page can
-      // expose these buttons via a form alter hook.  Beware that
+      // expose these buttons via a form alter hook. Beware that
       // skipped pages will not be validated.
       $access = ($page['#access'] && ($page_indexes[$page_name] <= $current_index)) ? TRUE : FALSE;
-      $t_args =  [
+      $t_args = [
         '@label' => $page['#title'],
         '@start' => $index++,
         '@end' => $total,

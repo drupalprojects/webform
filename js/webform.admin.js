@@ -47,7 +47,7 @@
             $input.keyup();
           }
           // Make sure the filter input is always focused.
-          setTimeout(function() {$input.focus()});
+          setTimeout(function () {$input.focus()});
         }
 
         /**

@@ -39,8 +39,8 @@
       $(context).find('.js-webform-multiple-add').once('webform-multiple-add').each(function () {
         var $submit = $(this).find('input[type="submit"], button');
         var $number = $(this).find('input[type="number"]');
-        $number.keyup(function(event){
-          if(event.which === 13) {
+        $number.keyup(function (event) {
+          if (event.which === 13) {
             // Note: Mousedown is the default trigger for Ajax events.
             // @see Drupal.Ajax.
             $submit.mousedown();

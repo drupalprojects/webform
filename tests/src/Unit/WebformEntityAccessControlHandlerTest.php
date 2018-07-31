@@ -42,7 +42,7 @@ class WebformEntityAccessControlHandlerTest extends UnitTestCase {
    *   - is_owner: (bool) Whether the mocked user should be owner of the
    *     webform. Defaults to FALSE.
    *   - is_template: (bool) Whether the mocked webform should be a template.
-   *     Defaults  to FALSE.
+   *     Defaults to FALSE.
    *   - is_open: (bool) Whether the mocked webform should be open.
    *     Defaults to TRUE.
    *   - has_token: (bool) Whether the mocked webform submission should

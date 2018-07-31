@@ -61,10 +61,10 @@ class WebformExampleCompositeTest extends WebformTestBase {
     ]);
     $this->assertEqual($webform_submission->getElementData('webform_example_composite_multiple'), [
       [
-      'first_name' => 'Jane',
-      'last_name' => 'Doe',
-      'gender' => 'Female',
-      'date_of_birth' => '1920-12-01',
+        'first_name' => 'Jane',
+        'last_name' => 'Doe',
+        'gender' => 'Female',
+        'date_of_birth' => '1920-12-01',
       ],
     ]);
   }

@@ -16,7 +16,7 @@
    */
   Drupal.behaviors.webformRadiosRequired = {
     attach: function (context) {
-      $('.js-webform-type-radios[required="required"], .js-form-type-webform-radios-other[required="required"]', context).each(function() {
+      $('.js-webform-type-radios[required="required"], .js-form-type-webform-radios-other[required="required"]', context).each(function () {
         $(this).find('input[type="radio"]').attr({'required': 'required', 'aria-required': 'true'});
       });
     }

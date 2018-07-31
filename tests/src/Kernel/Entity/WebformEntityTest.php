@@ -212,7 +212,7 @@ class WebformEntityTest extends KernelTestBase {
     ];
     $this->assertEquals($webform->getElementsDecodedAndFlattened(), $flattened_elements);
 
-    // Check elements initialized  and flattened.
+    // Check elements initialized and flattened.
     $elements_initialized_and_flattened = [
       'root' => [
         '#type' => 'textfield',

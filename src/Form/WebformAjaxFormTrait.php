@@ -48,7 +48,7 @@ trait WebformAjaxFormTrait {
    * Get default ajax callback settings.
    *
    * @return array
-   *   An associative array containing  default ajax callback settings.
+   *   An associative array containing default ajax callback settings.
    */
   protected function getDefaultAjaxSettings() {
     return [
@@ -145,7 +145,7 @@ trait WebformAjaxFormTrait {
     // @see Drupal.AjaxCommands.prototype.webformScrollTop
     $wrapper_id = $this->getWrapperId();
     $form['#form_wrapper_id'] = $wrapper_id;
-    $form['#prefix'] = '<a id="' . $wrapper_id  . '-content" tabindex="-1"></a><div id="' . $wrapper_id . '">';
+    $form['#prefix'] = '<a id="' . $wrapper_id . '-content" tabindex="-1"></a><div id="' . $wrapper_id . '">';
     $form['#suffix'] = '</div>';
 
     // Add Ajax library which contains 'Scroll to top' Ajax command and

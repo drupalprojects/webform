@@ -36,7 +36,7 @@ class WebformElementCheckboxesTest extends WebformElementTestBase {
     $webform->setElementProperties('checkbox_exclude_empty', ['#type' => 'checkbox', '#title' => 'checkbox_exclude_empty']);
     $webform->save();
 
-    // Check exclude empty is  visible.
+    // Check exclude empty is visible.
     $edit = [
       'checkboxes_required_conditions[Yes]' => TRUE,
       'checkboxes_other_required_conditions[checkboxes][Yes]' => TRUE,

@@ -45,7 +45,7 @@
         }
 
         for (var plugin_name in plugins) {
-          if(plugins.hasOwnProperty(plugin_name)) {
+          if (plugins.hasOwnProperty(plugin_name)) {
             CKEDITOR.plugins.addExternal(plugin_name, plugins[plugin_name]);
           }
         }
@@ -114,7 +114,7 @@
 
         // Catch and suppress
         // "Uncaught TypeError: Cannot read property 'getEditor' of undefined".
-        // 
+        //
         // Steps to reproduce this error.
         // - Goto any form elements.
         // - Edit an element.

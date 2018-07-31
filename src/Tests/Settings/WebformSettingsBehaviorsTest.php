@@ -323,7 +323,7 @@ class WebformSettingsBehaviorsTest extends WebformTestBase {
     $this->assertNoCssSelect('webform.webform-details-toggle', t('Webform does not have the .webform-details-toggle class.'));
 
     /**************************************************************************/
-    /* Test webform disable inline form errors  (test_form_disable_inline_errors) */
+    /* Test webform disable inline form errors (test_form_disable_inline_errors) */
     /**************************************************************************/
 
     $webform_form_inline_errors = Webform::load('test_form_disable_inline_errors');

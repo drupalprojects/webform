@@ -50,14 +50,14 @@
         // @see Drupal.behaviors.webformFormTabs
         var hash = $(this).data('hash');
         if (hash) {
-          $(this).on('click', function() {
+          $(this).on('click', function () {
             location.hash = $(this).data('hash');
           });
         }
 
         // Close all open modal dialogs when opening off-canvas dialog.
         if (element_settings.dialogRenderer === 'off_canvas') {
-          $(this).on('click', function() {
+          $(this).on('click', function () {
             $(".ui-dialog.webform-ui-dialog:visible").find('.ui-dialog-content').dialog('close');
           });
         }
@@ -77,7 +77,7 @@
     attach: function (context) {
       $('.js-webform-confirmation-back-link-ajax', context)
         .once('webform-confirmation-back-ajax')
-        .click(function(event) {
+        .click(function (event) {
           var $form = $(this).parents('form');
 
           // Trigger the Ajax call back for the hidden submit button.
@@ -135,7 +135,7 @@
 
       // Highlight the updated element's row.
       $element.addClass('color-success');
-      setTimeout(function() {$element.removeClass('color-success')}, 3000);
+      setTimeout(function () {$element.removeClass('color-success')}, 3000);
 
       // Focus first tabbable item for the updated elements and handlers.
       $element.find(':tabbable:not(.tabledrag-handle)').eq(0).focus();
@@ -296,7 +296,7 @@
    */
   Drupal.AjaxCommands.prototype.webformAnnounce = function (ajax, response) {
     // Delay the announcement.
-    setTimeout(function() {Drupal.announce(response.text, response.priority);}, 200);
+    setTimeout(function () {Drupal.announce(response.text, response.priority);}, 200);
   };
 
   /****************************************************************************/

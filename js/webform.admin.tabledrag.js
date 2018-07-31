@@ -12,7 +12,7 @@
     return;
   }
 
-  $(function() {
+  $(function () {
     $('head').append('<style type="text/css">.webform-tabledrag-hide {display: table-cell;}</style>');
   });
 

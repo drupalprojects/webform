@@ -431,7 +431,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     catch (\Exception $exception) {
       $message = $exception->getMessage();
     }
-    // Restore  Drupal's error and exception handler.
+    // Restore Drupal's error and exception handler.
     restore_error_handler();
     restore_exception_handler();
 

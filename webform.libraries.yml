@@ -6,7 +6,7 @@ webform.admin:
     theme:
       css/webform.admin.css: {}
   js:
-    js/webform.admin.js:  {}
+    js/webform.admin.js: {}
   dependencies:
     - core/jquery
     - core/drupal
@@ -29,7 +29,7 @@ webform.admin.dialog:
     theme:
       css/webform.admin.css: {}
   js:
-    js/webform.admin.js:  {}
+    js/webform.admin.js: {}
   dependencies:
     - core/drupal.dialog.ajax
     - webform/jquery.ui.dialog
@@ -49,7 +49,7 @@ webform.admin.dropbutton:
     theme:
       css/webform.admin.dropbutton.css: {}
   js:
-    js/webform.admin.dropbutton.js:  {}
+    js/webform.admin.dropbutton.js: {}
   dependencies:
     - core/drupal.dropbutton
 
@@ -65,7 +65,7 @@ webform.admin.tabledrag:
     theme:
       css/webform.admin.tabledrag.css: {}
   js:
-    js/webform.admin.tabledrag.js:  {}
+    js/webform.admin.tabledrag.js: {}
   dependencies:
     - core/drupal.tabledrag
 
@@ -96,7 +96,7 @@ webform.ajax:
     theme:
       css/webform.ajax.css: {}
   js:
-    js/webform.ajax.js:  {}
+    js/webform.ajax.js: {}
   dependencies:
     - core/drupal
     - core/drupalSettings
@@ -110,7 +110,7 @@ webform.ajax:
 webform.block:
   version: VERSION
   js:
-    js/webform.block.js:  {}
+    js/webform.block.js: {}
   dependencies:
     - webform/webform.element.codemirror.yaml
     - webform/webform.element.select2
@@ -132,7 +132,7 @@ webform.confirmation:
 webform.confirmation.modal:
   version: VERSION
   js:
-    js/webform.confirmation.modal.js:  {}
+    js/webform.confirmation.modal.js: {}
   dependencies:
     - core/drupal
     - core/drupal.dialog
@@ -153,7 +153,7 @@ webform.contribute:
 webform.contextual:
   version: VERSION
   js:
-    js/webform.contextual.js:  {}
+    js/webform.contextual.js: {}
   dependencies:
     - core/jquery.once
 
@@ -162,7 +162,7 @@ webform.contextual:
 webform.dialog:
   version: VERSION
   js:
-    js/webform.dialog.js:  {}
+    js/webform.dialog.js: {}
   dependencies:
     - core/drupal.dialog.ajax
     - webform/jquery.ui.dialog
@@ -175,7 +175,7 @@ webform.help:
     theme:
       css/webform.help.css: {}
   js:
-    js/webform.help.js:  {}
+    js/webform.help.js: {}
 
 # More.
 
@@ -233,7 +233,7 @@ webform.promotions:
 webform.states:
   version: VERSION
   js:
-    js/webform.states.js:  {}
+    js/webform.states.js: {}
   dependencies:
     - core/drupal.states
 
@@ -270,7 +270,7 @@ webform.form:
     component:
       css/webform.form.css: {}
   js:
-    js/webform.form.js:  {}
+    js/webform.form.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
@@ -280,20 +280,20 @@ webform.form.disable_back:
   version: VERSION
   header: true
   js:
-    js/webform.form.disable_back.js:  {preprocess: false}
+    js/webform.form.disable_back.js: {preprocess: false}
 
 webform.form.submit_back:
   version: VERSION
   header: true
   js:
-    js/webform.form.submit_back.js:  {preprocess: false}
+    js/webform.form.submit_back.js: {preprocess: false}
   dependencies:
     - core/jquery
 
 webform.form.submit_once:
   version: VERSION
   js:
-    js/webform.form.submit_once.js:  {}
+    js/webform.form.submit_once.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
@@ -302,7 +302,7 @@ webform.form.submit_once:
 webform.form.tabs:
   version: VERSION
   js:
-    js/webform.form.tabs.js:  {}
+    js/webform.form.tabs.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
@@ -311,7 +311,7 @@ webform.form.tabs:
 webform.form.unsaved:
   version: VERSION
   js:
-    js/webform.form.unsaved.js:  {}
+    js/webform.form.unsaved.js: {}
   dependencies:
     - core/jquery.once
     - core/drupal
@@ -323,7 +323,7 @@ webform.wizard.pages:
     component:
       css/webform.wizard.pages.css: {}
   js:
-    js/webform.wizard.pages.js:  {}
+    js/webform.wizard.pages.js: {}
   dependencies:
     - core/jquery.once
     - core/drupal
@@ -331,7 +331,7 @@ webform.wizard.pages:
 webform.wizard.track:
   version: VERSION
   js:
-    js/webform.wizard.track.js:  {}
+    js/webform.wizard.track.js: {}
   dependencies:
     - core/jquery.once
     - core/drupal
@@ -835,7 +835,7 @@ webform.composite.telephone:
 jquery.ui.dialog:
   version: VERSION
   js:
-    js/webform.jquery.ui.dialog.js:  {}
+    js/webform.jquery.ui.dialog.js: {}
   dependencies:
     - core/jquery.ui.dialog
 
@@ -844,7 +844,7 @@ jquery.ui.dialog:
 imce.input:
   version: VERSION
   js:
-    js/webform.imce.js:  {}
+    js/webform.imce.js: {}
   dependencies:
     - imce/drupal.imce.input
 

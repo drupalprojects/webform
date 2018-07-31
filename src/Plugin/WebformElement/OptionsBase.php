@@ -214,7 +214,7 @@ abstract class OptionsBase extends WebformElementBase {
             $element['#options'][$default_value] = $default_value;
           }
         }
-    }
+      }
     }
 
     // If the element is #required and the #default_value is an empty string

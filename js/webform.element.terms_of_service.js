@@ -54,9 +54,9 @@
 
         // Set event handlers.
         $a.click(openDetails)
-          .on('keydown', function(event) {
+          .on('keydown', function (event) {
             // Space or Return.
-            if(event.which === 32 || event.which === 13) {
+            if (event.which === 32 || event.which === 13) {
               openDetails(event);
             }
           });
