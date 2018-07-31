@@ -16,7 +16,7 @@ git diff 8.x-5.x > [project_name]-[issue-description]-[issue-number]-00.patch
 curl https://www.drupal.org/files/issues/[project_name]-[issue-description]-[issue-number]-00.patch | git apply -
 
 # Force apply patch
-patch -p1  < webform_whitespace_inconsistencies-2989606-5.diff
+patch -p1 < webform_whitespace_inconsistencies-2989606-5.diff
 
 # Create interdiff
 interdiff \
@@ -136,7 +136,7 @@ drush en -y webform\
 drush features-diff webform
 drush features-diff webform_test
 
-# Export webform configuration from your site.          
+# Export webform configuration from your site.
 drush features-export -y webform
 drush features-export -y webform_demo_application_evaluation
 drush features-export -y webform_demo_event_registration
@@ -167,7 +167,7 @@ drush features-export -y webform_scheduled_email_test
 # Revert all feature update to *.info.yml files.
 git checkout -- *.info.yml
 
-# Tidy webform configuration from your site.          
+# Tidy webform configuration from your site.
 drush webform:tidy -y --dependencies webform
 drush webform:tidy -y --dependencies webform_demo_application_evaluation
 drush webform:tidy -y --dependencies webform_demo_event_registration
@@ -195,7 +195,7 @@ drush webform:tidy -y --dependencies webform_node_test_multiple
 drush webform:tidy -y --dependencies webform_node_test_translation
 drush webform:tidy -y --dependencies webform_scheduled_email_test
 
-# Re-import all webform configuration into your site.      
+# Re-import all webform configuration into your site.
 drush features-import -y webform
 drush features-import -y webform_demo_application_evaluation
 drush features-import -y webform_demo_event_registration
