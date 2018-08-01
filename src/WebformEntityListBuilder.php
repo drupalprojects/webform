@@ -275,6 +275,9 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           $status = $this->t('Scheduled (@state)', ['@state' => $entity->isOpen() ? $this->t('Open') : $this->t('Closed')]);
           $aria_label = $this->t('@label is scheduled and is @state', $t_args + ['@state' => $entity->isOpen() ? $this->t('open') : $this->t('closed')]);
           break;
+
+        default:
+          return [];
       }
 
       if ($entity->access('update')) {
