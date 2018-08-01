@@ -85,7 +85,7 @@ Notes
 [PHPUnit](https://www.drupal.org/node/2116263)
      
 Notes
-- Links to PHP Unit HTML responses are not being printed by PHPStrom
+- Links to PHP Unit HTML responses are not being printed by PHPStorm
 
 References 
 - [Issue #2870145: Set printerClass in phpunit.xml.dist](https://www.drupal.org/node/2870145) 
