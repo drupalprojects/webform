@@ -242,6 +242,50 @@ class TextFormat extends WebformElementBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function postSave(array &$element, WebformSubmissionInterface $webform_submission, $update = TRUE) {
+    $webform = $webform_submission->getWebform();
+    if ($webform->isResultsDisabled()) {
+      return;
+    }
+
+    // Get current value and original value for this element.
+    $key = $element['#webform_key'];
+
+    $data = $webform_submission->getData();
+    $value = isset($data[$key]) ? $data[$key]['value'] : '';
+    $uuids = _webform_parse_file_uuids($value);
+
+    if ($update) {
+      $original_data = $webform_submission->getOriginalData();
+      $original_value = isset($original_data[$key]) ? $original_data[$key]['value'] : '';
+      $original_uuids = _webform_parse_file_uuids($original_value);
+
+      // Detect file usages that should be incremented.
+      $added_files = array_diff($uuids, $original_uuids);
+      _webform_record_file_usage($added_files, $webform_submission->getEntityTypeId(), $webform_submission->id());
+
+      // Detect file usages that should be decremented.
+      $removed_files = array_diff($original_uuids, $uuids);
+      _webform_delete_file_usage($removed_files, $webform_submission->getEntityTypeId(), $webform_submission->id(), 1);
+    }
+    else {
+      _webform_record_file_usage($uuids, $webform_submission->getEntityTypeId(), $webform_submission->id());
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postDelete(array &$element, WebformSubmissionInterface $webform_submission) {
+    $key = $element['#webform_key'];
+    $value = $webform_submission->getElementData($key);
+    $uuids = _webform_parse_file_uuids($value['value']);
+    _webform_delete_file_usage($uuids, $webform_submission->getEntityTypeId(), $webform_submission->id(), 0);
+  }
+
+  /**
    * Check if composite element exists.
    *
    * @return bool

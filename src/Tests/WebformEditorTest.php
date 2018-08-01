@@ -4,6 +4,7 @@ namespace Drupal\webform\Tests;
 
 use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
 
 /**
  * Tests for webform editor.
@@ -17,7 +18,14 @@ class WebformEditorTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['file', 'webform'];
+  public static $modules = ['file', 'filter', 'webform'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_text_format'];
 
   /**
    * File usage manager.
@@ -184,6 +192,103 @@ class WebformEditorTest extends WebformTestBase {
     // @see webform_uninstall()
     $config = \Drupal::configFactory()->get('webform.settings');
     _webform_config_delete($config);
+    $this->reloadImages($images);
+
+    // Check that first and second image are temporary.
+    $this->assertTrue($images[0]->isTemporary());
+    $this->assertTrue($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+  }
+
+  /**
+   * Tests webform text format element files.
+   */
+  public function testTextFormatFiles() {
+    $this->createFilters();
+
+    $webform = Webform::load('test_element_text_format');
+
+    $this->drupalLogin($this->rootUser);
+
+    // Create three test images.
+    /** @var \Drupal\file\FileInterface[] $images */
+    $images = $this->drupalGetTestFiles('image');
+    $images = array_slice($images, 0, 5);
+    foreach ($images as $index => $image_file) {
+      $images[$index] = File::create((array) $image_file);
+      $images[$index]->save();
+    }
+    // Check that all images are temporary.
+    $this->assertTrue($images[0]->isTemporary());
+    $this->assertTrue($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Upload the first image.
+    $edit = [
+      'text_format[value]' => '<img data-entity-type="file" data-entity-uuid="' . $images[0]->uuid() . '"/>',
+      'text_format[format]' => 'full_html',
+    ];
+    $sid = $this->postSubmission($webform, $edit);
+    $this->reloadImages($images);
+
+    // Check that first image is not temporary.
+    $this->assertFalse($images[0]->isTemporary());
+    $this->assertTrue($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Check create first image file usage.
+    $this->assertIdentical(['editor' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($images[0]), 'The file has 1 usage.');
+
+    // Upload the second image.
+    $edit = [
+      'text_format[value]' => '<img data-entity-type="file" data-entity-uuid="' . $images[0]->uuid() . '"/><img data-entity-type="file" data-entity-uuid="' . $images[1]->uuid() . '"/>',
+      'text_format[format]' => 'full_html',
+    ];
+    $this->drupalPostForm("/admin/structure/webform/manage/test_element_text_format/submission/$sid/edit", $edit, t('Save'));
+    $this->reloadImages($images);
+
+    // Check that first and second image are not temporary.
+    $this->assertFalse($images[0]->isTemporary());
+    $this->assertFalse($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Check first and second image file usage.
+    $this->assertIdentical(['editor' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($images[0]), 'The file has 1 usage.');
+    $this->assertIdentical(['editor' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 1 usage.');
+
+    // Remove the first image.
+    $edit = [
+      'text_format[value]' => '<img data-entity-type="file" data-entity-uuid="' . $images[1]->uuid() . '"/>',
+      'text_format[format]' => 'full_html',
+    ];
+    $this->drupalPostForm("/admin/structure/webform/manage/test_element_text_format/submission/$sid/edit", $edit, t('Save'));
+    $this->reloadImages($images);
+
+    // Check that first is temporary and second image is not temporary.
+    $this->assertTrue($images[0]->isTemporary());
+    $this->assertFalse($images[1]->isTemporary());
+    $this->assertTrue($images[2]->isTemporary());
+
+    // Check first and second image file usage.
+    $this->assertIdentical([], $this->fileUsage->listUsage($images[0]), 'The file has 0 usage.');
+    $this->assertIdentical(['editor' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 1 usage.');
+
+    // Duplicate submission.
+    $webform_submission = WebformSubmission::load($sid);
+    $webform_submission_duplicate = $webform_submission->createDuplicate();
+    $webform_submission_duplicate->save();
+
+    // Check second image file usage.
+    $this->assertIdentical(['editor' => ['webform_submission' => [$webform_submission->id() => '1', $webform_submission_duplicate->id() => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 2 usages.');
+
+    // Delete the duplicate webform submission.
+    $webform_submission_duplicate->delete();
+
+    // Check second image file usage.
+    $this->assertIdentical(['editor' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($images[1]), 'The file has 1 usage.');
+
+    // Delete the webform submission.
+    $this->drupalPostForm("/admin/structure/webform/manage/test_element_text_format/submission/$sid/delete", [], t('Delete'));
     $this->reloadImages($images);
 
     // Check that first and second image are temporary.
