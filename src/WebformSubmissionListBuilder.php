@@ -234,7 +234,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
    *   The webform message manager.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage,  RouteMatchInterface $route_match, RequestStack $request_stack, AccountInterface $current_user, WebformRequestInterface $webform_request, WebformElementManagerInterface $element_manager, WebformMessageManagerInterface $message_manager) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, RouteMatchInterface $route_match, RequestStack $request_stack, AccountInterface $current_user, WebformRequestInterface $webform_request, WebformElementManagerInterface $element_manager, WebformMessageManagerInterface $message_manager) {
     parent::__construct($entity_type, $storage);
     $this->routeMatch = $route_match;
     $this->request = $request_stack->getCurrentRequest();
@@ -536,7 +536,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   Throw exception if table row column is not found.
    */
   public function buildRowColumn(array $column, EntityInterface $entity) {
-    /** @var  $entity \Drupal\webform\WebformSubmissionInterface */
+    /** @var $entity \Drupal\webform\WebformSubmissionInterface */
 
     $is_raw = ($column['format'] == 'raw');
     $name = $column['name'];

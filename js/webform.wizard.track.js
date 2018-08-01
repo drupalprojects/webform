@@ -31,7 +31,7 @@
       // the expected page name or index is going to be.
       // NOTE: If conditional wizard page logic is configured the
       // expected page name or index may not be accurate.
-      $(':button[data-webform-wizard-page], :submit[data-webform-wizard-page]', context).once('webform-wizard-page').on('click', function() {
+      $(':button[data-webform-wizard-page], :submit[data-webform-wizard-page]', context).once('webform-wizard-page').on('click', function () {
         var page = $(this).attr('data-webform-wizard-page');
         this.form.action = this.form.action.replace(/\?.+$/, '') + '?page=' + page;
       });

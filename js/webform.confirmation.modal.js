@@ -19,7 +19,7 @@
    */
   Drupal.behaviors.webformConfirmationModal = {
     attach: function (context) {
-      $('.js-webform-confirmation-modal', context).once('webform-confirmation-modal').each(function() {
+      $('.js-webform-confirmation-modal', context).once('webform-confirmation-modal').each(function () {
         var $element = $(this);
 
         var $dialog = $element.find('.webform-confirmation-modal--content');
@@ -40,7 +40,7 @@
 
         // Use setTimeout to prevent dialog.position.js
         // Uncaught TypeError: Cannot read property 'settings' of undefined
-        setTimeout(function() {dialog.showModal()}, 1);
+        setTimeout(function () {dialog.showModal()}, 1);
       });
     }
   };

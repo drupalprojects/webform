@@ -479,7 +479,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   /**
    * Get the default key for the current element.
    *
-   * Default key will be auto incremented when there are  duplicate keys.
+   * Default key will be auto incremented when there are duplicate keys.
    *
    * @return null|string
    *   An element's default key which will be incremented to prevent duplicate

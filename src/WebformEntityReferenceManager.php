@@ -14,7 +14,7 @@ use Drupal\webform\Entity\Webform;
  * Webform entity reference (field) manager.
  *
  * The webform entity reference (field) manager is used to track webforms that
- * are attached to entities, specifically webform nodes.  Generally, only one
+ * are attached to entities, specifically webform nodes. Generally, only one
  * webform is attached to a single node. Field API does allow multiple
  * webforms to be attached to any entity and this services helps handle this
  * edge case.

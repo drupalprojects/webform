@@ -110,7 +110,7 @@ class WebformSettingsConfirmationTest extends WebformTestBase {
     $this->postSubmission($webform_confirmation_page);
     $this->assertUrl('webform/test_confirmation_page/confirmation');
 
-    // TODO: (TESTING)  Figure out why the inline confirmation link is not including the query string parameters.
+    // TODO: (TESTING) Figure out why the inline confirmation link is not including the query string parameters.
     // $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '?custom=param">Back to form</a>');.
 
     /* Test confirmation page custom (confirmation_type=page) */

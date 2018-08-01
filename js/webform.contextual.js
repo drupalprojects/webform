@@ -11,8 +11,8 @@
   // dynamically inserted via Ajax.
   // @see webform_contextual_links_view_alter()
   // @see Drupal.behaviors.contextual
-  $(document).on('click', '.contextual', function() {
-    $(this).find('a.webform-contextual').once('webform-contextual').each(function() {
+  $(document).on('click', '.contextual', function () {
+    $(this).find('a.webform-contextual').once('webform-contextual').each(function () {
       this.href = this.href.split('?')[0];
 
       // Add ?_webform_test={webform} to the current page's URL.
@@ -21,5 +21,5 @@
       }
     });
   });
-  
+
 })(jQuery);

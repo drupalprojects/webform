@@ -31,7 +31,7 @@
         }
 
         // Add event handler to elements that are used by the computed element.
-        $.each(elementKeys, function( i, key) {
+        $.each(elementKeys, function (i, key) {
           $form.find(':input[name^="' + key + '"]')
             .on('keyup change', debounce(triggerUpdate, Drupal.webform.computed.delay));
         });

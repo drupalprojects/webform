@@ -279,7 +279,8 @@ class WebformPluginElementController extends ControllerBase implements Container
       '#placeholder' => $this->t('Filter by element name'),
       '#attributes' => [
         'class' => ['webform-form-filter-text'],
-        'data-element' => '.webform-element-plugin',
+        'data-element' => '.webform-element-plugin-table',
+        'data-summary' => '.webform-element-plugin-summary',
         'data-item-single' => $this->t('element'),
         'data-item-plural' => $this->t('elements'),
         'title' => $this->t('Enter a part of the element type to filter by.'),
@@ -298,7 +299,7 @@ class WebformPluginElementController extends ControllerBase implements Container
     // Display info.
     $build['info'] = [
       '#markup' => $this->t('@total elements', ['@total' => count($webform_form_element_rows)]),
-      '#prefix' => '<p>',
+      '#prefix' => '<p class="webform-element-plugin-summary">',
       '#suffix' => '</p>',
     ];
 
@@ -322,7 +323,7 @@ class WebformPluginElementController extends ControllerBase implements Container
       '#rows' => $webform_form_element_rows,
       '#sticky' => TRUE,
       '#attributes' => [
-        'class' => ['webform-element-plugin'],
+        'class' => ['webform-element-plugin-table'],
       ],
     ];
 

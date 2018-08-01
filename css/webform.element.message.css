@@ -14,7 +14,7 @@
   background-image: url(../images/icons/info.svg);
   background-repeat: no-repeat;
   background-position: 10px 17px;
-  border-color: #0074bd #0074bd #0074bd transparent;  /* LTR */
+  border-color: #0074bd #0074bd #0074bd transparent; /* LTR */
   box-shadow: -8px 0 0 #0074bd; /* LTR */
 }
 [dir="rtl"] .messages.messages--info {

@@ -128,7 +128,7 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
       if (isset($library['issues_url'])) {
         $issues_url = $library['issues_url'];
       }
-      elseif (preg_match('#https://github.com/[^/]+/[^/]+#', $library['download_url']->toString(),$match)) {
+      elseif (preg_match('#https://github.com/[^/]+/[^/]+#', $library['download_url']->toString(), $match)) {
         $issues_url = Url::fromUri($match[0] . '/issues');
       }
       else {

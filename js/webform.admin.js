@@ -25,88 +25,101 @@
    */
   Drupal.behaviors.webformFilterByText = {
     attach: function (context, settings) {
-      var $input = $('input.webform-form-filter-text').once('webform-form-filter-text');
-      var $table = $($input.attr('data-element'));
-      var $details = $table.closest('details');
-      var $filterRows;
+      $('input.webform-form-filter-text', context).once('webform-form-filter-text').each(function () {
+        var $input = $(this);
+        var $table = $($input.data('element'));
+        var $summary = $($input.data('summary'));
+        var $details = $table.closest('details');
+        var $filterRows;
 
-      var hasDetails = $details.length;
-      var totalItems;
-      var itemLabel = $input.data('data-item-single') || Drupal.t('item');
-      var itemsLabel = $input.data('data-item-plural') || Drupal.t('items');
+        var hasDetails = $details.length;
+        var totalItems;
+        var args = {
+          '@item': $input.data('item-single') || Drupal.t('item'),
+          '@items': $input.data('item-plural') || Drupal.t('items'),
+          '@total': null
+        };
 
-      /**
-       * Filters the webform element list.
-       *
-       * @param {jQuery.Event} e
-       *   The jQuery event for the keyup event that triggered the filter.
-       */
-      function filterElementList(e) {
-        var query = $(e.target).val().toLowerCase();
+        if ($table.length) {
+          $filterRows = $table.find('.webform-form-filter-text-source');
+          $input.on('keyup', debounce(filterElementList, 200));
+          if ($input.val()) {
+            $input.keyup();
+          }
+          // Make sure the filter input is always focused.
+          setTimeout(function () {$input.focus()});
+        }
 
         /**
-         * Shows or hides the webform element entry based on the query.
+         * Filters the webform element list.
          *
-         * @param {number} index
-         *   The index in the loop, as provided by `jQuery.each`
-         * @param {HTMLElement} label
-         *   The label of the webform.
+         * @param {jQuery.Event} e
+         *   The jQuery event for the keyup event that triggered the filter.
          */
-        function toggleEntry(index, label) {
-          var $label = $(label);
-          var $row = $label.closest('tr');
-          var textMatch = $label.text().toLowerCase().indexOf(query) !== -1;
-          $row.toggle(textMatch);
-          if (textMatch) {
-            totalItems++;
-            if (hasDetails) {
-              $row.closest('details').show();
-            }
-          }
-        }
+        function filterElementList(e) {
+          var query = $(e.target).val().toLowerCase();
 
-        // Filter if the length of the query is at least 2 characters.
-        if (query.length >= 2) {
-          // Reset count.
-          totalItems = 0;
-          if ($details.length) {
-            $details.hide();
-          }
-          $filterRows.each(toggleEntry);
-
-          // Announce filter changes.
-          // @see Drupal.behaviors.blockFilterByText
-          var args = {
-            '@total': totalItems,
-            '@item': itemLabel,
-            '@items': itemsLabel
-          };
-          Drupal.announce(Drupal.formatPlural(
-            totalItems,
-            '1 @item is available in the modified list.',
-            '@total @items are available in the modified list.',
-            args
-          ));
-        }
-        else {
-          $filterRows.each(function (index) {
-            $(this).closest('tr').show();
+          // Filter if the length of the query is at least 2 characters.
+          if (query.length >= 2) {
+            // Reset count.
+            totalItems = 0;
             if ($details.length) {
-              $details.show();
+              $details.hide();
             }
-          });
-        }
-      }
+            $filterRows.each(toggleEntry);
+            args['@total'] = totalItems;
 
-      if ($table.length) {
-        $filterRows = $table.find('.webform-form-filter-text-source');
-        $input.on('keyup', debounce(filterElementList, 200));
-        if ($input.val()) {
-          $input.keyup();
+            // Announce filter changes.
+            // @see Drupal.behaviors.blockFilterByText
+            Drupal.announce(Drupal.formatPlural(
+              totalItems,
+              '1 @item is available in the modified list.',
+              '@total @items are available in the modified list.',
+              args
+            ));
+          }
+          else {
+            $filterRows.each(function (index) {
+              $(this).closest('tr').show();
+              if ($details.length) {
+                $details.show();
+              }
+            });
+            args['@total'] = $filterRows.length;
+          }
+
+          // Update summary.
+          if ($summary.length) {
+            $summary.html(Drupal.formatPlural(
+              totalItems,
+              '1 @item',
+              '@total @items',
+              args
+            ));
+          }
+
+          /**
+           * Shows or hides the webform element entry based on the query.
+           *
+           * @param {number} index
+           *   The index in the loop, as provided by `jQuery.each`
+           * @param {HTMLElement} label
+           *   The label of the webform.
+           */
+          function toggleEntry(index, label) {
+            var $label = $(label);
+            var $row = $label.closest('tr');
+            var textMatch = $label.text().toLowerCase().indexOf(query) !== -1;
+            $row.toggle(textMatch);
+            if (textMatch) {
+              totalItems++;
+              if (hasDetails) {
+                $row.closest('details').show();
+              }
+            }
+          }
         }
-        // Make sure the filter input is always focused.
-        setTimeout(function() {$input.focus()});
-      }
+      });
     }
   };
 

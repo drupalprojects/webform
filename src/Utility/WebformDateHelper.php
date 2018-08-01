@@ -44,8 +44,8 @@ class WebformDateHelper {
    *   the user interface language for the page.
    *
    * @return string
-   *   A translated date string in the requested format.  An empty string
-   *   will be returned for empty timestamps.
+   *   A translated date string in the requested format. An empty string will be
+   *   returned for empty timestamps.
    *
    * @see \Drupal\Core\Datetime\DateFormatterInterface::format
    */

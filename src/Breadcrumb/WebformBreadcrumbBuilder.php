@@ -82,7 +82,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $path = '';
     }
 
-    if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' ||  $args[2] == 'webform_submission')) {
+    if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' || $args[2] == 'webform_submission')) {
       $this->type = 'webform_source_entity';
     }
     elseif ($route_name === 'webform.reports_plugins.elements.test') {
@@ -112,7 +112,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && $route_match->getParameter('webform_submission')->access('admin')) {
       $this->type = 'webform_submission';
     }
-    elseif (($route_match->getParameter('webform') instanceof WebformInterface  && $route_match->getParameter('webform')->access('admin'))) {
+    elseif (($route_match->getParameter('webform') instanceof WebformInterface && $route_match->getParameter('webform')->access('admin'))) {
       /** @var \Drupal\webform\WebformInterface $webform */
       $webform = $route_match->getParameter('webform');
       $this->type = ($webform->isTemplate() && $this->moduleHandler->moduleExists('webform_templates')) ? 'webform_template' : 'webform';

@@ -306,7 +306,7 @@ function webform_form_update_manager_update_form_alter(&$form, FormStateInterfac
     '#weight' => -10,
   ];
 
-  // Display warning to backup site when webform  is checked.
+  // Display warning to backup site when webform is checked.
   $form['projects']['#options']['webform']['title']['data'] = [
     'title' => $form['projects']['#options']['webform']['title']['data'],
     'container' => [

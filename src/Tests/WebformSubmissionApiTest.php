@@ -149,7 +149,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
     WebformElementHelper::convertRenderMarkupToStrings($errors);
     // $this->debug($errors);
     $this->assertEqual($errors, [
-        'gender' => 'An illegal choice has been detected. Please contact the site administrator.',
+      'gender' => 'An illegal choice has been detected. Please contact the site administrator.',
     ]);
 
     /**************************************************************************/

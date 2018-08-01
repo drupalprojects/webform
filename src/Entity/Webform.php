@@ -2007,7 +2007,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     // Update confirm path.
     $confirm_source = '/webform/' . $this->id() . '/confirmation';
-    $confirm_alias = $this->settings['page_confirm_path'] ?:  $submit_base_path . '/confirmation';
+    $confirm_alias = $this->settings['page_confirm_path'] ?: $submit_base_path . '/confirmation';
     $confirm_alias = '/' . trim($confirm_alias, '/');
     $this->updatePath($confirm_source, $confirm_alias, $this->langcode);
     $this->updatePath($confirm_source, $confirm_alias, LanguageInterface::LANGCODE_NOT_SPECIFIED);

@@ -29,7 +29,7 @@ class WebformXss {
    * Gets the standard list of HTML tags allowed by Xss::filter() with missing <font> tag.
    *
    * @return array
-   *   The list of HTML tags allowed by Xss::filter()  with missing <font> tag.
+   *   The list of HTML tags allowed by Xss::filter() with missing <font> tag.
    */
   public static function getHtmlTagList() {
     $allowed_tags = Xss::getHtmlTagList();

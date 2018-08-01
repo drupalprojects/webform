@@ -47,7 +47,7 @@
         }, Drupal.webform.locationGeocomplete.options);
 
         var $geocomplete = $input.geocomplete(options);
-        
+
         // If there is default value look up location's attributes, else see if
         // the default value should be set to the browser's current geolocation.
         var value = $geocomplete.val();

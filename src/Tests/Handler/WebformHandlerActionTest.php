@@ -8,7 +8,7 @@ use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\Tests\WebformTestBase;
 
 /**
- * Tests for action  webform handler functionality.
+ * Tests for action webform handler functionality.
  *
  * @group Webform
  */

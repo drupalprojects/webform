@@ -52,8 +52,8 @@
       // @see https://ckeditor.com/old/forums/Support/CKEditor-jQuery-change-event
       if (window.CKEDITOR && !CKEDITOR.webformUnsaved) {
         CKEDITOR.webformUnsaved = true;
-        CKEDITOR.on('instanceCreated', function(event) {
-          event.editor.on('change', function(evt) {
+        CKEDITOR.on('instanceCreated', function (event) {
+          event.editor.on('change', function (evt) {
             unsaved = true;
           });
         });

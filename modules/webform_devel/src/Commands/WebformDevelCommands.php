@@ -41,7 +41,7 @@ class WebformDevelCommands extends DrushCommands {
         $tidied_yaml = WebformYaml::tidy(Yaml::encode($data)) . PHP_EOL;
 
         if ($tidied_yaml != $original_yaml) {
-           $this->output()->writeln(dt('Updating @file…', ['@file' => $file->filename]));
+          $this->output()->writeln(dt('Updating @file…', ['@file' => $file->filename]));
           file_put_contents($file->uri, $tidied_yaml);
           $total++;
         }
@@ -52,15 +52,15 @@ class WebformDevelCommands extends DrushCommands {
           $message = substr($message, 0, 255) . '…';
         }
         $this->logger()->log($message, LogLevel::ERROR);
-         $this->output()->writeln($message);
+        $this->output()->writeln($message);
       }
     }
 
     if ($total) {
-       $this->output()->writeln(dt('@total webform.webform.* configuration file(s) updated.', ['@total' => $total]));
+      $this->output()->writeln(dt('@total webform.webform.* configuration file(s) updated.', ['@total' => $total]));
     }
     else {
-       $this->output()->writeln(dt('No webform.webform.* configuration files updated.'));
+      $this->output()->writeln(dt('No webform.webform.* configuration files updated.'));
     }
   }
 

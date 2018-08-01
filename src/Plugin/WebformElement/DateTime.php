@@ -272,7 +272,7 @@ class DateTime extends DateBase {
       '#other__placeholder' => $this->t('Custom time format…'),
       '#other__description' => $this->t('Enter time format using <a href="http://php.net/manual/en/function.date.php">Time Input Format</a>.'),
       '#states' => [
-        'invisible'  => [
+        'invisible' => [
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime']],
           'or',
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime-local']],
@@ -289,7 +289,7 @@ class DateTime extends DateBase {
       '#title' => $this->t('Time min'),
       '#description' => $this->t('Specifies the minimum time.'),
       '#states' => [
-        'invisible'  => [
+        'invisible' => [
           [':input[name="properties[date_time_element]"]' => ['value' => 'none']],
         ],
       ],
@@ -299,7 +299,7 @@ class DateTime extends DateBase {
       '#title' => $this->t('Time max'),
       '#description' => $this->t('Specifies the maximum time.'),
       '#states' => [
-        'invisible'  => [
+        'invisible' => [
           [':input[name="properties[date_time_element]"]' => ['value' => 'none']],
         ],
       ],

@@ -196,11 +196,11 @@
     }
   });
 
-  $document.bind('state:visible-slide', function(e) {
+  $document.bind('state:visible-slide', function (e) {
     if (e.trigger && $(e.target).isWebform()) {
       var effect = e.value ? 'slideDown' : 'slideUp';
       var duration = Drupal.webform.states[effect].duration;
-      $(e.target).closest('.js-form-item, .js-form-submit, .js-form-wrapper')[effect ](duration);
+      $(e.target).closest('.js-form-item, .js-form-submit, .js-form-wrapper')[effect](duration);
     }
   });
   Drupal.states.State.aliases['invisible-slide'] = '!visible-slide';

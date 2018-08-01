@@ -29,14 +29,14 @@
       // @see https://github.com/harvesthq/chosen/issues/515
       if (!$.fn.oldChosen) {
         $.fn.oldChosen = $.fn.chosen;
-        $.fn.chosen = function(options) {
+        $.fn.chosen = function (options) {
           var select = $(this), is_creating_chosen = !!options;
           if (is_creating_chosen && select.css('position') === 'absolute') {
             select.removeAttr('style');
           }
           var ret = select.oldChosen(options);
           if (is_creating_chosen && select.css('display') === 'none') {
-            select.attr('style','display:visible; position:absolute; width:0px; height: 0px; clip:rect(0,0,0,0)');
+            select.attr('style', 'display:visible; position:absolute; width:0px; height: 0px; clip:rect(0,0,0,0)');
             select.attr('tabindex', -1);
           }
           return ret;

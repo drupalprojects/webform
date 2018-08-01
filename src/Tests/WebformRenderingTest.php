@@ -88,7 +88,7 @@ class WebformRenderingTest extends WebformTestBase {
     // $this->assertContains($html_email['params']['body'], '<b><em>textfield_markup</em></b><br /><em>{prefix}</em>{default_value}<em>{suffix}</em><br /><br />');
     // $this->assertContains($html_email['params']['body'], '<b>textfield_special_characters (&amp;&gt;&lt;#)</b><br />(&amp;&gt;&lt;#){default_value}(&amp;&gt;&lt;#)<br /><br />');
     // $this->assertContains($html_email['params']['body'], '<b>text_format_basic_html</b><br /><p><em>{default_value}</em></p><br /><br />');
-    
+
     // Check plain text email.
     $this->assertEqual($text_email['subject'], 'submission label (&>');
     $this->assertEqual($text_email['params']['subject'], 'submission <em>label</em> (&><#)');

@@ -75,7 +75,7 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
    *   associative array as described above.
    *
    * @return mixed|null
-   *   Return result of the invoked method.  NULL will be returned if the
+   *   Return result of the invoked method. NULL will be returned if the
    *   element and/or method name does not exist.
    *
    * @see \Drupal\webform\WebformSubmissionForm::prepareElements

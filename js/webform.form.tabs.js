@@ -27,7 +27,7 @@
    */
   Drupal.behaviors.webformFormTabs = {
     attach: function (context) {
-      $(context).find('div.webform-tabs').once('webform-tabs').each(function() {
+      $(context).find('div.webform-tabs').once('webform-tabs').each(function () {
         var $tabs = $(this);
         var options = jQuery.extend({}, Drupal.webform.formTabs.options);
 

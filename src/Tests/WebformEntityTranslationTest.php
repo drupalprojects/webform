@@ -209,7 +209,7 @@ class WebformEntityTranslationTest extends WebformTestBase {
     ];
     $this->drupalPostForm('admin/structure/webform/manage/test_translation/duplicate', $edit, t('Save'));
 
-    // Check duplicate  English translation.
+    // Check duplicate English translation.
     $this->drupalGet('webform/duplicate', ['language' => $language_manager->getLanguage('en')]);
     $this->assertRaw('<label for="edit-textfield">Text field</label>');
 

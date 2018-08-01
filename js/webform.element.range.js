@@ -90,7 +90,7 @@
           // range's buttons so we only incrementally move the output bubble.
           var inputWidth = $input.outerWidth();
           var buttonPosition = Math.floor(inputWidth * (inputValue - $input.attr('min')) / ($input.attr('max') - $input.attr('min')));
-          var increment = Math.floor(inputWidth/5);
+          var increment = Math.floor(inputWidth / 5);
           var outputWidth = $output.outerWidth();
 
           // Set output left position.
@@ -130,14 +130,14 @@
         var defaultOpacity = $output.css('opacity');
         if (defaultOpacity < 1) {
           // Fade in/out on focus/blur of the input.
-          $input.on('focus mouseover', function() {
+          $input.on('focus mouseover', function () {
             $output.stop().fadeTo('slow', 1);
           });
-          $input.on('blur mouseout', function() {
+          $input.on('blur mouseout', function () {
             $output.stop().fadeTo('slow', defaultOpacity);
           });
           // Also fade in when focusing the output.
-          $output.on('touchstart mouseover', function() {
+          $output.on('touchstart mouseover', function () {
             $output.stop().fadeTo('slow', 1);
           });
         }

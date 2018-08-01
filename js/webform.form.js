@@ -92,18 +92,18 @@
   Drupal.behaviors.webformRequiredError = {
     attach: function (context) {
       $(context).find(':input[data-webform-required-error]').once('webform-required-error')
-        .on('invalid', function() {
+        .on('invalid', function () {
           this.setCustomValidity('');
           if (!this.valid) {
             this.setCustomValidity($(this).attr('data-webform-required-error'));
           }
         })
-        .on('input, change', function() {
+        .on('input, change', function () {
           // Find all related elements by name and reset custom validity.
           // This specifically applies to required radios and checkboxes.
           var name = $(this).attr('name');
-          $(this.form).find(':input[name="' + name + '"]').each(
-            function() {this.setCustomValidity('');
+          $(this.form).find(':input[name="' + name + '"]').each(function () {
+            this.setCustomValidity('');
           });
         });
     }
@@ -113,7 +113,7 @@
   // custom validity.
   $(document).on('state:required', function (e) {
     $(e.target).filter('[data-webform-required-error]')
-      .each(function() {this.setCustomValidity('');});
+      .each(function () {this.setCustomValidity('');});
   });
 
   if (window.imceInput) {

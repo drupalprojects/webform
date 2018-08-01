@@ -68,7 +68,7 @@
           // Allow thumbnail to be tabbed.
           .prop('tabindex', '0')
           .attr('role', isMultiple ? 'checkbox' : 'radio')
-          .each(function() {
+          .each(function () {
             // Cleanup alt, set title, and fix aria.
             var alt = $(this).find('img').attr('alt').replace(/<\/?[^>]+(>|$)/g, '');
             $(this).find('img').attr('alt', alt);
@@ -77,30 +77,30 @@
             // Aria hide caption since the 'title' attribute will be read aloud.
             $(this).find('p').attr('aria-hidden', true);
           })
-          .on('focus', function(event) {
+          .on('focus', function (event) {
             $(this).addClass('focused');
           })
-          .on('blur', function(event) {
+          .on('blur', function (event) {
             $(this).removeClass('focused');
           })
-          .on('keydown', function(event) {
-            if(event.which === 32) {
+          .on('keydown', function (event) {
+            if (event.which === 32) {
               // Space.
               $(this).click();
               event.preventDefault();
             }
-            else if(event.which === 37 || event.which === 38) {
+            else if (event.which === 37 || event.which === 38) {
               // Left or Up.
               $(this).parent().prev().find('.thumbnail').focus();
               event.preventDefault();
             }
-            else if(event.which === 39 || event.which === 40) {
+            else if (event.which === 39 || event.which === 40) {
               // Right or Down.
               $(this).parent().next().find('.thumbnail').focus();
               event.preventDefault();
             }
           })
-          .on('click', function(event) {
+          .on('click', function (event) {
             var selected = $(this).hasClass('selected');
             $(this).attr('aria-checked', selected);
           });

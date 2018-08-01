@@ -17,7 +17,7 @@ use Drupal\webform\Utility\WebformArrayHelper;
 class WebformElementComposite extends FormElement {
 
   /**
-   * List of supported  element properties.
+   * List of supported element properties.
    *
    * @var array
    */
@@ -139,7 +139,7 @@ class WebformElementComposite extends FormElement {
             '<br/><br/>' . '<b>' . t('Type') . ':</b> ' . t('The type of element to be displayed.') .
             '<br/><br/>' . '<b>' . t('Options') . ':</b> ' . t('Please select predefined options or enter custom options.') . ' ' . t('Key-value pairs MUST be specified as "safe_key: \'Some readable options\'". Use of only alphanumeric characters and underscores is recommended in keys. One option per line.') .
             ($edit_source ? '<br/><br/>' . '<b>' . t('Custom Properties') . ':</b> ' . t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added to the custom properties.') : '') .
-            '<br/><br/>' . '<b>' . t('Required') . ':</b> ' .  t('Check this option if the user must enter a value.'),
+            '<br/><br/>' . '<b>' . t('Required') . ':</b> ' . t('Check this option if the user must enter a value.'),
           'key' => [
             '#type' => 'textfield',
             '#title' => t('Key'),
@@ -245,7 +245,7 @@ class WebformElementComposite extends FormElement {
             '#type' => 'textarea',
             '#title' => t('Help text'),
             '#title_display' => 'invisible',
-            '#description' =>  t('A tooltip displayed after the title.'),
+            '#description' => t('A tooltip displayed after the title.'),
             '#description_display' => 'invisible',
             '#placeholder' => t('Enter help text…'),
             '#rows' => 2,

@@ -27,7 +27,7 @@
         var $buttons = $(this);
 
         // Remove classes around radios and labels and move to main element.
-        $buttons.find('input[type="radio"], label').each(function() {
+        $buttons.find('input[type="radio"], label').each(function () {
           $buttons.append($(this).removeAttr('class'));
         });
 

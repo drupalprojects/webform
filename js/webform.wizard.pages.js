@@ -24,7 +24,7 @@
         var hasProgressLink = $pages.data('wizard-progress-link');
         var hasPreviewLink = $pages.data('wizard-preview-link');
 
-        $pages.find('.js-webform-wizard-pages-link').each(function() {
+        $pages.find('.js-webform-wizard-pages-link').each(function () {
           var $button = $(this);
           var title = $button.attr('title');
           var page = $button.data('webform-page');
