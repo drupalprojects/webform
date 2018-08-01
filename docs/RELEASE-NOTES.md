@@ -118,7 +118,7 @@ References
 
 [Git Release Notes for Drush](https://www.drupal.org/project/grn)
 
-    drush release-notes --nouser 8.x-5.0-rc16 8.x-5.x
+    drush release-notes --nouser 8.x-5.0-VERSION 8.x-5.x
 
 
 7. Tag and create a new release
