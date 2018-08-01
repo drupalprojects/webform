@@ -5,6 +5,7 @@ namespace Drupal\webform\Form\AdminConfig;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElement\TableSelect;
 
 /**
@@ -19,33 +20,15 @@ abstract class WebformAdminConfigBaseForm extends ConfigFormBase {
     return ['webform.settings'];
   }
 
-  /****************************************************************************/
-  // Config helpers.
-  /****************************************************************************/
-
   /**
-   * Load webform.settings config.
-   *
-   * @return \Drupal\Core\Config\Config
-   *   An editable configuration object.
+   * {@inheritdoc}
    */
-  protected function loadConfig() {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('webform.settings');
-    _webform_config_load($config);
-    return $config;
-  }
-
-  /**
-   * Save webform.settings config.
-   *
-   * @param \Drupal\Core\Config\Config $config
-   *   An editable configuration object.
-   *
-   * @return \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
-   */
-  protected function saveConfig(Config  $config) {
     _webform_config_update($config);
     $config->save();
+
+    parent::submitForm($form, $form_state);
   }
 
   /****************************************************************************/

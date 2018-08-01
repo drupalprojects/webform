@@ -249,20 +249,18 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Load and save config.
-    $config = $this->loadConfig();
+    // Update config and submit form.
+    $config = $this->config('webform.settings');
     $config->set('ui', $form_state->getValue('ui'));
     $config->set('requirements', $form_state->getValue('requirements'));
     $config->set('test', $form_state->getValue('test'));
     $config->set('batch', $form_state->getValue('batch'));
-    $this->saveConfig($config);
+    parent::submitForm($form, $form_state);
 
     // Clear render cache so that local tasks can be updated.
     // @see webform_local_tasks_alter()
     $this->renderCache->deleteAll();
     $this->routerBuilder->rebuild();
-
-    parent::submitForm($form, $form_state);
   }
 
 }

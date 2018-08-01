@@ -600,8 +600,8 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     // Excluded elements.
     $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_elements'));
 
-    // Load and save config.
-    $config = $this->loadConfig();
+    // Update config and submit form.
+    $config = $this->config('webform.settings');
     $config->set('element', $form_state->getValue('element') +
       $form_state->getValue('checkbox') +
       $form_state->getValue('location') +
@@ -611,8 +611,6 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     $config->set('html_editor', $form_state->getValue('html_editor'));
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
-    $this->saveConfig($config);
-
     parent::submitForm($form, $form_state);
   }
 

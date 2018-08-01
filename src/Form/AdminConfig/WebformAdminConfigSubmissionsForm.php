@@ -177,12 +177,10 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
       + $form_state->getValue('submission_behaviors')
       + $form_state->getValue('submission_limits');
 
-    // Load and save config.
-    $config = $this->loadConfig();
+    // Update config and submit form.
+    $config = $this->config('webform.settings');
     $config->set('settings', $settings + $config->get('settings'));
     $config->set('purge', $form_state->getValue('purge'));
-    $this->saveConfig($config);
-
     parent::submitForm($form, $form_state);
   }
 

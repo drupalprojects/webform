@@ -68,23 +68,13 @@ function webform_webform_delete(WebformInterface $webform) {
 /******************************************************************************/
 
 /**
- * Alter loaded config by storing the original raw data
- *
- * @param \Drupal\Core\Config\Config $config
- *   An editable configuration object.
- */
-function _webform_config_load(Config $config) {
-  $config->original = $config->getRawData();
-}
-
-/**
  * Update config editor file references.
  *
  * @param \Drupal\Core\Config\Config $config
  *   An editable configuration object.
  */
 function _webform_config_update(Config $config) {
-  $original_uuids = _webform_get_array_file_uuids($config->original);
+  $original_uuids = _webform_get_array_file_uuids($config->getOriginal());
   $uuids = _webform_get_array_file_uuids($config->getRawData());
 
   // Detect file usages that should be incremented.

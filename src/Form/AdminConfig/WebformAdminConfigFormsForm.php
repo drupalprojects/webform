@@ -598,11 +598,11 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       $settings['dialog_options'][$dialog_name] = array_filter($dialog_options);
     }
 
-    // Load and save config.
-    $config = $this->loadConfig();
+    // Update config and submit form.
+    $config = $this->config('webform.settings');
     $config->set('settings', $settings + $config->get('settings'));
     $config->set('third_party_settings', $form_state->getValue('third_party_settings') ?: []);
-    $this->saveConfig($config);
+    parent::submitForm($form, $form_state);
 
     /* Update paths */
 
@@ -613,8 +613,6 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
         $webform->updatePaths();
       }
     }
-
-    parent::submitForm($form, $form_state);
   }
 
 }

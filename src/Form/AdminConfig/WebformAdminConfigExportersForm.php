@@ -148,11 +148,9 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
     // Set custom temp directory.
     $export['temp_directory'] = ($values['temp_directory'] === file_directory_temp()) ? '' : $values['temp_directory'];
 
-    // Load and save config.
-    $config = $this->loadConfig();
+    // Update config and submit form.
+    $config = $this->config('webform.settings');
     $config->set('export', $export);
-    $this->saveConfig($config);
-
     parent::submitForm($form, $form_state);
   }
 
