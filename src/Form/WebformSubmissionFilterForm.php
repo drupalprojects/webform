@@ -20,7 +20,7 @@ class WebformSubmissionFilterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $search = NULL, $state = NULL, array $state_options = []) {
+  public function buildForm(array $form, FormStateInterface $form_state, $search = NULL, $state = NULL, array $state_options = [], $source_entity = NULL, $source_entity_options = []) {
     $form['#attributes'] = ['class' => ['webform-filter-form']];
     $form['filter'] = [
       '#type' => 'details',
@@ -37,6 +37,15 @@ class WebformSubmissionFilterForm extends FormBase {
       '#size' => 40,
       '#default_value' => $search,
     ];
+    if ($source_entity_options) {
+      $form['filter']['entity'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Submitted to'),
+        '#title_display' => 'invisible',
+        '#options' => ['' =>  $this->t('Submitted to…')] + $source_entity_options,
+        '#default_value' => $source_entity,
+      ];
+    }
     $form['filter']['state'] = [
       '#type' => 'select',
       '#title' => $this->t('State'),
@@ -66,7 +75,9 @@ class WebformSubmissionFilterForm extends FormBase {
     $query = [
       'search' => trim($form_state->getValue('search')),
       'state' => trim($form_state->getValue('state')),
+      'entity' => trim($form_state->getValue('entity')),
     ];
+    $query = array_filter($query);
     $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all(), [
       'query' => $query ,
     ]);

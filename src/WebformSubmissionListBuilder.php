@@ -171,6 +171,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   protected $sort;
 
   /**
+   * Search source entity.
+   *
+   * @var string
+   */
+  protected $sourceEntityTypeId;
+
+  /**
    * Sort direction.
    *
    * @var string
@@ -245,6 +252,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     $this->keys = $this->request->query->get('search');
     $this->state = $this->request->query->get('state');
+    $this->sourceEntityTypeId = $this->request->query->get('entity');
 
     list($this->webform, $this->sourceEntity) = $this->requestManager->getWebformEntities();
 
@@ -283,7 +291,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $this->limit = 20;
     $this->customize = FALSE;
     $this->sort = 'created';
-    $this->total = $this->getTotal($this->keys, $this->state);
+    $this->total = $this->getTotal($this->keys, $this->state, $this->sourceEntityTypeId);
 
     switch ($route_name) {
       // Display webform submissions which includes properties and elements.
@@ -410,21 +418,30 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   A render array representing the filter form.
    */
   protected function buildFilterForm() {
+    // State options.
     $state_options = [
-      '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
-      self::STATE_STARRED => $this->t('Starred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_STARRED)]),
-      self::STATE_UNSTARRED => $this->t('Unstarred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNSTARRED)]),
-      self::STATE_LOCKED => $this->t('Locked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_LOCKED)]),
-      self::STATE_UNLOCKED => $this->t('Unlocked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNLOCKED)]),
+      '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL, $this->sourceEntityTypeId)]),
+      self::STATE_STARRED => $this->t('Starred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_STARRED, $this->sourceEntityTypeId)]),
+      self::STATE_UNSTARRED => $this->t('Unstarred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNSTARRED, $this->sourceEntityTypeId)]),
+      self::STATE_LOCKED => $this->t('Locked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_LOCKED, $this->sourceEntityTypeId)]),
+      self::STATE_UNLOCKED => $this->t('Unlocked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNLOCKED, $this->sourceEntityTypeId)]),
     ];
     // Add draft to state options.
     if (!$this->webform || $this->webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
       $state_options += [
-        self::STATE_COMPLETED => $this->t('Completed [@total]', ['@total' => $this->getTotal(NULL, self::STATE_COMPLETED)]),
-        self::STATE_DRAFT => $this->t('Draft [@total]', ['@total' => $this->getTotal(NULL, self::STATE_DRAFT)]),
+        self::STATE_COMPLETED => $this->t('Completed [@total]', ['@total' => $this->getTotal(NULL, self::STATE_COMPLETED, $this->sourceEntityTypeId)]),
+        self::STATE_DRAFT => $this->t('Draft [@total]', ['@total' => $this->getTotal(NULL, self::STATE_DRAFT, $this->sourceEntityTypeId)]),
       ];
     }
-    return \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformSubmissionFilterForm', $this->keys, $this->state, $state_options);
+
+    // Source entity options.
+    // Note: This filter is only visible if there is < 100 source entities.
+    $source_entity_options = NULL;
+    if ($this->webform && !$this->sourceEntity && ($this->storage->getSourceEntitiesTotal($this->webform) < 100)) {
+      $source_entity_options = $this->storage->getSourceEntitiesAsOptions($this->webform);
+    }
+
+    return \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformSubmissionFilterForm', $this->keys, $this->state, $state_options, $this->sourceEntityTypeId, $source_entity_options);
   }
 
   /**
@@ -898,7 +915,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   protected function getEntityIds() {
-    $query = $this->getQuery($this->keys, $this->state);
+    $query = $this->getQuery($this->keys, $this->state, $this->sourceEntityTypeId);
     $query->pager($this->limit);
 
     $header = $this->buildHeader();
@@ -950,12 +967,14 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   (optional) Search key.
    * @param string $state
    *   (optional) Submission state.
+   * @param string $source_entity
+   *   (optional) Source entity (type:id).
    *
    * @return int
    *   The total number of submissions.
    */
-  protected function getTotal($keys = '', $state = '') {
-    return $this->getQuery($keys, $state)
+  protected function getTotal($keys = '', $state = '', $source_entity = '') {
+    return $this->getQuery($keys, $state, $source_entity)
       ->count()
       ->execute();
   }
@@ -967,11 +986,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   (optional) Search key.
    * @param string $state
    *   (optional) Submission state.
+   * @param string $source_entity
+   *   (optional) Source entity (type:id).
    *
    * @return \Drupal\Core\Entity\Query\QueryInterface
    *   An entity query.
    */
-  protected function getQuery($keys = '', $state = '') {
+  protected function getQuery($keys = '', $state = '', $source_entity = '') {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = $this->getStorage();
     $query = $submission_storage->getQuery();
@@ -1025,6 +1046,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case self::STATE_COMPLETED:
         $query->condition('in_draft', 0);
         break;
+    }
+
+    // Filter by source entity.
+    if ($source_entity && strpos($source_entity, ':') !== FALSE) {
+      list($entity_type, $entity_id) = explode(':', $source_entity);
+      $query->condition('entity_type', $entity_type);
+      $query->condition('entity_id', $entity_id);
     }
 
     return $query;

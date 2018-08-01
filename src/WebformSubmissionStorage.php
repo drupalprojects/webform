@@ -263,6 +263,62 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   }
 
   /****************************************************************************/
+  // Source entity methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSourceEntitiesTotal(WebformInterface $webform) {
+    $query = $this->database->select('webform_submission', 's')
+      ->fields('s', ['entity_type', 'entity_id'])
+      ->condition('webform_id', $webform->id())
+      ->condition('entity_type', '', '<>')
+      ->isNotNull('entity_type')
+      ->condition('entity_id', '', '<>')
+      ->isNotNull('entity_id');
+    return (int) $query->countQuery()->execute()->fetchField();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSourceEntities(WebformInterface $webform) {
+    /** @var \Drupal\Core\Database\StatementInterface $result */
+    $result = $this->database->select('webform_submission', 's')
+      ->fields('s', ['entity_type', 'entity_id'])
+      ->condition('webform_id', $webform->id())
+      ->condition('entity_type', '', '<>')
+      ->isNotNull('entity_type')
+      ->condition('entity_id', '', '<>')
+      ->isNotNull('entity_id')
+      ->execute();
+    $source_entities = [];
+    while ($record = $result->fetchAssoc()) {
+      $source_entities[$record['entity_type']][$record['entity_id']] = $record['entity_id'];
+    }
+    return $source_entities;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSourceEntitiesAsOptions(WebformInterface $webform) {
+    $options = [];
+    $source_entities = $this->getSourceEntities($webform);
+    foreach ($source_entities as $entity_type => $entity_ids) {
+      $optgroup = (string) $this->entityManager->getDefinition($entity_type)->getCollectionLabel();
+      $entities = $this->entityManager->getStorage($entity_type)->loadMultiple($entity_ids);
+      foreach ($entities as $entity_id => $entity) {
+        $option_value = "$entity_type:$entity_id";
+        $option_text = $entity->label();
+        $options[$optgroup][$option_value] = $option_text;
+      }
+    }
+    return (count($options) === 1) ? reset($options) : $options;
+  }
+
+  /****************************************************************************/
   // Query methods.
   /****************************************************************************/
 

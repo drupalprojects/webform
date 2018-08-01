@@ -176,6 +176,45 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function hasSubmissionValue(WebformInterface $webform, $element_key);
 
   /****************************************************************************/
+  // Source entity methods.
+  /****************************************************************************/
+
+  /**
+   * Get total number of source entities.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   *
+   * @return int
+   *   Total number of source entities.
+   */
+  public function getSourceEntitiesTotal(WebformInterface $webform);
+
+  /**
+   * Get source entities associated for a specified webform.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   *
+   * @return array
+   *   An associative array contain source entities associated for
+   *   a specified webform grouped by entity type.
+   */
+  public function getSourceEntities(WebformInterface $webform);
+
+  /**
+   * Get source entities as options for a specified webform.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   *
+   * @return array
+   *   An associative array contain ource entities as options for
+   *   a specified webform.
+   */
+  public function getSourceEntitiesAsOptions(WebformInterface $webform);
+
+  /****************************************************************************/
   // Query methods.
   /****************************************************************************/
 
