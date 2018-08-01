@@ -197,13 +197,13 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
       [FALSE, 'entity.webform'],
       [TRUE, 'entity.webform.handler.'],
       [TRUE, 'entity.webform_ui.element'],
-      [TRUE, 'webform.user.submissions'],
-      [TRUE, 'webform.user.submissions'],
+      [TRUE, 'entity.webform.user.submissions'],
       // Source entity.
       [TRUE, 'entity.{source_entity}.webform'],
       [TRUE, 'entity.{source_entity}.webform_submission'],
       [TRUE, 'entity.node.webform'],
       [TRUE, 'entity.node.webform_submission'],
+      [TRUE, 'entity.node.webform.user.submissions'],
       // Submissions.
       [FALSE, 'entity.webform.user.submission'],
       [TRUE, 'entity.webform.user.submission', [['webform_submission', $this->webformSubmissionAccess]]],
@@ -255,7 +255,7 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
       // Handler.
       ['webform_handler', 'entity.webform.handler.'],
       // User submissions.
-      ['webform_user_submissions', 'webform.user.submissions'],
+      ['webform_user_submissions', 'entity.webform.user.submissions'],
       ['webform_source_entity', 'entity.{source_entity}.webform.user.submissions'],
       ['webform_source_entity', 'entity.node.webform.user.submissions'],
       // User submission.

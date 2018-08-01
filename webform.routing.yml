@@ -715,6 +715,20 @@ webform.reports_plugins.exporters:
   requirements:
     _permission: 'administer webform'
 
+# User submissions.
+
+webform.user.submissions:
+  path: '/user/{user}/submissions'
+  defaults:
+    _entity_list: 'webform_submission'
+    _title: 'Submissions'
+  requirements:
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkUserSubmissionsAccess'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
 # Autocomplete.
 
 webform.element.autocomplete:
@@ -738,3 +752,4 @@ webform.element.message.close:
   requirements:
     _user_is_logged_in: 'TRUE'
     _csrf_token: 'TRUE'
+

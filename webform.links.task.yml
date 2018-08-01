@@ -333,3 +333,10 @@ webform.reports_plugins.exporters:
   route_name: webform.reports_plugins.exporters
   base_route: webform.reports_plugins.elements
   weight: 20
+
+# User Submissions.
+
+webform.user.submissions:
+  title: 'Submissions'
+  route_name: webform.user.submissions
+  base_route: entity.user.canonical

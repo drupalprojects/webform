@@ -3,6 +3,7 @@
 namespace Drupal\Tests\webform\Unit\Access;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
 use Drupal\webform\Access\WebformAccountAccess;
 use Drupal\webform\Access\WebformSubmissionAccess;
@@ -27,6 +28,23 @@ class WebformAccessCheckTest extends UnitTestCase {
    * @var \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   protected $container;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    $this->cacheContextsManager = $this->getMockBuilder('Drupal\Core\Cache\Context\CacheContextsManager')
+      ->disableOriginalConstructor()
+      ->getMock();
+    $this->cacheContextsManager->method('assertValidTokens')->willReturn(TRUE);
+
+    $container = new ContainerBuilder();
+    $container->set('cache_contexts_manager', $this->cacheContextsManager);
+    \Drupal::setContainer($container);
+  }
+
 
   /**
    * Tests the check admin access.
@@ -90,16 +108,16 @@ class WebformAccessCheckTest extends UnitTestCase {
       ->will($this->returnValue($email_webform));
 
     // Check submission access.
-    $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkAdminAccess($account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkAdminAccess($admin_account));
+    $this->assertEquals(AccessResult::neutral()->cachePerPermissions(), WebformAccountAccess::checkAdminAccess($account));
+    $this->assertEquals(AccessResult::allowed()->cachePerPermissions(), WebformAccountAccess::checkAdminAccess($admin_account));
 
     // Check submission access.
-    $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkSubmissionAccess($account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkSubmissionAccess($submission_manager_account));
+    $this->assertEquals(AccessResult::neutral()->cachePerPermissions(), WebformAccountAccess::checkSubmissionAccess($account));
+    $this->assertEquals(AccessResult::allowed()->cachePerPermissions(), WebformAccountAccess::checkSubmissionAccess($submission_manager_account));
 
     // Check overview access.
-    $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkOverviewAccess($account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkOverviewAccess($submission_manager_account));
+    $this->assertEquals(AccessResult::neutral()->cachePerPermissions(), WebformAccountAccess::checkOverviewAccess($account));
+    $this->assertEquals(AccessResult::allowed()->cachePerPermissions(), WebformAccountAccess::checkOverviewAccess($submission_manager_account));
 
     // Check resend (email) message access.
     $this->assertEquals(AccessResult::forbidden(), WebformSubmissionAccess::checkResendAccess($webform_submission, $account));

@@ -299,7 +299,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param bool $include_elements
    *   Flag that include all form element in the list of columns.
    *
-   * @return array|mixed
+   * @return array
    *   An associative array of columns keyed by name.
    */
   public function getCustomColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
@@ -316,10 +316,60 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param bool $include_elements
    *   Flag that include all form element in the list of columns.
    *
-   * @return array|mixed
+   * @return array
    *   An associative array of columns keyed by name.
    */
   public function getUserColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
+
+  /**
+   * Get default submission columns used to display results.
+   *
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
+   *
+   * @return array
+   *   An associative array of columns keyed by name.
+   */
+  public function getDefaultColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
+
+  /**
+   * Get submissions columns.
+   *
+   * @return array
+   *   An associative array of columns keyed by name.
+   */
+  public function getSubmissionsColumns();
+
+  /**
+   * Get user submissions columns.
+   *
+   * @return array
+   *   An associative array of columns keyed by name.
+   */
+  public function getUsersSubmissionsColumns();
+
+  /**
+   * Get submission columns used to display results table.
+   *
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
+   *
+   * @return array
+   *   An associative array of columns keyed by name.
+   */
+  public function getColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
 
   /**
    * Get user default submission columns used to display results.
@@ -333,7 +383,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param bool $include_elements
    *   Flag that include all form element in the list of columns.
    *
-   * @return array|mixed
+   * @return array
    *   An associative array of columns names.
    */
   public function getUserDefaultColumnNames(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
@@ -350,27 +400,14 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param bool $include_elements
    *   Flag that include all form element in the list of columns.
    *
-   * @return array|mixed
-   *   An associative array of columns keyed by name.
+   * @return array
+   *   An associative array of columns names.
    */
-  public function getDefaultColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
+  public function getDefaultColumnNames(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
 
-  /**
-   * Get submission columns used to display results table.
-   *
-   * @param \Drupal\webform\WebformInterface|null $webform
-   *   A webform.
-   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A webform submission source entity.
-   * @param \Drupal\Core\Session\AccountInterface|null $account
-   *   A user account.
-   * @param bool $include_elements
-   *   Flag that include all form element in the list of columns.
-   *
-   * @return array|mixed
-   *   An associative array of columns keyed by name.
-   */
-  public function getColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
+  /****************************************************************************/
+  // Custom settings methods.
+  /****************************************************************************/
 
   /**
    * Get customize setting.

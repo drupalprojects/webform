@@ -61,6 +61,12 @@ class RouteParametersWebformSourceEntity extends PluginBase implements WebformSo
    * {@inheritdoc}
    */
   public function getSourceEntity(array $ignored_types) {
+    // Use current account when viewing a user's submissions.
+    // @see \Drupal\webform\WebformSubmissionListBuilder
+    if ($this->routeMatch->getRouteName() === 'webform.user.submissions') {
+      return NULL;
+    }
+
     // Get the most specific source entity available in the current route's
     // parameters.
     $parameters = $this->routeMatch->getParameters()->all();

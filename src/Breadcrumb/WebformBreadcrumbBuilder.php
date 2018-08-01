@@ -82,6 +82,12 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $path = '';
     }
 
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = ($route_match->getParameter('webform') instanceof WebformInterface) ? $route_match->getParameter('webform') : NULL;
+
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface) ? $route_match->getParameter('webform_submission') : NULL;
+
     if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' || $args[2] == 'webform_submission')) {
       $this->type = 'webform_source_entity';
     }
@@ -100,21 +106,19 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     elseif (strpos($route_name, 'entity.webform.handler.') === 0) {
       $this->type = 'webform_handler';
     }
-    elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && strpos($route_name, 'webform.user.submission') !== FALSE) {
+    elseif ($webform_submission && strpos($route_name, '.webform.user.submission') !== FALSE) {
       $this->type = 'webform_user_submission';
     }
-    elseif (strpos($route_match->getRouteName(), 'webform.user.submissions') !== FALSE) {
+    elseif (strpos($route_name, '.webform.user.submissions') !== FALSE) {
       $this->type = 'webform_user_submissions';
     }
-    elseif (strpos($route_match->getRouteName(), 'webform.user.drafts') !== FALSE) {
+    elseif (strpos($route_name, '.webform.user.drafts') !== FALSE) {
       $this->type = 'webform_user_drafts';
     }
-    elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && $route_match->getParameter('webform_submission')->access('admin')) {
+    elseif ($webform_submission && $webform_submission->access('admin')) {
       $this->type = 'webform_submission';
     }
-    elseif (($route_match->getParameter('webform') instanceof WebformInterface && $route_match->getParameter('webform')->access('admin'))) {
-      /** @var \Drupal\webform\WebformInterface $webform */
-      $webform = $route_match->getParameter('webform');
+    elseif ($webform && $webform->access('admin')) {
       $this->type = ($webform->isTemplate() && $this->moduleHandler->moduleExists('webform_templates')) ? 'webform_template' : 'webform';
     }
     elseif (strpos($path, 'admin/structure/webform/test/') !== FALSE) {
@@ -126,7 +130,6 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     else {
       $this->type = NULL;
     }
-
     return ($this->type) ? TRUE : FALSE;
   }
 

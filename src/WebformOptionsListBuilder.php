@@ -23,21 +23,35 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
     $build = [];
 
     // Display info.
-    if ($total = $this->getStorage()->getQuery()->count()->execute()) {
-      $build['info'] = [
-        '#markup' => $this->formatPlural($total, '@total option', '@total options', ['@total' => $total]),
-        '#prefix' => '<div>',
-        '#suffix' => '</div>',
-      ];
-    }
+    $build['info'] = $this->buildInfo();
 
+    // Table.
     $build += parent::render();
-
     $build['table']['#sticky'] = TRUE;
 
+    // Attachments.
     $build['#attached']['library'][] = 'webform/webform.admin.dialog';
 
     return $build;
+  }
+
+  /**
+   * Build information summary.
+   *
+   * @return array
+   *   A render array representing the information summary.
+   */
+  protected function buildInfo() {
+    $total = $this->getStorage()->getQuery()->count()->execute();
+    if (!$total) {
+      return [];
+    }
+
+    return [
+      '#markup' => $this->formatPlural($total, '@total option', '@total options', ['@total' => $total]),
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+    ];
   }
 
   /**

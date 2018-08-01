@@ -163,6 +163,7 @@ abstract class WebformTestBase extends WebTestBase {
       'view own webform submission',
       'edit own webform submission',
       'delete own webform submission',
+      'access webform submission user',
     ]));
 
     // Any webform submission user.

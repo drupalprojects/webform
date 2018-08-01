@@ -248,17 +248,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     list($this->webform, $this->sourceEntity) = $this->requestManager->getWebformEntities();
 
-    $base_route_name = ($this->webform) ? $this->requestManager->getBaseRouteName($this->webform, $this->sourceEntity) : '';
-    if (in_array($this->routeMatch->getRouteName(), ["$base_route_name.webform.user.submissions", "$base_route_name.webform.user.drafts"])) {
-      $this->account = $this->currentUser;
-      // Set submission filter so that we can support user.submissions and
-      // user.drafts routes.
-      $this->state = ($this->routeMatch->getRouteName() === "$base_route_name.webform.user.submissions") ? self::STATE_COMPLETED : self::STATE_DRAFT;
-    }
-    else {
-      $this->account = NULL;
-    }
-
     $this->messageManager->setWebform($this->webform);
     $this->messageManager->setSourceEntity($this->sourceEntity);
 
@@ -266,59 +255,94 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $webform_submission_storage = $this->getStorage();
 
     $route_name = $this->routeMatch->getRouteName();
-    if ($route_name == "$base_route_name.webform.results_submissions") {
-      // Display submission properties and elements.
-      // @see /admin/structure/webform/manage/{webform}/results/submissions
-      // @see /node/{node}/webform/results/submissions
-      $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
-      $this->sort = $webform_submission_storage->getCustomSetting('sort', 'created', $this->webform, $this->sourceEntity);
-      $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
-      $this->limit = $webform_submission_storage->getCustomSetting('limit', 20, $this->webform, $this->sourceEntity);
-      $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
-      $this->linkType = $webform_submission_storage->getCustomSetting('link_type', $this->linkType, $this->webform, $this->sourceEntity);
-      $this->customize = $this->webform->access('update');
-      if ($this->format['element_format'] == 'raw') {
-        foreach ($this->columns as &$column) {
-          $column['format'] = 'raw';
-          if (isset($column['element'])) {
-            $column['element']['#format'] = 'raw';
-          }
-        }
-      }
-    }
-    else {
-      if ($route_name == 'entity.webform_submission.collection') {
-        // Display only submission properties.
-        // @see /admin/structure/webform/submissions/manage
-        $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
-        // Replace serial with sid when showing results from all webforms.
-        unset($this->columns['serial']);
-        $this->columns = [
-            'sid' => [
-              'title' => $this->t('SID'),
-              'name' => 'sid',
-              'format' => 'value',
-            ],
-          ] + $this->columns;
-        $this->sort = 'created';
-      }
-      else {
-        $this->columns = $webform_submission_storage->getUserColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
-        unset($this->columns['sid']);
-        $this->sort = 'created';
-      }
-      $this->direction = 'desc';
-      $this->limit = 20;
-      $this->customize = FALSE;
+    $base_route_name = ($this->webform) ? $this->requestManager->getBaseRouteName($this->webform, $this->sourceEntity) : '';
+
+    // Set account and state based on the current route.
+    switch ($route_name) {
+      case "webform.user.submissions":
+        $this->account = $this->currentUser;
+        break;
+
+      case "$base_route_name.webform.user.submissions":
+        $this->account = $this->currentUser;
+        $this->state = self::STATE_COMPLETED;
+        break;
+
+      case "$base_route_name.webform.user.drafts":
+        $this->account = $this->currentUser;
+        $this->state = self::STATE_DRAFT;
+        break;
+
+      default:
+        $this->account = NULL;
+        break;
     }
 
+    // Set default display settings.
+    $this->direction = 'desc';
+    $this->limit = 20;
+    $this->customize = FALSE;
+    $this->sort = 'created';
     $this->total = $this->getTotal($this->keys, $this->state);
+
+    switch ($route_name) {
+      // Display webform submissions which includes properties and elements.
+      // @see /admin/structure/webform/manage/{webform}/results/submissions
+      // @see /node/{node}/webform/results/submissions
+      case "$base_route_name.webform.results_submissions":
+        $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
+        $this->sort = $webform_submission_storage->getCustomSetting('sort', 'created', $this->webform, $this->sourceEntity);
+        $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
+        $this->limit = $webform_submission_storage->getCustomSetting('limit', 20, $this->webform, $this->sourceEntity);
+        $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
+        $this->linkType = $webform_submission_storage->getCustomSetting('link_type', $this->linkType, $this->webform, $this->sourceEntity);
+        $this->customize = $this->webform->access('update');
+        if ($this->format['element_format'] == 'raw') {
+          foreach ($this->columns as &$column) {
+            $column['format'] = 'raw';
+            if (isset($column['element'])) {
+              $column['element']['#format'] = 'raw';
+            }
+          }
+        }
+        break;
+
+      // Display all submissions.
+      // @see /admin/structure/webform/submissions/manage
+      case 'entity.webform_submission.collection':
+        // Display only submission properties.
+        // @see /admin/structure/webform/submissions/manage
+        $this->columns = $webform_submission_storage->getSubmissionsColumns();
+        break;
+
+      // Display user's submissions.
+      // @see /user/{user}/submissions
+      case 'webform.user.submissions':
+        $this->columns = $webform_submission_storage->getUsersSubmissionsColumns();
+        break;
+
+      // Display user's submissions.
+      // @see /webform/{webform}/submissions
+      // @see /webform/{webform}/drafts
+      // @see /admin/structure/webform/manage/{webform}/results/user
+      // @see /node/{node}/webform/submissions
+      // @see /node/{node}/webform/drafts
+      // @see /node/{node}/webform/results/submissions
+      case "$base_route_name.webform.user.drafts":
+      case "$base_route_name.webform.user.submissions":
+      case "$base_route_name.webform.results_user":
+      default:
+        $this->columns = $webform_submission_storage->getUserColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
+        break;
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function render() {
+    $build = [];
+
     // Set user specific page title.
     if ($this->webform && $this->account) {
       $t_args = [
@@ -332,6 +356,9 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         $build['#title'] = $this->t('Submissions to %webform for %user', $t_args);
       }
     }
+    elseif ($this->account) {
+      $build['#title'] = $this->account->getDisplayName();
+    }
 
     // Display warning when the webform has a submission but saving of results.
     // are disabled.
@@ -339,46 +366,25 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $this->messageManager->display(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'warning');
     }
 
-    // Add the filter.
+    // Filter form.
     if (empty($this->account)) {
-      $state_options = [
-        '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
-        self::STATE_STARRED => $this->t('Starred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_STARRED)]),
-        self::STATE_UNSTARRED => $this->t('Unstarred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNSTARRED)]),
-        self::STATE_LOCKED => $this->t('Locked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_LOCKED)]),
-        self::STATE_UNLOCKED => $this->t('Unlocked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNLOCKED)]),
-      ];
-      // Add draft to state options.
-      if (!$this->webform || $this->webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
-        $state_options += [
-          self::STATE_COMPLETED => $this->t('Completed [@total]', ['@total' => $this->getTotal(NULL, self::STATE_COMPLETED)]),
-          self::STATE_DRAFT => $this->t('Draft [@total]', ['@total' => $this->getTotal(NULL, self::STATE_DRAFT)]),
-        ];
-      }
-      $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformSubmissionFilterForm', $this->keys, $this->state, $state_options);
+      $build['filter_form'] = $this->buildFilterForm();
     }
 
-    // Customize.
+    // Customize buttons.
     if ($this->customize) {
       $build['custom_top'] = $this->buildCustomizeButton();
     }
 
     // Display info.
     if ($this->total) {
-      if ($this->account && $this->state == self::STATE_DRAFT) {
-        $info = $this->formatPlural($this->total, '@total draft', '@total drafts', ['@total' => $this->total]);
-      }
-      else {
-        $info = $this->formatPlural($this->total, '@total submission', '@total submissions', ['@total' => $this->total]);
-      }
-      $build['info'] = [
-        '#markup' => $info,
-        '#prefix' => '<div>',
-        '#suffix' => '</div>',
-      ];
+      $build['info'] = $this->buildInfo();
     }
 
+    // Table.
     $build += parent::render();
+    $build['table']['#sticky'] = TRUE;
+    $build['table']['#attributes']['class'][] = 'webform-results-table';
 
     // Customize.
     // Only displayed when more than 20 submissions are being displayed.
@@ -389,15 +395,36 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
 
-    $build['table']['#sticky'] = TRUE;
-    $build['table']['#attributes']['class'][] = 'webform-results-table';
-
     $build['#attached']['library'][] = 'webform/webform.admin';
 
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($build);
 
     return $build;
+  }
+
+  /**
+   * Build the filter form.
+   *
+   * @return array
+   *   A render array representing the filter form.
+   */
+  protected function buildFilterForm() {
+    $state_options = [
+      '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
+      self::STATE_STARRED => $this->t('Starred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_STARRED)]),
+      self::STATE_UNSTARRED => $this->t('Unstarred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNSTARRED)]),
+      self::STATE_LOCKED => $this->t('Locked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_LOCKED)]),
+      self::STATE_UNLOCKED => $this->t('Unlocked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNLOCKED)]),
+    ];
+    // Add draft to state options.
+    if (!$this->webform || $this->webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
+      $state_options += [
+        self::STATE_COMPLETED => $this->t('Completed [@total]', ['@total' => $this->getTotal(NULL, self::STATE_COMPLETED)]),
+        self::STATE_DRAFT => $this->t('Draft [@total]', ['@total' => $this->getTotal(NULL, self::STATE_DRAFT)]),
+      ];
+    }
+    return \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformSubmissionFilterForm', $this->keys, $this->state, $state_options);
   }
 
   /**
@@ -414,6 +441,26 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       '#title' => $this->t('Customize'),
       '#url' => $this->ensureDestination(Url::fromRoute($route_name, $route_parameters)),
       '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, ['button', 'button-action', 'button--small', 'button-webform-table-setting']),
+    ];
+  }
+
+  /**
+   * Build information summary.
+   *
+   * @return array
+   *   A render array representing the information summary.
+   */
+  protected function buildInfo() {
+    if ($this->account && $this->state == self::STATE_DRAFT) {
+      $info = $this->formatPlural($this->total, '@total draft', '@total drafts', ['@total' => $this->total]);
+    }
+    else {
+      $info = $this->formatPlural($this->total, '@total submission', '@total submissions', ['@total' => $this->total]);
+    }
+    return [
+      '#markup' => $info,
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
     ];
   }
 
@@ -603,7 +650,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
           $link_url = $this->requestManager->getUrl($entity, $entity->getSourceEntity(), $this->getSubmissionRouteName());
         }
         if ($name == 'serial') {
-          $link_text = $entity->serial() . ($entity->isDraft() ? ' (' . $this->t('draft') . ')' : '');
+          $link_text = $entity->serial();
         }
         else {
           $link_text = $entity->label();
@@ -612,6 +659,9 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         if ($name == 'serial') {
           $link['#attributes']['title'] = $entity->label();
           $link['#attributes']['aria-label'] = $entity->label();
+        }
+        if ($entity->isDraft()) {
+          $link['#suffix'] = ' (' . $this->t('draft') . ')';
         }
         return ['data' => $link];
 

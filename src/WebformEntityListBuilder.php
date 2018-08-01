@@ -130,6 +130,31 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
 
     $build = [];
 
+    // Filter form.
+    $build['filter_form'] = $this->buildFilterForm();
+
+    // Display info.
+    $build['info'] = $this->buildInfo();
+
+    // Table.
+    $build += parent::render();
+    $build['table']['#sticky'] = TRUE;
+    $build['table']['#attributes']['class'][] = 'webform-forms';
+
+    // Attachments.
+    // Must preload libraries required by (modal) dialogs.
+    WebformDialogHelper::attachLibraries($build);
+
+    return $build;
+  }
+
+  /**
+   * Build the filter form.
+   *
+   * @return array
+   *   A render array representing the filter form.
+   */
+  protected function buildFilterForm() {
     // Add the filter by key(word) and/or state.
     if ($this->currentUser->hasPermission('administer webform')) {
       $state_options = [
@@ -157,26 +182,27 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         ],
       ];
     }
-    $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->category, $this->state, $state_options);
+    return \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->category, $this->state, $state_options);
+  }
 
+  /**
+   * Build information summary.
+   *
+   * @return array
+   *   A render array representing the information summary.
+   */
+  protected function buildInfo() {
     // Display info.
     if ($this->currentUser->hasPermission('administer webform') && ($total = $this->getTotal($this->keys, $this->category, $this->state))) {
-      $build['info'] = [
+      return [
         '#markup' => $this->formatPlural($total, '@total webform', '@total webforms', ['@total' => $total]),
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ];
     }
-
-    $build += parent::render();
-
-    $build['table']['#sticky'] = TRUE;
-    $build['table']['#attributes']['class'][] = 'webform-forms';
-
-    // Must preload libraries required by (modal) dialogs.
-    WebformDialogHelper::attachLibraries($build);
-
-    return $build;
+    else {
+      return [];
+    }
   }
 
   /**
