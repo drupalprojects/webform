@@ -314,7 +314,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         $option_text = $entity->label();
         $options[$optgroup][$option_value] = $option_text;
       }
-      asort($options[$optgroup]); ` `
+      asort($options[$optgroup]);
     }
     return (count($options) === 1) ? reset($options) : $options;
   }
