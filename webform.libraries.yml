@@ -1017,7 +1017,7 @@ libraries.jquery.inputmask:
   cdn:
     /libraries/jquery.inputmask/: https://cdn.rawgit.com/RobinHerbots/Inputmask/4.0.0/
   js:
-    /libraries/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js: {}
+    /libraries/Inputmask/dist/min/jquery.inputmask.bundle.min.js: {}
   dependencies:
     - core/jquery
 
